@@ -21,11 +21,11 @@ public class Packet3Chat extends Packet {
     }
 
     public void a(DataInputStream datainputstream) throws IOException { // CraftBukkit
-        this.message = a(datainputstream, 119);
+        this.message = readString(datainputstream, 119);
     }
 
     public void a(DataOutputStream dataoutputstream) throws IOException { // CraftBukkit
-        a(this.message, dataoutputstream);
+        writeString(this.message, dataoutputstream);
     }
 
     public void a(NetHandler nethandler) {

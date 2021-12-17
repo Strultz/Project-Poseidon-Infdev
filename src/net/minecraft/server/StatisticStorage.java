@@ -11,7 +11,6 @@ public class StatisticStorage {
     private StatisticStorage() {
         try {
             this.b.load(StatisticStorage.class.getResourceAsStream("/lang/en_US.lang"));
-            this.b.load(StatisticStorage.class.getResourceAsStream("/lang/stats_US.lang"));
         } catch (IOException ioexception) {
             ioexception.printStackTrace();
         }

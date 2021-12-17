@@ -37,7 +37,7 @@ public class BlockLeaves extends BlockLeavesBase {
     }
 
     public void a(World world, int i, int j, int k, Random random) {
-        if (!world.isStatic) {
+        if (!world.isStatic && world.getServer().getServer().leafDecay) {
             int l = world.getData(i, j, k);
 
             if ((l & 8) != 0) {
@@ -131,20 +131,11 @@ public class BlockLeaves extends BlockLeavesBase {
     }
 
     public int a(Random random) {
-        return random.nextInt(20) == 0 ? 1 : 0;
+        return random.nextInt(10) == 0 ? 1 : 0;
     }
 
     public int a(int i, Random random) {
         return Block.SAPLING.id;
-    }
-
-    public void a(World world, EntityHuman entityhuman, int i, int j, int k, int l) {
-        if (!world.isStatic && entityhuman.G() != null && entityhuman.G().id == Item.SHEARS.id) {
-            entityhuman.a(StatisticList.C[this.id], 1);
-            this.a(world, i, j, k, new ItemStack(Block.LEAVES.id, 1, l & 3));
-        } else {
-            super.a(world, entityhuman, i, j, k, l);
-        }
     }
 
     protected int a_(int i) {

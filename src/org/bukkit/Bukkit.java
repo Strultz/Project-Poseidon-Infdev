@@ -7,7 +7,6 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.map.MapView;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicesManager;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -160,14 +159,6 @@ public final class Bukkit {
 
     public static World getWorld(UUID uid) {
         return server.getWorld(uid);
-    }
-
-    public static MapView getMap(short id) {
-        return server.getMap(id);
-    }
-
-    public static MapView createMap(World world) {
-        return server.createMap(world);
     }
 
     public static void reload() {

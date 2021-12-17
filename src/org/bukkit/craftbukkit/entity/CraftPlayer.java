@@ -8,11 +8,8 @@ import org.bukkit.Statistic;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.craftbukkit.map.CraftMapView;
-import org.bukkit.craftbukkit.map.RenderData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.map.MapView;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -74,19 +71,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     public double getEyeHeight() {
-        return getEyeHeight(false);
-    }
-
-    public double getEyeHeight(boolean ignoreSneaking) {
-        if (ignoreSneaking) {
-            return 1.62D;
-        } else {
-            if (isSneaking()) {
-                return 1.42D;
-            } else {
-                return 1.62D;
-            }
-        }
+        return 1.62D;
     }
 
     public void setHandle(final EntityPlayer entity) {
@@ -169,18 +154,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         return server.dispatchCommand(this, command);
     }
 
-    public void playNote(Location loc, byte instrument, byte note) {
-        getHandle().netServerHandler.sendPacket(new Packet54PlayNoteBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), instrument, note));
-    }
-
-    public void playNote(Location loc, Instrument instrument, Note note) {
-        getHandle().netServerHandler.sendPacket(new Packet54PlayNoteBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), instrument.getType(), note.getId()));
-    }
-
     public void playEffect(Location loc, Effect effect, int data) {
-        int packetData = effect.getId();
-        Packet61 packet = new Packet61(packetData, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), data);
-        getHandle().netServerHandler.sendPacket(packet);
     }
 
     public void sendBlockChange(Location loc, Material material, byte data) {
@@ -222,19 +196,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         return true;
     }
 
-    public void sendMap(MapView map) {
-        RenderData data = ((CraftMapView) map).render(this);
-        for (int x = 0; x < 128; ++x) {
-            byte[] bytes = new byte[131];
-            bytes[1] = (byte) x;
-            for (int y = 0; y < 128; ++y) {
-                bytes[y + 3] = data.buffer[y * 128 + x];
-            }
-            Packet131 packet = new Packet131((short) Material.MAP.getId(), map.getId(), bytes);
-            getHandle().netServerHandler.sendPacket(packet);
-        }
-    }
-
     @Override
     public boolean teleport(Location location) {
         // From = Players current Location
@@ -267,14 +228,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         return true;
     }
 
-    public void setSneaking(boolean sneak) {
-        getHandle().setSneak(sneak);
-    }
-
-    public boolean isSneaking() {
-        return getHandle().isSneaking();
-    }
-
     public void loadData() {
         server.getHandle().playerFileData.b(getHandle());
     }
@@ -288,12 +241,10 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     public void setSleepingIgnored(boolean isSleeping) {
-        getHandle().fauxSleeping = isSleeping;
-        ((CraftWorld) getWorld()).getHandle().checkSleepStatus();
     }
 
     public boolean isSleepingIgnored() {
-        return getHandle().fauxSleeping;
+        return false;
     }
 
     public void awardAchievement(Achievement achievement) {
@@ -330,12 +281,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     private void sendStatistic(int id, int amount) {
-        while (amount > Byte.MAX_VALUE) {
-            sendStatistic(id, Byte.MAX_VALUE);
-            amount -= Byte.MAX_VALUE;
-        }
-
-        getHandle().netServerHandler.sendPacket(new Packet200Statistic(id, amount));
     }
 
     public void setPlayerTime(long time, boolean relative) {
@@ -355,16 +300,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         return getHandle().relativeTime;
     }
 
-    public ConnectionType getConnectionType() {
-        return getHandle().netServerHandler.getConnectionType();
-    }
-
     public boolean hasReceivedPacket0() {
         return getHandle().netServerHandler.isReceivedKeepAlive();
-    }
-
-    public boolean isUsingReleaseToBeta() {
-        return getHandle().netServerHandler.isUsingReleaseToBeta();
     }
 
     public void resetPlayerTime() {

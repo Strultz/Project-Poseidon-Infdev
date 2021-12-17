@@ -12,21 +12,6 @@ public class BlockTNT extends Block {
         return i == 0 ? this.textureId + 2 : (i == 1 ? this.textureId + 1 : this.textureId);
     }
 
-    public void c(World world, int i, int j, int k) {
-        super.c(world, i, j, k);
-        if (world.isBlockIndirectlyPowered(i, j, k)) {
-            this.postBreak(world, i, j, k, 1);
-            world.setTypeId(i, j, k, 0);
-        }
-    }
-
-    public void doPhysics(World world, int i, int j, int k, int l) {
-        if (l > 0 && Block.byId[l].isPowerSource() && world.isBlockIndirectlyPowered(i, j, k)) {
-            this.postBreak(world, i, j, k, 1);
-            world.setTypeId(i, j, k, 0);
-        }
-    }
-
     public int a(Random random) {
         return 0;
     }
@@ -40,14 +25,11 @@ public class BlockTNT extends Block {
 
     public void postBreak(World world, int i, int j, int k, int l) {
         if (!world.isStatic) {
-            if ((l & 1) == 0) {
-                this.a(world, i, j, k, new ItemStack(Block.TNT.id, 1, 0));
-            } else {
                 EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F));
 
                 world.addEntity(entitytntprimed);
                 world.makeSound(entitytntprimed, "random.fuse", 1.0F, 1.0F);
-            }
+            
         }
     }
 

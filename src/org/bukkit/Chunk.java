@@ -53,7 +53,7 @@ public interface Chunk {
      * @param includeBiomeTempRain - if true, snapshot includes per-coordinate raw biome temperature and rainfall
      * @return ChunkSnapshot
      */
-    ChunkSnapshot getChunkSnapshot(boolean includeMaxblocky, boolean includeBiome, boolean includeBiomeTempRain);
+    ChunkSnapshot getChunkSnapshot(boolean includeMaxblocky);
 
     Entity[] getEntities();
 

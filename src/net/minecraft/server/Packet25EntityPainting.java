@@ -26,7 +26,7 @@ public class Packet25EntityPainting extends Packet {
 
     public void a(DataInputStream datainputstream) throws IOException {
         this.a = datainputstream.readInt();
-        this.f = a(datainputstream, EnumArt.z);
+        this.f = readString(datainputstream, EnumArt.z);
         this.b = datainputstream.readInt();
         this.c = datainputstream.readInt();
         this.d = datainputstream.readInt();
@@ -35,7 +35,7 @@ public class Packet25EntityPainting extends Packet {
 
     public void a(DataOutputStream dataoutputstream) throws IOException {
         dataoutputstream.writeInt(this.a);
-        a(this.f, dataoutputstream);
+        writeString(this.f, dataoutputstream);
         dataoutputstream.writeInt(this.b);
         dataoutputstream.writeInt(this.c);
         dataoutputstream.writeInt(this.d);

@@ -12,14 +12,8 @@ public class ServerNBTManager extends PlayerNBTManager {
     public IChunkLoader a(WorldProvider worldprovider) {
         File file1 = this.a();
 
-        if (worldprovider instanceof WorldProviderHell) {
-            File file2 = new File(file1, "DIM-1");
-
-            file2.mkdirs();
-            return new ChunkRegionLoader(file2);
-        } else {
-            return new ChunkRegionLoader(file1);
-        }
+        return new ChunkRegionLoader(file1);
+        
     }
 
     public void a(WorldData worlddata, List list) {

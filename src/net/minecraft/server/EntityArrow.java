@@ -58,7 +58,7 @@ public class EntityArrow extends Entity {
     protected void b() {}
 
     public void a(double d0, double d1, double d2, float f, float f1) {
-        float f2 = MathHelper.a(d0 * d0 + d1 * d1 + d2 * d2);
+        float f2 = MathHelper.sqrt_double(d0 * d0 + d1 * d1 + d2 * d2);
 
         d0 /= (double) f2;
         d1 /= (double) f2;
@@ -72,7 +72,7 @@ public class EntityArrow extends Entity {
         this.motX = d0;
         this.motY = d1;
         this.motZ = d2;
-        float f3 = MathHelper.a(d0 * d0 + d2 * d2);
+        float f3 = MathHelper.sqrt_double(d0 * d0 + d2 * d2);
 
         this.lastYaw = this.yaw = (float) (Math.atan2(d0, d2) * 180.0D / 3.1415927410125732D);
         this.lastPitch = this.pitch = (float) (Math.atan2(d1, (double) f3) * 180.0D / 3.1415927410125732D);
@@ -82,7 +82,7 @@ public class EntityArrow extends Entity {
     public void m_() {
         super.m_();
         if (this.lastPitch == 0.0F && this.lastYaw == 0.0F) {
-            float f = MathHelper.a(this.motX * this.motX + this.motZ * this.motZ);
+            float f = MathHelper.sqrt_double(this.motX * this.motX + this.motZ * this.motZ);
 
             this.lastYaw = this.yaw = (float) (Math.atan2(this.motX, this.motZ) * 180.0D / 3.1415927410125732D);
             this.lastPitch = this.pitch = (float) (Math.atan2(this.motY, (double) f) * 180.0D / 3.1415927410125732D);
@@ -214,7 +214,7 @@ public class EntityArrow extends Entity {
                     this.motX = (double) ((float) (movingobjectposition.f.a - this.locX));
                     this.motY = (double) ((float) (movingobjectposition.f.b - this.locY));
                     this.motZ = (double) ((float) (movingobjectposition.f.c - this.locZ));
-                    f2 = MathHelper.a(this.motX * this.motX + this.motY * this.motY + this.motZ * this.motZ);
+                    f2 = MathHelper.sqrt_double(this.motX * this.motX + this.motY * this.motY + this.motZ * this.motZ);
                     this.locX -= this.motX / (double) f2 * 0.05000000074505806D;
                     this.locY -= this.motY / (double) f2 * 0.05000000074505806D;
                     this.locZ -= this.motZ / (double) f2 * 0.05000000074505806D;
@@ -227,7 +227,7 @@ public class EntityArrow extends Entity {
             this.locX += this.motX;
             this.locY += this.motY;
             this.locZ += this.motZ;
-            f2 = MathHelper.a(this.motX * this.motX + this.motZ * this.motZ);
+            f2 = MathHelper.sqrt_double(this.motX * this.motX + this.motZ * this.motZ);
             this.yaw = (float) (Math.atan2(this.motX, this.motZ) * 180.0D / 3.1415927410125732D);
 
             for (this.pitch = (float) (Math.atan2(this.motY, (double) f2) * 180.0D / 3.1415927410125732D); this.pitch - this.lastPitch < -180.0F; this.lastPitch -= 360.0F) {

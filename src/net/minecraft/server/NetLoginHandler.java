@@ -12,8 +12,6 @@ import java.net.Socket;
 import java.util.Random;
 import java.util.logging.Logger;
 
-import static com.legacyminecraft.poseidon.util.Release2Beta.deserializeAddress;
-
 public class NetLoginHandler extends NetHandler {
 
     public static Logger a = Logger.getLogger("Minecraft");
@@ -25,10 +23,7 @@ public class NetLoginHandler extends NetHandler {
     private String g = null;
     private Packet1Login h = null;
     private String serverId = "";
-    private ConnectionType connectionType;
-    private boolean usingReleaseToBeta = false; //Poseidon -> Release2Beta support
     private boolean receivedLoginPacket = false;
-    private int rawConnectionType;
     private boolean receivedKeepAlive = false;
 
     public NetLoginHandler(MinecraftServer minecraftserver, Socket socket, String s) {
@@ -87,54 +82,16 @@ public class NetLoginHandler extends NetHandler {
         }
         receivedLoginPacket = true;
         this.g = packet1login.name;
-        if (packet1login.a != 14) {
-            if (packet1login.a > 14) {
+        if (packet1login.a != 42012) {
+            if (packet1login.a > 42012) {
                 this.disconnect("Outdated server!");
             } else {
                 this.disconnect("Outdated client!");
             }
         } else {
-            //Project Poseidon - Start (Release2Beta)
-            if (packet1login.d == (byte) -999 || packet1login.d == (byte) 25) {
-                connectionType = ConnectionType.RELEASE2BETA_OFFLINE_MODE_IP_FORWARDING;
-            } else if (packet1login.d == (byte) 26) {
-                connectionType = ConnectionType.RELEASE2BETA_ONLINE_MODE_IP_FORWARDING;
-            } else if (packet1login.d == (byte) 1) {
-                connectionType = ConnectionType.RELEASE2BETA;
-            } else if (packet1login.d == (byte) 2) {
-                connectionType = ConnectionType.BUNGEECORD_OFFLINE_MODE_IP_FORWARDING;
-            } else {
-                connectionType = ConnectionType.NORMAL;
-            }
-            rawConnectionType = packet1login.d;
-            //TODO: We need to find a better and cleaner way to support these different Beta proxies, Maybe a handler class???
-            if (connectionType.equals(ConnectionType.RELEASE2BETA_OFFLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.RELEASE2BETA_ONLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.BUNGEECORD_OFFLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.BUNGEECORD_ONLINE_MODE_IP_FORWARDING)) {
-                //Proxy has IP Forwarding enabled
-                if ((Boolean) PoseidonConfig.getInstance().getConfigOption("settings.release2beta.enable-ip-pass-through")) {
-                    //IP Forwarding is enabled server side
-                    if (this.getSocket().getInetAddress().getHostAddress().equalsIgnoreCase(String.valueOf(PoseidonConfig.getInstance().getConfigOption("settings.release2beta.proxy-ip", "127.0.0.1")))) {
-                        //Release2Beta server is authorized - Override IP address
-                        InetSocketAddress address = deserializeAddress(packet1login.c);
-                        a.info(packet1login.name + " has been detected using Release2Beta, using the IP passed through: " + address.getAddress().getHostAddress());
-                        this.networkManager.setSocketAddress(address);
-                        this.usingReleaseToBeta = true;
-                    } else {
-                        //Release2Beta server isn't authorized
-                        a.info(packet1login.name + " is attempting to use a unauthorized Release2Beta server, kicking the player.");
-                        this.disconnect(ChatColor.RED + "The Release2Beta server you are connecting through is unauthorized.");
-                        return;
-                    }
-                } else {
-                    //Poseidon doesn't support IP Forwarding
-                    a.info(packet1login.name + " is trying to connect through R2B with IP Forwarding enabled, however, it is disabled in Poseidon. Kicking player!");
-                    this.disconnect(ChatColor.RED + "IP Forwarding is disabled in Poseidon. Please disable in Release2Beta.");
-                    return;
-                }
-            }
-            //Project Poseidon - End (Release2Beta
 
             if (((CraftServer) Bukkit.getServer()).isShuttingdown()) {
-                this.disconnect(ChatColor.RED + "Server is shutting down, please rejoin later.");
+                this.disconnect("Server closed");
                 return;
             }
 
@@ -157,9 +114,6 @@ public class NetLoginHandler extends NetHandler {
             ChunkCoordinates chunkcoordinates = worldserver.getSpawn();
             NetServerHandler netserverhandler = new NetServerHandler(this.server, this.networkManager, entityplayer);
             //Poseidon Start
-            netserverhandler.setUsingReleaseToBeta(usingReleaseToBeta);
-            netserverhandler.setConnectionType(connectionType);
-            netserverhandler.setRawConnectionType(rawConnectionType);
             netserverhandler.setReceivedKeepAlive(receivedKeepAlive);
             //Poseidon End
             netserverhandler.sendPacket(new Packet1Login("", entityplayer.id, worldserver.getSeed(), (byte) worldserver.worldProvider.dimension));
@@ -171,9 +125,9 @@ public class NetLoginHandler extends NetHandler {
             this.server.networkListenThread.a(netserverhandler);
             netserverhandler.sendPacket(new Packet4UpdateTime(entityplayer.getPlayerTime())); // CraftBukkit - add support for player specific time
             entityplayer.syncInventory();
-            if (PoseidonConfig.getInstance().getBoolean("settings.support.modloader.enable", false)) {
+            /*if (PoseidonConfig.getInstance().getBoolean("settings.support.modloader.enable", false)) {
                 net.minecraft.server.ModLoaderMp.HandleAllLogins(entityplayer);
-            }
+            }*/
         }
 
         this.c = true;

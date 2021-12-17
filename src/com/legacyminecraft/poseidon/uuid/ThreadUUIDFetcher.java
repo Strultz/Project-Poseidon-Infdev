@@ -4,6 +4,8 @@ import com.legacyminecraft.poseidon.PoseidonConfig;
 import com.legacyminecraft.poseidon.util.GetUUIDFetcher;
 import com.legacyminecraft.poseidon.util.UUIDResult;
 import com.projectposeidon.johnymuffin.LoginProcessHandler;
+import com.projectposeidon.johnymuffin.UUIDManager;
+
 import net.minecraft.server.Packet1Login;
 import org.bukkit.ChatColor;
 
@@ -28,6 +30,10 @@ public class ThreadUUIDFetcher extends Thread {
     }
 
     public void run() {
+    	if (!(boolean) PoseidonConfig.getInstance().getProperty("settings.use-uuids")) {
+    		loginProcessHandler.userUUIDReceived(UUIDManager.generateOfflineUUID(loginPacket.name), false);
+    		return;
+    	}
         if (useGetMethod) {
             getMethod();
         } else {

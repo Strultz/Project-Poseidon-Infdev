@@ -82,7 +82,10 @@ public abstract class Container {
 
     public ItemStack a(int i, int j, boolean flag, EntityHuman entityhuman) {
         ItemStack itemstack = null;
-
+        if(j > 1)
+        {
+            return null;
+        }
         if (j == 0 || j == 1) {
             InventoryPlayer inventoryplayer = entityhuman.inventory;
 
@@ -120,6 +123,10 @@ public abstract class Container {
                         }
                     }
                 } else {
+                	if(i < 0)
+                    {
+                        return null;
+                    }
                     Slot slot1 = (Slot) this.e.get(i);
 
                     if (slot1 != null) {

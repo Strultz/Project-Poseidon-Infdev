@@ -15,13 +15,6 @@ public class SlotResult2 extends Slot {
 
     public void a(ItemStack itemstack) {
         itemstack.b(this.d.world, this.d);
-        if (itemstack.id == Item.IRON_INGOT.id) {
-            this.d.a(AchievementList.k, 1);
-        }
-
-        if (itemstack.id == Item.COOKED_FISH.id) {
-            this.d.a(AchievementList.p, 1);
-        }
 
         super.a(itemstack);
     }

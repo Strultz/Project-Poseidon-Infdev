@@ -68,13 +68,6 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         if (world == null) {
             this.dead = false;
             ChunkCoordinates position = null;
-            if (this.spawnWorld != null && !this.spawnWorld.equals("")) {
-                CraftWorld cworld = (CraftWorld) Bukkit.getServer().getWorld(this.spawnWorld);
-                if (cworld != null && this.getBed() != null) {
-                    world = cworld.getHandle();
-                    position = EntityHuman.getBed(cworld.getHandle(), this.getBed());
-                }
-            }
             if (world == null || position == null) {
                 world = ((CraftWorld) Bukkit.getServer().getWorlds().get(0)).getHandle();
                 position = world.getSpawn();
@@ -204,18 +197,6 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public void a(boolean flag) {
         super.m_();
 
-        for (int i = 0; i < this.inventory.getSize(); ++i) {
-            ItemStack itemstack = this.inventory.getItem(i);
-
-            if (itemstack != null && Item.byId[itemstack.id].b() && this.netServerHandler.b() <= 2) {
-                Packet packet = ((ItemWorldMapBase) Item.byId[itemstack.id]).b(itemstack, this.world, this);
-
-                if (packet != null) {
-                    this.netServerHandler.sendPacket(packet);
-                }
-            }
-        }
-
         if (flag && !this.chunkCoordIntPairQueue.isEmpty()) {
             ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair) this.chunkCoordIntPairQueue.get(0);
 
@@ -238,39 +219,6 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                     }
                 }
             }
-        }
-
-        if (this.E) {
-            //if (this.b.propertyManager.getBoolean("allow-nether", true)) { // CraftBukkit
-            if (this.activeContainer != this.defaultContainer) {
-                this.y();
-            }
-
-            if (this.vehicle != null) {
-                this.mount(this.vehicle);
-            } else {
-                this.F += 0.0125F;
-                if (this.F >= 1.0F) {
-                    this.F = 1.0F;
-                    this.D = 10;
-                    this.b.serverConfigurationManager.f(this);
-                }
-            }
-
-            this.E = false;
-            //} // CraftBukkit
-        } else {
-            if (this.F > 0.0F) {
-                this.F -= 0.05F;
-            }
-
-            if (this.F < 0.0F) {
-                this.F = 0.0F;
-            }
-        }
-
-        if (this.D > 0) {
-            --this.D;
         }
 
         if (this.health != this.bL) {
@@ -323,50 +271,6 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public void x() {
     }
 
-    public EnumBedError a(int i, int j, int k) {
-        EnumBedError enumbederror = super.a(i, j, k);
-
-        if (enumbederror == EnumBedError.OK) {
-            EntityTracker entitytracker = this.b.getTracker(this.dimension);
-            Packet17 packet17 = new Packet17(this, 0, i, j, k);
-
-            entitytracker.a(this, packet17);
-            this.netServerHandler.a(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
-            this.netServerHandler.sendPacket(packet17);
-        }
-
-        return enumbederror;
-    }
-
-    public void a(boolean flag, boolean flag1, boolean flag2) {
-        if (this.isSleeping()) {
-            EntityTracker entitytracker = this.b.getTracker(this.dimension);
-
-            entitytracker.sendPacketToEntity(this, new Packet18ArmAnimation(this, 3));
-        }
-
-        super.a(flag, flag1, flag2);
-        if (this.netServerHandler != null) {
-            this.netServerHandler.a(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
-        }
-    }
-
-    public void mount(Entity entity) {
-        // CraftBukkit start
-        this.setPassengerOf(entity);
-    }
-
-    public void setPassengerOf(Entity entity) {
-        // mount(null) doesn't really fly for overloaded methods,
-        // so this method is needed
-
-        super.setPassengerOf(entity);
-        // CraftBukkit end
-
-        this.netServerHandler.sendPacket(new Packet39AttachEntity(this, this.vehicle));
-        this.netServerHandler.a(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
-    }
-
     protected void a(double d0, boolean flag) {
     }
 
@@ -399,14 +303,6 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         this.ai();
         this.netServerHandler.sendPacket(new Packet100OpenWindow(this.bO, 2, tileentityfurnace.getName(), tileentityfurnace.getSize()));
         this.activeContainer = new ContainerFurnace(this.inventory, tileentityfurnace);
-        this.activeContainer.windowId = this.bO;
-        this.activeContainer.a((ICrafting) this);
-    }
-
-    public void a(TileEntityDispenser tileentitydispenser) {
-        this.ai();
-        this.netServerHandler.sendPacket(new Packet100OpenWindow(this.bO, 3, tileentitydispenser.getName(), tileentitydispenser.getSize()));
-        this.activeContainer = new ContainerDispenser(this.inventory, tileentitydispenser);
         this.activeContainer.windowId = this.bO;
         this.activeContainer.a((ICrafting) this);
     }
@@ -451,40 +347,12 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         this.activeContainer = this.defaultContainer;
     }
 
-    public void a(float f, float f1, boolean flag, boolean flag1, float f2, float f3) {
+    public void a(float f, float f1, boolean flag, float f2, float f3) {
         this.az = f;
         this.aA = f1;
         this.aC = flag;
-        this.setSneak(flag1);
         this.pitch = f2;
         this.yaw = f3;
-    }
-
-    public void a(Statistic statistic, int i) {
-        if (statistic != null) {
-            if (!statistic.g) {
-                while (i > 100) {
-                    this.netServerHandler.sendPacket(new Packet200Statistic(statistic.e, 100));
-                    i -= 100;
-                }
-
-                this.netServerHandler.sendPacket(new Packet200Statistic(statistic.e, i));
-            }
-        }
-    }
-
-    public void B() {
-        if (this.vehicle != null) {
-            this.mount(this.vehicle);
-        }
-
-        if (this.passenger != null) {
-            this.passenger.mount(this);
-        }
-
-        if (this.sleeping) {
-            this.a(true, false, false);
-        }
     }
 
     public void C() {

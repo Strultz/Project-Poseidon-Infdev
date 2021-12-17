@@ -10,21 +10,16 @@ import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
-import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Type;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockDamageEvent;
-import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
-import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -66,42 +61,6 @@ public class CraftEventFactory {
         boolean canBuild = canBuild(craftWorld, player, placedBlock.getX(), placedBlock.getZ());
 
         BlockPlaceEvent event = new BlockPlaceEvent(placedBlock, replacedBlockState, blockClicked, itemInHand, player, canBuild);
-        craftServer.getPluginManager().callEvent(event);
-
-        return event;
-    }
-
-    /**
-     * Bucket methods
-     */
-    public static PlayerBucketEmptyEvent callPlayerBucketEmptyEvent(EntityHuman who, int clickedX, int clickedY, int clickedZ, int clickedFace, ItemStack itemInHand) {
-        return (PlayerBucketEmptyEvent) getPlayerBucketEvent(Type.PLAYER_BUCKET_EMPTY, who, clickedX, clickedY, clickedZ, clickedFace, itemInHand, Item.BUCKET);
-    }
-
-    public static PlayerBucketFillEvent callPlayerBucketFillEvent(EntityHuman who, int clickedX, int clickedY, int clickedZ, int clickedFace, ItemStack itemInHand, net.minecraft.server.Item bucket) {
-        return (PlayerBucketFillEvent) getPlayerBucketEvent(Type.PLAYER_BUCKET_FILL, who, clickedX, clickedY, clickedZ, clickedFace, itemInHand, bucket);
-    }
-
-    private static PlayerEvent getPlayerBucketEvent(Type type, EntityHuman who, int clickedX, int clickedY, int clickedZ, int clickedFace, ItemStack itemstack, net.minecraft.server.Item item) {
-        Player player = (who == null) ? null : (Player) who.getBukkitEntity();
-        CraftItemStack itemInHand = new CraftItemStack(new ItemStack(item));
-        Material bucket = Material.getMaterial(itemstack.id);
-
-        CraftWorld craftWorld = (CraftWorld) player.getWorld();
-        CraftServer craftServer = (CraftServer) player.getServer();
-
-        Block blockClicked = craftWorld.getBlockAt(clickedX, clickedY, clickedZ);
-        BlockFace blockFace = CraftBlock.notchToBlockFace(clickedFace);
-
-        PlayerEvent event = null;
-        if (type == Type.PLAYER_BUCKET_EMPTY) {
-            event = new PlayerBucketEmptyEvent(player, blockClicked, blockFace, bucket, itemInHand);
-            ((PlayerBucketEmptyEvent) event).setCancelled(!canBuild(craftWorld, player, clickedX, clickedZ));
-        } else if (type == Type.PLAYER_BUCKET_FILL) {
-            event = new PlayerBucketFillEvent(player, blockClicked, blockFace, bucket, itemInHand);
-            ((PlayerBucketFillEvent) event).setCancelled(!canBuild(craftWorld, player, clickedX, clickedZ));
-        }
-
         craftServer.getPluginManager().callEvent(event);
 
         return event;
@@ -176,53 +135,25 @@ public class CraftEventFactory {
 
         CreatureType type = null;
 
-        if (entityliving instanceof EntityChicken) {
-            type = CreatureType.CHICKEN;
-        } else if (entityliving instanceof EntityCow) {
-            type = CreatureType.COW;
-        } else if (entityliving instanceof EntityCreeper) {
+        if (entityliving instanceof EntityCreeper) {
             type = CreatureType.CREEPER;
-        } else if (entityliving instanceof EntityGhast) {
-            type = CreatureType.GHAST;
         } else if (entityliving instanceof EntityGiantZombie) {
             type = CreatureType.GIANT;
-        } else if (entityliving instanceof EntityWolf) {
-            type = CreatureType.WOLF;
         } else if (entityliving instanceof EntityPig) {
             type = CreatureType.PIG;
-        } else if (entityliving instanceof EntityPigZombie) {
-            type = CreatureType.PIG_ZOMBIE;
         } else if (entityliving instanceof EntitySheep) {
             type = CreatureType.SHEEP;
         } else if (entityliving instanceof EntitySkeleton) {
             type = CreatureType.SKELETON;
-        } else if (entityliving instanceof EntitySlime) {
-            type = CreatureType.SLIME;
         } else if (entityliving instanceof EntitySpider) {
             type = CreatureType.SPIDER;
-        } else if (entityliving instanceof EntitySquid) {
-            type = CreatureType.SQUID;
         } else if (entityliving instanceof EntityZombie) {
             type = CreatureType.ZOMBIE;
-        // Supertype of many, last!
         } else if (entityliving instanceof EntityMonster) {
             type = CreatureType.MONSTER;
         }
 
         CreatureSpawnEvent event = new CreatureSpawnEvent(entity, type, entity.getLocation(), spawnReason);
-        craftServer.getPluginManager().callEvent(event);
-        return event;
-    }
-
-    /**
-     * EntityTameEvent
-     */
-    public static EntityTameEvent callEntityTameEvent(EntityLiving entity, EntityHuman tamer) {
-        org.bukkit.entity.Entity bukkitEntity = entity.getBukkitEntity();
-        org.bukkit.entity.AnimalTamer bukkitTamer = (tamer != null ? (AnimalTamer) tamer.getBukkitEntity() : null);
-        CraftServer craftServer = (CraftServer) bukkitEntity.getServer();
-
-        EntityTameEvent event = new EntityTameEvent(bukkitEntity, bukkitTamer);
         craftServer.getPluginManager().callEvent(event);
         return event;
     }
@@ -237,18 +168,6 @@ public class CraftEventFactory {
         ItemSpawnEvent event = new ItemSpawnEvent(entity, entity.getLocation());
 
         craftServer.getPluginManager().callEvent(event);
-        return event;
-    }
-
-    /**
-     * BlockFadeEvent
-     */
-    public static BlockFadeEvent callBlockFadeEvent(Block block, int type) {
-        BlockState state = block.getState();
-        state.setTypeId(type);
-
-        BlockFadeEvent event = new BlockFadeEvent(block, state);
-        Bukkit.getPluginManager().callEvent(event);
         return event;
     }
 

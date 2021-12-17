@@ -114,22 +114,6 @@ public interface Entity {
     public Server getServer();
 
     /**
-     * Gets the primary passenger of a vehicle. For vehicles that could have
-     * multiple passengers, this will only return the primary passenger.
-     *
-     * @return an entity
-     */
-    public abstract Entity getPassenger();
-
-    /**
-     * Set the passenger of a vehicle.
-     *
-     * @param passenger
-     * @return false if it could not be done for whatever reason
-     */
-    public abstract boolean setPassenger(Entity passenger);
-
-    /**
      * Returns true if the vehicle has no passengers.
      *
      * @return

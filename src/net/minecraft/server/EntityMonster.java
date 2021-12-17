@@ -41,7 +41,7 @@ public class EntityMonster extends EntityCreature implements IMonster {
 
     public boolean damageEntity(Entity entity, int i) {
         if (super.damageEntity(entity, i)) {
-            if (this.passenger != entity && this.vehicle != entity) {
+
                 if (entity != this) {
                     // CraftBukkit start
                     org.bukkit.entity.Entity bukkitTarget = entity == null ? null : entity.getBukkitEntity();
@@ -60,9 +60,6 @@ public class EntityMonster extends EntityCreature implements IMonster {
                 }
 
                 return true;
-            } else {
-                return true;
-            }
         } else {
             return false;
         }

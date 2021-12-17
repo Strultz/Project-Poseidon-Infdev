@@ -8,18 +8,18 @@ import org.bukkit.block.BlockState;
  *<p />
  * Examples:
  *<ul>
- *     <li>Mushrooms spreading.</li>
  *     <li>Fire spreading.</li>
  * </ul>
  *<p />
  * If a Block Spread event is cancelled, the block will not spread.
  * @see BlockFormEvent
  */
-public class BlockSpreadEvent extends BlockFormEvent {
+public class BlockSpreadEvent extends BlockEvent {
     private Block source;
+    protected boolean cancel;
 
     public BlockSpreadEvent(Block block, Block source, BlockState newState) {
-        super(Type.BLOCK_SPREAD, block, newState);
+        super(Type.BLOCK_SPREAD, block);
         this.source = source;
     }
 
@@ -30,5 +30,13 @@ public class BlockSpreadEvent extends BlockFormEvent {
      */
     public Block getSource() {
         return source;
+    }
+    
+    public boolean isCancelled() {
+        return cancel;
+    }
+
+    public void setCancelled(boolean cancel) {
+        this.cancel = cancel;
     }
 }

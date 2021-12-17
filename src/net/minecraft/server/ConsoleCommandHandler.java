@@ -268,7 +268,7 @@ public class ConsoleCommandHandler {
                                         if (!checkPermission(listener, "say")) return true; // Craftbukkit
                                         s = s.substring(s.indexOf(" ")).trim();
                                         a.info("[" + s1 + "] " + s);
-                                        serverconfigurationmanager.sendAll(new Packet3Chat("\u00A7d[Server] " + s));
+                                        serverconfigurationmanager.sendAll(new Packet3Chat("\u00A7e" + s));
                                     } else if (s.toLowerCase().startsWith("tell ")) {
                                         if (!checkPermission(listener, "tell")) return true; // Craftbukkit
                                         astring = s.split(" ");

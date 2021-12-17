@@ -19,9 +19,7 @@ public class ItemBlock extends Item {
     public boolean a(ItemStack itemstack, EntityHuman entityhuman, World world, int i, int j, int k, int l) {
         int clickedX = i, clickedY = j, clickedZ = k; // CraftBukkit
 
-        if (world.getTypeId(i, j, k) == Block.SNOW.id) {
-            l = 0;
-        } else {
+
             if (l == 0) {
                 --j;
             }
@@ -45,7 +43,7 @@ public class ItemBlock extends Item {
             if (l == 5) {
                 ++i;
             }
-        }
+        
 
         if (itemstack.count == 0) {
             return false;
@@ -90,11 +88,6 @@ public class ItemBlock extends Item {
                         world.setTypeIdAndData(i, j - 1, k, blockStateBelow.getTypeId(), blockStateBelow.getRawData());
 
                     } else {
-
-                        if (this.id == Block.ICE.id) {
-                            // Ice will explode if we set straight to 0
-                            world.setTypeId(i, j, k, 20);
-                        }
 
                         world.setTypeIdAndData(i, j, k, replacedBlockState.getTypeId(), replacedBlockState.getRawData());
                     }

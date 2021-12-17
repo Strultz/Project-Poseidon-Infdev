@@ -84,12 +84,6 @@ public class EntityDamageEvent extends EntityEvent implements Cancellable {
          */
         PROJECTILE,
         /**
-         * Damage caused by being put in a block
-         *
-         * Damage: 1
-         */
-        SUFFOCATION,
-        /**
          * Damage caused when an entity falls a distance greater than 3 blocks
          *
          * Damage: fall height - 3.0
@@ -131,18 +125,6 @@ public class EntityDamageEvent extends EntityEvent implements Cancellable {
          * Damage: variable
          */
         ENTITY_EXPLOSION,
-        /**
-         * Damage caused by falling into the void
-         *
-         * Damage: 4 for players
-         */
-        VOID,
-        /**
-         * Damage caused by being struck by lightning
-         *
-         * Damage: 5
-         */
-        LIGHTNING,
         /**
          * Damage caused by committing suicide using the command "/kill"
          *

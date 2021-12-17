@@ -14,11 +14,11 @@ public class MathHelper {
         return a[(int) (f * 10430.378F + 16384.0F) & '\uffff'];
     }
 
-    public static final float c(float f) {
+    public static final float sqrt_float(float f) {
         return (float) Math.sqrt((double) f);
     }
 
-    public static final float a(double d0) {
+    public static final float sqrt_double(double d0) {
         return (float) Math.sqrt(d0);
     }
 

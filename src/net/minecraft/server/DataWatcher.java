@@ -127,7 +127,7 @@ public class DataWatcher {
             break;
 
         case 4:
-            Packet.a((String) watchableobject.b(), dataoutputstream);
+            Packet.writeString((String) watchableobject.b(), dataoutputstream);
             break;
 
         case 5:
@@ -177,7 +177,7 @@ public class DataWatcher {
                 break;
 
             case 4:
-                watchableobject = new WatchableObject(i, j, Packet.a(datainputstream, 64));
+                watchableobject = new WatchableObject(i, j, Packet.readString(datainputstream, 64));
                 break;
 
             case 5:

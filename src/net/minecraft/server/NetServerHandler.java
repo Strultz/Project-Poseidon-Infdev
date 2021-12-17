@@ -14,10 +14,9 @@ import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.event.CraftEventFactory;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.StorageMinecart;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.packet.PacketReceivedEvent;
 import org.bukkit.event.player.*;
 
@@ -45,9 +44,6 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
     private double z;
     private boolean checkMovement = true;
     private Map n = new HashMap();
-    private boolean usingReleaseToBeta = false; //Project Poseidon - Create Variable
-    private ConnectionType connectionType = ConnectionType.NORMAL; //Project Poseidon - Create Variable
-    private int rawConnectionType = 0; //Project Poseidon - Create Variable
     private boolean receivedKeepAlive = false;
     private boolean firePacketEvents;
 
@@ -69,31 +65,6 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
         // CraftBukkit start
         this.server = minecraftserver.server;
         this.firePacketEvents = PoseidonConfig.getInstance().getBoolean("settings.packet-events.enabled", false); //Poseidon
-    }
-
-    //Project Poseidon - Start
-    public boolean isUsingReleaseToBeta() {
-        return usingReleaseToBeta;
-    }
-
-    public void setUsingReleaseToBeta(boolean usingReleaseToBeta) {
-        this.usingReleaseToBeta = usingReleaseToBeta;
-    }
-
-    public ConnectionType getConnectionType() {
-        return this.connectionType;
-    }
-
-    public void setConnectionType(ConnectionType connectionType) {
-        this.connectionType = connectionType;
-    }
-
-    public void setRawConnectionType(int rawConnectionType) {
-        this.rawConnectionType = rawConnectionType;
-    }
-
-    public int getRawConnectionType() {
-        return this.rawConnectionType;
     }
 
     //Project Poseidon - End
@@ -146,7 +117,6 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
         s = event.getReason();
         // CraftBukkit end
 
-        this.player.B();
         this.sendPacket(new Packet255KickDisconnect(s));
         this.networkManager.d();
 
@@ -159,16 +129,6 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
 
         this.minecraftServer.serverConfigurationManager.disconnect(this.player);
         this.disconnected = true;
-    }
-
-    public void a(Packet27 packet27) {
-        // poseidon
-        PacketReceivedEvent event = new PacketReceivedEvent(server.getPlayer(player), packet27);
-        server.getPluginManager().callEvent(event);
-        if (event.isCancelled())
-            return;
-
-        this.player.a(packet27.c(), packet27.e(), packet27.g(), packet27.h(), packet27.d(), packet27.f());
     }
 
     public void a(Packet10Flying packet10flying) {
@@ -261,56 +221,6 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
             double d3;
             double d4;
 
-            if (this.player.vehicle != null) {
-                float f = this.player.yaw;
-                float f1 = this.player.pitch;
-
-                this.player.vehicle.f();
-                d1 = this.player.locX;
-                d2 = this.player.locY;
-                d3 = this.player.locZ;
-                double d5 = 0.0D;
-
-                d4 = 0.0D;
-                if (packet10flying.hasLook) {
-                    f = packet10flying.yaw;
-                    f1 = packet10flying.pitch;
-                }
-
-                if (packet10flying.h && packet10flying.y == -999.0D && packet10flying.stance == -999.0D) {
-                    d5 = packet10flying.x;
-                    d4 = packet10flying.z;
-                }
-
-                this.player.onGround = packet10flying.g;
-                this.player.a(true);
-                this.player.move(d5, 0.0D, d4);
-                this.player.setLocation(d1, d2, d3, f, f1);
-                this.player.motX = d5;
-                this.player.motZ = d4;
-                if (this.player.vehicle != null) {
-                    worldserver.vehicleEnteredWorld(this.player.vehicle, true);
-                }
-
-                if (this.player.vehicle != null) {
-                    this.player.vehicle.f();
-                }
-
-                this.minecraftServer.serverConfigurationManager.d(this.player);
-                this.x = this.player.locX;
-                this.y = this.player.locY;
-                this.z = this.player.locZ;
-                worldserver.playerJoinedWorld(this.player);
-                return;
-            }
-
-            if (this.player.isSleeping()) {
-                this.player.a(true);
-                this.player.setLocation(this.x, this.y, this.z, this.player.yaw, this.player.pitch);
-                worldserver.playerJoinedWorld(this.player);
-                return;
-            }
-
             d0 = this.player.locY;
             this.x = this.player.locX;
             this.y = this.player.locY;
@@ -330,7 +240,7 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
                 d2 = packet10flying.y;
                 d3 = packet10flying.z;
                 d4 = packet10flying.stance - packet10flying.y;
-                if (!this.player.isSleeping() && (d4 > 1.65D || d4 < 0.1D)) {
+                if (d4 > 1.65D || d4 < 0.1D) {
                     this.disconnect("Illegal stance");
                     a.warning(this.player.name + " had an illegal stance: " + d4);
                     return;
@@ -379,7 +289,7 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
             d8 = d4 * d4 + d6 * d6 + d7 * d7;
             boolean flag1 = false;
 
-            if (d8 > 0.0625D && !this.player.isSleeping()) {
+            if (d8 > 0.0625D) {
                 flag1 = true;
                 a.warning(this.player.name + " moved wrongly!");
                 System.out.println("Got position " + d1 + ", " + d2 + ", " + d3);
@@ -389,7 +299,7 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
             this.player.setLocation(d1, d2, d3, f2, f3);
             boolean flag2 = worldserver.getEntities(this.player, this.player.boundingBox.clone().shrink((double) f4, (double) f4, (double) f4)).size() == 0;
 
-            if (flag && (flag1 || !flag2) && !this.player.isSleeping()) {
+            if (flag && (flag1 || !flag2)) {
                 this.a(this.x, this.y, this.z, f2, f3);
                 return;
             }
@@ -492,7 +402,7 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
             // CraftBukkit end
             this.player.F();
         } else {
-            boolean flag = worldserver.weirdIsOpCache = worldserver.dimension != 0 || this.minecraftServer.serverConfigurationManager.isOp(this.player.name); // CraftBukkit
+            boolean flag = worldserver.weirdIsOpCache = this.minecraftServer.serverConfigurationManager.isOp(this.player.name); // CraftBukkit
             boolean flag1 = false;
 
             if (packet14blockdig.e == 0) {
@@ -544,7 +454,7 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
                 double d5 = this.player.locY - ((double) j + 0.5D);
                 double d6 = this.player.locZ - ((double) k + 0.5D);
                 double d7 = d4 * d4 + d5 * d5 + d6 * d6;
-
+                
                 if (d7 < 256.0D) {
                     this.player.netServerHandler.sendPacket(new Packet53BlockChange(i, j, k, worldserver));
                 }
@@ -631,8 +541,9 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
             }
             flag = true; // spawn protection moved to ItemBlock!!!
             // CraftBukkit end
-
-            if (j1 > 16 || flag) {
+            
+            //fix this madness
+            if (j1 > this.server.getSpawnRadius() || flag) {
                 this.player.itemInWorldManager.interact(this.player, worldserver, itemstack, i, j, k, l);
             }
 
@@ -931,25 +842,7 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
 
         // CraftBukkit start
         if (this.player.dead) return;
-
-        if (packet19entityaction.animation == 1 || packet19entityaction.animation == 2) {
-            PlayerToggleSneakEvent event = new PlayerToggleSneakEvent(this.getPlayer(), packet19entityaction.animation == 1);
-            this.server.getPluginManager().callEvent(event);
-
-            if (event.isCancelled()) {
-                return;
-            }
-        }
         // CraftBukkit end
-
-        if (packet19entityaction.animation == 1) {
-            this.player.setSneak(true);
-        } else if (packet19entityaction.animation == 2) {
-            this.player.setSneak(false);
-        } else if (packet19entityaction.animation == 3) {
-            this.player.a(false, true, true);
-            this.checkMovement = false;
-        }
     }
 
     public void a(Packet0KeepAlive packet0KeepAlive) {
@@ -996,11 +889,6 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
                 Player player = (Player) this.getPlayer();
                 org.bukkit.entity.Entity bukkitEntity = entity.getBukkitEntity();
                 // CraftBukkit start
-                //Project Poseidon Start - Fixes a Minecart dupe glitch
-                if (player.isInsideVehicle() && bukkitEntity instanceof StorageMinecart) {
-                    return;
-                }
-                //Project Poseidon End
                 PlayerInteractEntityEvent event = new PlayerInteractEntityEvent(player, bukkitEntity);
                 this.server.getPluginManager().callEvent(event);
 
@@ -1091,78 +979,6 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
 
         if (oshort != null && packet106transaction.b == oshort.shortValue() && this.player.activeContainer.windowId == packet106transaction.a && !this.player.activeContainer.c(this.player)) {
             this.player.activeContainer.a(this.player, true);
-        }
-    }
-
-    public void a(Packet130UpdateSign packet130updatesign) {
-        // poseidon
-        PacketReceivedEvent pevent = new PacketReceivedEvent(server.getPlayer(player), packet130updatesign);
-        server.getPluginManager().callEvent(pevent);
-        if (pevent.isCancelled())
-            return;
-
-        if (this.player.dead) return; // CraftBukkit
-
-        WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
-
-        if (worldserver.isLoaded(packet130updatesign.x, packet130updatesign.y, packet130updatesign.z)) {
-            TileEntity tileentity = worldserver.getTileEntity(packet130updatesign.x, packet130updatesign.y, packet130updatesign.z);
-
-            if (tileentity instanceof TileEntitySign) {
-                TileEntitySign tileentitysign = (TileEntitySign) tileentity;
-
-                if (!tileentitysign.a()) {
-                    this.minecraftServer.c("Player " + this.player.name + " just tried to change non-editable sign");
-                    // CraftBukkit
-                    this.sendPacket(new Packet130UpdateSign(packet130updatesign.x, packet130updatesign.y, packet130updatesign.z, tileentitysign.lines));
-                    return;
-                }
-            }
-
-            int i;
-            int j;
-
-            for (j = 0; j < 4; ++j) {
-                boolean flag = true;
-
-                if (packet130updatesign.lines[j].length() > 15) {
-                    flag = false;
-                } else {
-                    for (i = 0; i < packet130updatesign.lines[j].length(); ++i) {
-                        if (FontAllowedCharacters.allowedCharacters.indexOf(packet130updatesign.lines[j].charAt(i)) < 0) {
-                            flag = false;
-                        }
-                    }
-                }
-
-                if (!flag) {
-                    packet130updatesign.lines[j] = "!?";
-                }
-            }
-
-            if (tileentity instanceof TileEntitySign) {
-                j = packet130updatesign.x;
-                int k = packet130updatesign.y;
-
-                i = packet130updatesign.z;
-                TileEntitySign tileentitysign1 = (TileEntitySign) tileentity;
-
-                // CraftBukkit start
-                Player player = this.server.getPlayer(this.player);
-                SignChangeEvent event = new SignChangeEvent((CraftBlock) player.getWorld().getBlockAt(j, k, i), this.server.getPlayer(this.player), packet130updatesign.lines);
-                this.server.getPluginManager().callEvent(event);
-
-                if (!event.isCancelled()) {
-                    for (int l = 0; l < 4; ++l) {
-                        tileentitysign1.lines[l] = event.getLine(l);
-                    }
-                    tileentitysign1.a(false);
-                }
-                // CraftBukkit end
-
-                tileentitysign1.update();
-                worldserver.notify(j, k, i);
-            }
         }
     }
 

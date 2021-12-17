@@ -60,11 +60,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
     }
 
     public boolean isSleeping() {
-        return getHandle().sleeping;
+        return false;
     }
 
     public int getSleepTicks() {
-        return getHandle().sleepTicks;
+        return 0;
     }
 
     public boolean isOp() {

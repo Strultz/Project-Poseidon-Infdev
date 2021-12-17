@@ -116,10 +116,6 @@ public abstract class NetHandler {
         this.a((Packet) packet40entitymetadata);
     }
 
-    public void a(Packet39AttachEntity packet39attachentity) {
-        this.a((Packet) packet39attachentity);
-    }
-
     public void a(Packet7UseEntity packet7useentity) {
         this.a((Packet) packet7useentity);
     }
@@ -160,10 +156,6 @@ public abstract class NetHandler {
         this.a((Packet) packet104windowitems);
     }
 
-    public void a(Packet130UpdateSign packet130updatesign) {
-        this.a((Packet) packet130updatesign);
-    }
-
     public void a(Packet105CraftProgressBar packet105craftprogressbar) {
         this.a((Packet) packet105craftprogressbar);
     }
@@ -178,37 +170,5 @@ public abstract class NetHandler {
 
     public void a(Packet25EntityPainting packet25entitypainting) {
         this.a((Packet) packet25entitypainting);
-    }
-
-    public void a(Packet54PlayNoteBlock packet54playnoteblock) {
-        this.a((Packet) packet54playnoteblock);
-    }
-
-    public void a(Packet200Statistic packet200statistic) {
-        this.a((Packet) packet200statistic);
-    }
-
-    public void a(Packet17 packet17) {
-        this.a((Packet) packet17);
-    }
-
-    public void a(Packet27 packet27) {
-        this.a((Packet) packet27);
-    }
-
-    public void a(Packet70Bed packet70bed) {
-        this.a((Packet) packet70bed);
-    }
-
-    public void a(Packet71Weather packet71weather) {
-        this.a((Packet) packet71weather);
-    }
-
-    public void a(Packet131 packet131) {
-        this.a((Packet) packet131);
-    }
-
-    public void a(Packet61 packet61) {
-        this.a((Packet) packet61);
     }
 }

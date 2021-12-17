@@ -33,7 +33,7 @@ public class SayCommand extends VanillaCommand {
                 Bukkit.getLogger().info("[" + sender.getName() + "] " + message);
             }
 
-            Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "[Server] " + message);
+            Bukkit.broadcastMessage(ChatColor.YELLOW + message);
 
             return true;
         } catch (Exception e) {

@@ -3,7 +3,6 @@ package org.bukkit.entity;
 import com.projectposeidon.ConnectionType;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
-import org.bukkit.map.MapView;
 
 import java.net.InetSocketAddress;
 import java.util.UUID;
@@ -101,20 +100,6 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
     public boolean performCommand(String command);
 
     /**
-     * Returns if the player is in sneak mode
-     *
-     * @return true if player is in sneak mode
-     */
-    public boolean isSneaking();
-
-    /**
-     * Sets the sneak mode the player
-     *
-     * @param sneak true if player should appear sneaking
-     */
-    public void setSneaking(boolean sneak);
-
-    /**
      * Saves the players current location, health, inventory, motion, and other information into the username.dat file, in the world/player folder
      */
     public void saveData();
@@ -142,28 +127,6 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
      * @return
      */
     public boolean isSleepingIgnored();
-
-    /**
-     * Play a note for a player at a location. This requires a note block
-     * at the particular location (as far as the client is concerned). This
-     * will not work without a note block. This will not work with cake.
-     *
-     * @param loc
-     * @param instrument
-     * @param note
-     */
-    public void playNote(Location loc, byte instrument, byte note);
-
-    /**
-     * Play a note for a player at a location. This requires a note block
-     * at the particular location (as far as the client is concerned). This
-     * will not work without a note block. This will not work with cake.
-     *
-     * @param loc
-     * @param instrument
-     * @param note
-     */
-    public void playNote(Location loc, Instrument instrument, Note note);
 
     /**
      * Plays an effect to just this player.
@@ -211,14 +174,6 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
      * @param data
      */
     public void sendBlockChange(Location loc, int material, byte data);
-
-    /**
-     * Render a map and send it to the player in its entirety. This may be used
-     * when streaming the map in the normal manner is not desirbale.
-     *
-     * @pram map The map to be sent
-     */
-    public void sendMap(MapView map);
 
     /**
      * Forces an update of the player's entire inventory.
@@ -302,22 +257,7 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
      */
     public boolean isPlayerTimeRelative();
 
-    /**
-     * Returns connection type which allows for a plugin to know if a user is using a proxy, and if IP Forwarding is enabled.
-     *
-     * @return ConntionType enum
-     */
-    public ConnectionType getConnectionType();
-
     public boolean hasReceivedPacket0();
-
-    /**
-     * Returns whether the player is using a Release2Beta proxy
-     *
-     * @return true if the player is using a Release2Beta proxy
-     */
-    @Deprecated
-    public boolean isUsingReleaseToBeta();
 
     /**
      * Restores the normal condition where the player's time is synchronized with the server time.

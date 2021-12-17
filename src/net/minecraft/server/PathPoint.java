@@ -29,7 +29,7 @@ public class PathPoint {
         float f1 = (float) (pathpoint.b - this.b);
         float f2 = (float) (pathpoint.c - this.c);
 
-        return MathHelper.c(f * f + f1 * f1 + f2 * f2);
+        return MathHelper.sqrt_float(f * f + f1 * f1 + f2 * f2);
     }
 
     public boolean equals(Object object) {

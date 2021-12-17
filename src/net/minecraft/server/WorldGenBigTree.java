@@ -1,14 +1,367 @@
 package net.minecraft.server;
+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+// Jad home page: http://www.kpdus.com/jad.html
+// Decompiler options: packimports(3) braces deadcode 
+
+import java.util.Random;
 
 import org.bukkit.BlockChangeDelegate;
 
+public final class WorldGenBigTree extends WorldGenerator {
+    private static byte[] otherCoordPairs;
+    private Random rand;
+    BlockChangeDelegate worldObj; //Craftbukkit
+    private int[] basePos;
+    private int heightLimit;
+    private int height;
+    private double heightAttenuation;
+    private double branchSlope;
+    private double scaleWidth;
+    private double leafDensity;
+    private int trunkSize;
+    private int heightLimitLimit;
+    private int leafDistanceLimit;
+    private int[][] leafNodes;
+    
+    public WorldGenBigTree() {
+        this.rand = new Random();
+        this.basePos = new int[] { 0, 0, 0 };
+        this.heightLimit = 0;
+        this.heightAttenuation = 0.618;
+        this.branchSlope = 0.381;
+        this.scaleWidth = 1.0;
+        this.leafDensity = 1.0;
+        this.trunkSize = 1;
+        this.heightLimitLimit = 12;
+        this.leafDistanceLimit = 4;
+    }
+    
+    private void placeBlockLine(final int[] array, final int[] array2, int n) {
+        final int[] array3 = { 0, 0, 0 };
+        int i = 0;
+        int n2 = 0;
+        while (i < 3) {
+            array3[i] = array2[i] - array[i];
+            if (Math.abs(array3[i]) > Math.abs(array3[n2])) {
+                n2 = i;
+            }
+            i = (byte)(i + 1);
+        }
+        if (array3[n2] == 0) {
+            return;
+        }
+        final byte b = WorldGenBigTree.otherCoordPairs[n2];
+        final byte b2 = WorldGenBigTree.otherCoordPairs[n2 + 3];
+        int n3;
+        if (array3[n2] > 0) {
+            n3 = 1;
+        }
+        else {
+            n3 = -1;
+        }
+        final double n4 = array3[b] / (double)array3[n2];
+        final double n5 = array3[b2] / (double)array3[n2];
+        final int[] array4 = { 0, 0, 0 };
+        int j;
+        for (j = 0, n = array3[n2] + n3; j != n; j += n3) {
+            array4[n2] = MathHelper.floor(array[n2] + j + 0.5);
+            array4[b] = MathHelper.floor(array[b] + j * n4 + 0.5);
+            array4[b2] = MathHelper.floor(array[b2] + j * n5 + 0.5);
+            this.worldObj.setRawTypeId(array4[0], array4[1], array4[2], 17);
+        }
+    }
+    
+    private int checkBlockLine(final int[] array, final int[] array2) {
+        final int[] array3 = { 0, 0, 0 };
+        int i = 0;
+        int n = 0;
+        while (i < 3) {
+            array3[i] = array2[i] - array[i];
+            if (Math.abs(array3[i]) > Math.abs(array3[n])) {
+                n = i;
+            }
+            i = (byte)(i + 1);
+        }
+        if (array3[n] == 0) {
+            return -1;
+        }
+        final byte b = WorldGenBigTree.otherCoordPairs[n];
+        final byte b2 = WorldGenBigTree.otherCoordPairs[n + 3];
+        int n2;
+        if (array3[n] > 0) {
+            n2 = 1;
+        }
+        else {
+            n2 = -1;
+        }
+        final double n3 = array3[b] / (double)array3[n];
+        final double n4 = array3[b2] / (double)array3[n];
+        final int[] array4 = { 0, 0, 0 };
+        int j;
+        int n5;
+        for (j = 0, n5 = array3[n] + n2; j != n5; j += n2) {
+            array4[n] = array[n] + j;
+            array4[b] = (int)(array[b] + j * n3);
+            array4[b2] = (int)(array[b2] + j * n4);
+            final int blockId;
+            if ((blockId = this.worldObj.getTypeId(array4[0], array4[1], array4[2])) != 0 && blockId != 18) {
+                break;
+            }
+        }
+        if (j == n5) {
+            return -1;
+        }
+        return Math.abs(j);
+    }
+    
+    @Override
+    public final void a(final double n, final double n2, final double n3) {
+        this.heightLimitLimit = 12;
+        this.leafDistanceLimit = 5;
+        this.scaleWidth = 1.0;
+        this.leafDensity = 1.0;
+    }
+    
+    @Override
+    public boolean a(World world, Random random, int i, int j, int k) {
+        // CraftBukkit start
+        // sk: The idea is to have (our) WorldServer implement
+        // BlockChangeDelegate and then we can implicitly cast World to
+        // WorldServer (a safe cast, AFAIK) and no code will be broken. This
+        // then allows plugins to catch manually-invoked generation events
+        return generate((BlockChangeDelegate)world, random, i, j, k);
+    }
+
+    public boolean generate(BlockChangeDelegate worldObj, Random random, int n, int blockId, int i) {
+        // CraftBukkit end
+        this.worldObj = worldObj;
+        this.rand.setSeed(random.nextLong());
+        this.basePos[0] = n;
+        this.basePos[1] = blockId;
+        this.basePos[2] = i;
+        if (this.heightLimit == 0) {
+            this.heightLimit = 5 + this.rand.nextInt(this.heightLimitLimit);
+        }
+        final int[] array = { this.basePos[0], this.basePos[1], this.basePos[2] };
+        final int[] array2 = { this.basePos[0], this.basePos[1] + this.heightLimit - 1, this.basePos[2] };
+        boolean b;
+        if ((blockId = this.worldObj.getTypeId(this.basePos[0], this.basePos[1] - 1, this.basePos[2])) != 2 && blockId != 3) {
+            b = false;
+        }
+        else if ((i = this.checkBlockLine(array, array2)) == -1) {
+            b = true;
+        }
+        else if (i < 6) {
+            b = false;
+        }
+        else {
+            this.heightLimit = i;
+            b = true;
+        }
+        if (!b) {
+            return false;
+        }
+        this.height = (int)(this.heightLimit * this.heightAttenuation);
+        if (this.height >= this.heightLimit) {
+            this.height = this.heightLimit - 1;
+        }
+        int j;
+        if ((j = (int)(1.382 + Math.pow(this.leafDensity * this.heightLimit / 13.0, 2.0))) <= 0) {
+            j = 1;
+        }
+        final int[][] array3 = new int[j * this.heightLimit][4];
+        blockId = this.basePos[1] + this.heightLimit - this.leafDistanceLimit;
+        i = 1;
+        int n2 = this.basePos[1] + this.height;
+        int k = blockId - this.basePos[1];
+        array3[0][0] = this.basePos[0];
+        array3[0][1] = blockId;
+        array3[0][2] = this.basePos[2];
+        array3[0][3] = n2;
+        --blockId;
+        while (k >= 0) {
+            int l = 0;
+            int n3 = k;
+            float n5;
+            float n4;
+            if (n3 < (float)this.heightLimit * 0.3) {
+                n4 = (n5 = -1.618f);
+            }
+            else {
+                final float n6 = this.heightLimit / 2.0f;
+                final float n7;
+                float n8;
+                if ((n7 = this.heightLimit / 2.0f - n3) == 0.0f) {
+                    n8 = n6;
+                }
+                else if (Math.abs(n7) >= n6) {
+                    n8 = 0.0f;
+                }
+                else {
+                    n8 = (float)Math.sqrt(Math.pow((double)Math.abs(n6), 2.0) - Math.pow((double)Math.abs(n7), 2.0));
+                }
+                n5 = (n8 = (n4 = n8 * 0.5f));
+            }
+            final float n9 = n5;
+            if (n4 < 0.0f) {
+                --blockId;
+                --k;
+            }
+            else {
+                while (l < j) {
+                    final double n10 = this.scaleWidth * (n9 * (this.rand.nextFloat() + 0.328));
+                    final double n11 = this.rand.nextFloat() * 2.0 * 3.14159;
+                    final int n12 = (int)(n10 * Math.sin(n11) + this.basePos[0] + 0.5);
+                    n3 = (int)(n10 * Math.cos(n11) + this.basePos[2] + 0.5);
+                    final int[] array4 = { n12, blockId, n3 };
+                    if (this.checkBlockLine(array4, new int[] { n12, blockId + this.leafDistanceLimit, n3 }) == -1) {
+                        final int[] array5 = { this.basePos[0], this.basePos[1], this.basePos[2] };
+                        final double n13 = Math.sqrt(Math.pow((double)Math.abs(this.basePos[0] - array4[0]), 2.0) + Math.pow((double)Math.abs(this.basePos[2] - array4[2]), 2.0)) * this.branchSlope;
+                        if (array4[1] - n13 > n2) {
+                            array5[1] = n2;
+                        }
+                        else {
+                            array5[1] = (int)(array4[1] - n13);
+                        }
+                        if (this.checkBlockLine(array5, array4) == -1) {
+                            array3[i][0] = n12;
+                            array3[i][1] = blockId;
+                            array3[i][2] = n3;
+                            array3[i][3] = array5[1];
+                            ++i;
+                        }
+                    }
+                    ++l;
+                }
+                --blockId;
+                --k;
+            }
+        }
+        System.arraycopy(array3, 0, (this.leafNodes = new int[i][4]), 0, i);
+        int l;
+        int n3;
+        int n12;
+        int n14;
+        int n15;
+        int n16;
+        int n17;
+        float n18;
+        int n19;
+        int n20;
+        int n21;
+        float n22;
+        int n23;
+        byte b2;
+        byte b3;
+        int[] array6;
+        int[] array7;
+        int n24;
+        int blockId2;
+        for (j = 0, n = this.leafNodes.length; j < n; ++j) {
+            blockId = this.leafNodes[j][0];
+            i = this.leafNodes[j][1];
+            n2 = this.leafNodes[j][2];
+            n14 = blockId;
+            n15 = i;
+            blockId = n2;
+            n16 = n15;
+            l = n14;
+            for (i = n16; i < n16 + this.leafDistanceLimit; ++i) {
+                n17 = i - n16;
+                n18 = ((n17 < 0 || n17 >= this.leafDistanceLimit) ? -1.0f : ((n17 == 0 || n17 == this.leafDistanceLimit - 1) ? 2.0f : 3.0f));
+                n19 = l;
+                n20 = i;
+                n21 = blockId;
+                n22 = n18;
+                n3 = n21;
+                n12 = n20;
+                n17 = n19;
+                n23 = (int)(n22 + 0.618);
+                b2 = WorldGenBigTree.otherCoordPairs[1];
+                b3 = WorldGenBigTree.otherCoordPairs[4];
+                array6 = new int[] { n17, n12, n3 };
+                array7 = new int[] { 0, 0, 0 };
+                n3 = -n23;
+                array7[1] = array6[1];
+                while (n3 <= n23) {
+                    array7[b2] = array6[b2] + n3;
+                    for (n24 = -n23; n24 <= n23; ++n24) {
+                        if (Math.sqrt(Math.pow(Math.abs(n3) + 0.5, 2.0) + Math.pow(Math.abs(n24) + 0.5, 2.0)) <= n22) {
+                            array7[b3] = array6[b3] + n24;
+                            if ((blockId2 = this.worldObj.getTypeId(array7[0], array7[1], array7[2])) == 0 || blockId2 == 18) {
+                                this.worldObj.setRawTypeId(array7[0], array7[1], array7[2], 18);
+                            }
+                        }
+                    }
+                    ++n3;
+                }
+            }
+        }
+        j = this.basePos[0];
+        n = this.basePos[1];
+        blockId = this.basePos[1] + this.height;
+        i = this.basePos[2];
+        final int[] array8 = { j, n, i };
+        final int[] array9 = { j, blockId, i };
+        this.placeBlockLine(array8, array9, 17);
+        if (this.trunkSize == 2) {
+            final int[] array10 = array8;
+            final int n25 = 0;
+            ++array10[n25];
+            final int[] array11 = array9;
+            final int n26 = 0;
+            ++array11[n26];
+            this.placeBlockLine(array8, array9, 17);
+            final int[] array12 = array8;
+            final int n27 = 2;
+            ++array12[n27];
+            final int[] array13 = array9;
+            final int n28 = 2;
+            ++array13[n28];
+            this.placeBlockLine(array8, array9, 17);
+            final int[] array14 = array8;
+            final int n29 = 0;
+            --array14[n29];
+            final int[] array15 = array9;
+            final int n30 = 0;
+            --array15[n30];
+            this.placeBlockLine(array8, array9, 17);
+        }
+        j = 0;
+        n = this.leafNodes.length;
+        final int[] array16 = { this.basePos[0], this.basePos[1], this.basePos[2] };
+        while (j < n) {
+            final int[] array17 = this.leafNodes[j];
+            final int[] array18 = { array17[0], array17[1], array17[2] };
+            array16[1] = array17[3];
+            k = (n16 = array16[1] - this.basePos[1]);
+            if (n16 >= this.heightLimit * 0.2) {
+                this.placeBlockLine(array16, array18, 17);
+            }
+            ++j;
+        }
+        return true;
+    }
+    
+    static {
+        WorldGenBigTree.otherCoordPairs = new byte[] { 2, 0, 0, 1, 2, 1 };
+    }
+}
+/*package net.minecraft.server;
+
 import java.util.Random;
+
+// CraftBukkit start
+import org.bukkit.BlockChangeDelegate;
+// CraftBukkit end
 
 public class WorldGenBigTree extends WorldGenerator {
 
     static final byte[] a = new byte[] { (byte) 2, (byte) 0, (byte) 0, (byte) 1, (byte) 2, (byte) 1};
     Random b = new Random();
-    BlockChangeDelegate c; // CraftBukkit
+    // CraftBukkit start
+    BlockChangeDelegate c;
+    // CraftBukkit end
     int[] d = new int[] { 0, 0, 0};
     int e = 0;
     int f;
@@ -59,8 +412,8 @@ public class WorldGenBigTree extends WorldGenerator {
                 for (double d0 = 0.5D; j1 < i; ++j1) {
                     double d1 = this.j * (double) f * ((double) this.b.nextFloat() + 0.328D);
                     double d2 = (double) this.b.nextFloat() * 2.0D * 3.14159D;
-                    int k1 = MathHelper.floor(d1 * Math.sin(d2) + (double) this.d[0] + d0);
-                    int l1 = MathHelper.floor(d1 * Math.cos(d2) + (double) this.d[2] + d0);
+                    int k1 = (int) (d1 * Math.sin(d2) + (double) this.d[0] + d0);
+                    int l1 = (int) (d1 * Math.cos(d2) + (double) this.d[2] + d0);
                     int[] aint1 = new int[] { k1, j, l1};
                     int[] aint2 = new int[] { k1, j + this.n, l1};
 
@@ -119,7 +472,7 @@ public class WorldGenBigTree extends WorldGenerator {
                     if (l1 != 0 && l1 != 18) {
                         ++k1;
                     } else {
-                        this.c.setRawTypeId(aint1[0], aint1[1], aint1[2], l);
+                        this.c.setTypeId(aint1[0], aint1[1], aint1[2], l);
                         ++k1;
                     }
                 }
@@ -192,10 +545,10 @@ public class WorldGenBigTree extends WorldGenerator {
             int j = 0;
 
             for (int k = aint2[b1] + b4; j != k; j += b4) {
-                aint3[b1] = MathHelper.floor((double) (aint[b1] + j) + 0.5D);
-                aint3[b2] = MathHelper.floor((double) aint[b2] + (double) j * d0 + 0.5D);
-                aint3[b3] = MathHelper.floor((double) aint[b3] + (double) j * d1 + 0.5D);
-                this.c.setRawTypeId(aint3[0], aint3[1], aint3[2], i);
+                aint3[b1] = MathHelper.b((double) (aint[b1] + j) + 0.5D);
+                aint3[b2] = MathHelper.b((double) aint[b2] + (double) j * d0 + 0.5D);
+                aint3[b3] = MathHelper.b((double) aint[b3] + (double) j * d1 + 0.5D);
+                this.c.setTypeId(aint3[0], aint3[1], aint3[2], i);
             }
         }
     }
@@ -290,8 +643,8 @@ public class WorldGenBigTree extends WorldGenerator {
 
             for (j = aint2[b1] + b4; i != j; i += b4) {
                 aint3[b1] = aint[b1] + i;
-                aint3[b2] = MathHelper.floor((double) aint[b2] + (double) i * d0);
-                aint3[b3] = MathHelper.floor((double) aint[b3] + (double) i * d1);
+                aint3[b2] = (int) ((double) aint[b2] + (double) i * d0);
+                aint3[b3] = (int) ((double) aint[b3] + (double) i * d1);
                 int k = this.c.getTypeId(aint3[0], aint3[1], aint3[2]);
 
                 if (k != 0 && k != 18) {
@@ -340,7 +693,7 @@ public class WorldGenBigTree extends WorldGenerator {
         // BlockChangeDelegate and then we can implicitly cast World to
         // WorldServer (a safe cast, AFAIK) and no code will be broken. This
         // then allows plugins to catch manually-invoked generation events
-        return this.generate((BlockChangeDelegate) world, random, i, j, k);
+        return generate((BlockChangeDelegate)world, random, i, j, k);
     }
 
     public boolean generate(BlockChangeDelegate world, Random random, int i, int j, int k) {
@@ -366,4 +719,4 @@ public class WorldGenBigTree extends WorldGenerator {
             return true;
         }
     }
-}
+}*/

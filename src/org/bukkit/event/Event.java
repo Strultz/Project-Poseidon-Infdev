@@ -235,12 +235,6 @@ public abstract class Event implements Serializable {
          */
         PLAYER_ANIMATION(Category.PLAYER),
         /**
-         * Called when a player toggles sneak mode
-         *
-         * @see org.bukkit.event.player.PlayerToggleSneakEvent
-         */
-        PLAYER_TOGGLE_SNEAK(Category.PLAYER),
-        /**
          * Called when a player interacts with an object or air
          *
          * @see org.bukkit.event.player.PlayerInteractEvent
@@ -253,23 +247,11 @@ public abstract class Event implements Serializable {
          */
         PLAYER_INTERACT_ENTITY(Category.PLAYER),
         /**
-         * Called when a player throws an egg
-         *
-         * @see org.bukkit.event.player.PlayerEggThrowEvent
-         */
-        PLAYER_EGG_THROW(Category.PLAYER),
-        /**
          * Called when a player teleports from one position to another
          *
          * @see org.bukkit.event.player.PlayerTeleportEvent
          */
         PLAYER_TELEPORT(Category.PLAYER),
-        /**
-         * Called when a player completes the portaling process by standing in a portal
-         *
-         * @see org.bukkit.event.player.PlayerPortalEvent
-         */
-        PLAYER_PORTAL(Category.PLAYER),
         /**
          * Called when a player changes their held item
          *
@@ -289,41 +271,11 @@ public abstract class Event implements Serializable {
          */
         PLAYER_PICKUP_ITEM(Category.PLAYER),
         /**
-         * Called when a player empties a bucket
-         *
-         * @see org.bukkit.event.player.PlayerBucketEmptyEvent
-         */
-        PLAYER_BUCKET_EMPTY(Category.PLAYER),
-        /**
-         * Called when a player fills a bucket
-         *
-         * @see org.bukkit.event.player.PlayerBucketFillEvent
-         */
-        PLAYER_BUCKET_FILL(Category.PLAYER),
-        /**
          * Called when a player interacts with the inventory
          *
          * @see org.bukkit.event.player.PlayerInventoryEvent
          */
         PLAYER_INVENTORY(Category.PLAYER),
-        /**
-         * Called when a player enter a bed
-         *
-         * @see org.bukkit.event.player.PlayerBedEnterEvent
-         */
-        PLAYER_BED_ENTER(Category.PLAYER),
-        /**
-         * Called when a player leaves a bed
-         *
-         * @see org.bukkit.event.player.PlayerBedLeaveEvent
-         */
-        PLAYER_BED_LEAVE(Category.PLAYER),
-        /**
-         * Called when a player is fishing
-         *
-         * @see org.bukkit.event.player.PlayerFishEvent
-         */
-        PLAYER_FISH(Category.PLAYER),
 
         /**
          * BLOCK EVENTS
@@ -374,12 +326,6 @@ public abstract class Event implements Serializable {
          */
         BLOCK_PLACE(Category.BLOCK),
         /**
-         * Called when a block dispenses something
-         *
-         * @see org.bukkit.event.block.BlockDispenseEvent
-         */
-        BLOCK_DISPENSE(Category.BLOCK),
-        /**
          * Called when a block is destroyed from being burnt by fire
          *
          * @see org.bukkit.event.block.BlockBurnEvent
@@ -392,55 +338,17 @@ public abstract class Event implements Serializable {
          */
         LEAVES_DECAY(Category.BLOCK),
         /**
-         * Called when a sign is changed
-         *
-         * @see org.bukkit.event.block.SignChangeEvent
-         */
-        SIGN_CHANGE(Category.BLOCK),
-        /**
-         * Called when a block changes redstone current. Only triggered on blocks
-         * that are actually capable of transmitting or carrying a redstone
-         * current
-         *
-         * @see org.bukkit.event.block.BlockRedstoneEvent
-         */
-        REDSTONE_CHANGE(Category.BLOCK),
-        /**
          * Called when a block is broken by a player
          *
          * @see org.bukkit.event.block.BlockBreakEvent
          */
         BLOCK_BREAK(Category.BLOCK),
         /**
-         * Called when a block is formed based on world conditions
-         *
-         * @see org.bukkit.event.block.BlockFormEvent
-         */
-        BLOCK_FORM(Category.BLOCK),
-        /**
          * Called when a block spreads based on world conditions
          *
          * @see org.bukkit.event.block.BlockSpreadEvent
          */
         BLOCK_SPREAD(Category.BLOCK),
-        /**
-         * Called when a block fades, melts or disappears based on world conditions
-         *
-         * @see org.bukkit.event.block.BlockFadeEvent
-         */
-        BLOCK_FADE(Category.BLOCK),
-        /**
-         * Called when a piston extends
-         *
-         * @see org.bukkit.event.block.PistonExtendEvent
-         */
-        BLOCK_PISTON_EXTEND(Category.BLOCK),
-        /**
-         * Called when a piston retracts
-         *
-         * @see org.bukkit.event.block.PistonRetractEvent
-         */
-        BLOCK_PISTON_RETRACT(Category.BLOCK),
 
         /**
          * INVENTORY EVENTS
@@ -511,12 +419,6 @@ public abstract class Event implements Serializable {
          * @see org.bukkit.event.server.ServerCommandEvent
          */
         SERVER_COMMAND(Category.SERVER),
-        /**
-         * Called when a map is initialized (created or loaded into memory)
-         *
-         * @see org.bukkit.event.server.MapInitializeEvent
-         */
-        MAP_INITIALIZE(Category.SERVER),
 
         /**
          * WORLD EVENTS
@@ -683,24 +585,6 @@ public abstract class Event implements Serializable {
          */
         ENTITY_INTERACT(Category.LIVING_ENTITY),
         /**
-         * Called when a creeper gains or loses a power shell
-         *
-         * @see org.bukkit.event.entity.CreeperPowerEvent
-         */
-        CREEPER_POWER(Category.LIVING_ENTITY),
-        /**
-         * Called when a pig is zapped, zombifying it
-         *
-         * @see org.bukkit.event.entity.PigZapEvent
-         */
-        PIG_ZAP(Category.LIVING_ENTITY),
-        /**
-         * Called when a LivingEntity is tamed
-         *
-         * @see org.bukkit.event.entity.EntityTameEvent
-         */
-        ENTITY_TAME(Category.LIVING_ENTITY),
-        /**
          * Called when a {@link Projectile} hits something
          *
          * @see org.bukkit.event.entity.ProjectileHitEvent
@@ -713,91 +597,6 @@ public abstract class Event implements Serializable {
          * @see org.bukkit.event.entity.EntityRegainHealthEvent
          */
         ENTITY_REGAIN_HEALTH(Category.LIVING_ENTITY),
-
-        /**
-         * WEATHER EVENTS
-         */
-
-        /**
-         * Called when a lightning entity strikes somewhere
-         *
-         * @see org.bukkit.event.weather.LightningStrikeEvent
-         */
-        LIGHTNING_STRIKE(Category.WEATHER),
-        /**
-         * Called when the weather in a world changes
-         *
-         * @see org.bukkit.event.weather.WeatherChangeEvent
-         */
-        WEATHER_CHANGE(Category.WEATHER),
-        /**
-         * Called when the thunder state in a world changes
-         *
-         * @see org.bukkit.event.weather.ThunderChangeEvent
-         */
-        THUNDER_CHANGE(Category.WEATHER),
-
-        /**
-         * VEHICLE EVENTS
-         */
-
-        /**
-         * Called when a vehicle is placed by a player
-         *
-         * @see org.bukkit.event.vehicle.VehicleCreateEvent
-         */
-        VEHICLE_CREATE(Category.VEHICLE),
-        /**
-         * Called when a vehicle is destroyed
-         *
-         * @see org.bukkit.event.vehicle.VehicleDestroyEvent
-         */
-        VEHICLE_DESTROY(Category.VEHICLE),
-        /**
-         * Called when a vehicle is damaged by a LivingEntity
-         *
-         * @see org.bukkit.event.vehicle.VehicleDamageEvent
-         */
-        VEHICLE_DAMAGE(Category.VEHICLE),
-        /**
-         * Called when a vehicle collides with an Entity
-         *
-         * @see org.bukkit.event.vehicle.VehicleCollisionEvent
-         */
-        VEHICLE_COLLISION_ENTITY(Category.VEHICLE),
-        /**
-         * Called when a vehicle collides with a Block
-         *
-         * @see org.bukkit.event.vehicle.VehicleBlockCollisionEvent
-         */
-        VEHICLE_COLLISION_BLOCK(Category.VEHICLE),
-        /**
-         * Called when a vehicle is entered by a LivingEntity
-         *
-         * @see org.bukkit.event.vehicle.VehicleEnterEvent
-         */
-        VEHICLE_ENTER(Category.VEHICLE),
-        /**
-         * Called when a vehicle is exited by a LivingEntity
-         *
-         * @see org.bukkit.event.vehicle.VehicleExitEvent
-         */
-        VEHICLE_EXIT(Category.VEHICLE),
-        /**
-         * Called when a vehicle moves position in the world
-         *
-         * @see org.bukkit.event.vehicle.VehicleMoveEvent
-         */
-        VEHICLE_MOVE(Category.VEHICLE),
-        /**
-         * Called when a vehicle is going through an update cycle, rechecking itself
-         *
-         * @see org.bukkit.event.vehicle.VehicleUpdateEvent
-         */
-        VEHICLE_UPDATE(Category.VEHICLE),
-        /**
-         * MISCELLANEOUS EVENTS
-         */
 
         /**
          * Represents a custom event, isn't actually used

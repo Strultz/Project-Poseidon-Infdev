@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import org.bukkit.BlockChangeDelegate;
 import org.bukkit.craftbukkit.generator.*;
-import org.bukkit.event.weather.LightningStrikeEvent;
 import org.bukkit.generator.ChunkGenerator;
 
 import java.util.ArrayList;
@@ -34,22 +33,6 @@ public class WorldServer extends World implements BlockChangeDelegate {
     public PlayerManager manager;
     // CraftBukkit end
 
-    public void entityJoinedWorld(Entity entity, boolean flag) {
-        /* CraftBukkit start - We prevent spawning in general, so this butchering is not needed
-        if (!this.server.spawnAnimals && (entity instanceof EntityAnimal || entity instanceof EntityWaterAnimal)) {
-            entity.die();
-        }
-        // CraftBukkit end */
-
-        if (entity.passenger == null || !(entity.passenger instanceof EntityHuman)) {
-            super.entityJoinedWorld(entity, flag);
-        }
-    }
-
-    public void vehicleEnteredWorld(Entity entity, boolean flag) {
-        super.entityJoinedWorld(entity, flag);
-    }
-
     protected IChunkProvider b() {
         IChunkLoader ichunkloader = this.w.a(this.worldProvider);
 
@@ -58,10 +41,6 @@ public class WorldServer extends World implements BlockChangeDelegate {
 
         if (this.generator != null) {
             gen = new CustomChunkGenerator(this, this.getSeed(), this.generator);
-        } else if (this.worldProvider instanceof WorldProviderHell) {
-            gen = new NetherChunkGenerator(this, this.getSeed());
-        } else if (this.worldProvider instanceof WorldProviderSky) {
-            gen = new SkyLandsChunkGenerator(this, this.getSeed());
         } else {
             gen = new NormalChunkGenerator(this, this.getSeed());
         }
@@ -112,24 +91,6 @@ public class WorldServer extends World implements BlockChangeDelegate {
         return (Entity) this.G.a(i);
     }
 
-    public boolean strikeLightning(Entity entity) {
-        // CraftBukkit start
-        LightningStrikeEvent lightning = new LightningStrikeEvent(this.getWorld(), (org.bukkit.entity.LightningStrike) entity.getBukkitEntity());
-        this.getServer().getPluginManager().callEvent(lightning);
-
-        if (lightning.isCancelled()) {
-            return false;
-        }
-
-        if (super.strikeLightning(entity)) {
-            this.server.serverConfigurationManager.sendPacketNearby(entity.locX, entity.locY, entity.locZ, 512.0D, this.dimension, new Packet71Weather(entity));
-            // CraftBukkit end
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public void a(Entity entity, byte b0) {
         Packet38EntityStatus packet38entitystatus = new Packet38EntityStatus(entity.id, b0);
 
@@ -155,28 +116,7 @@ public class WorldServer extends World implements BlockChangeDelegate {
         return explosion;
     }
 
-    public void playNote(int i, int j, int k, int l, int i1) {
-        super.playNote(i, j, k, l, i1);
-        // CraftBukkit
-        this.server.serverConfigurationManager.sendPacketNearby((double) i, (double) j, (double) k, 64.0D, this.dimension, new Packet54PlayNoteBlock(i, j, k, l, i1));
-    }
-
     public void saveLevel() {
         this.w.e();
-    }
-
-    protected void i() {
-        boolean flag = this.v();
-
-        super.i();
-        if (flag != this.v()) {
-            // CraftBukkit start - only sending weather packets to those affected
-            for (int i = 0; i < this.players.size(); ++i) {
-                if (((EntityPlayer) this.players.get(i)).world == this) {
-                    ((EntityPlayer) this.players.get(i)).netServerHandler.sendPacket(new Packet70Bed(flag ? 2 : 1));
-                }
-            }
-            // CraftBukkit end
-        }
     }
 }

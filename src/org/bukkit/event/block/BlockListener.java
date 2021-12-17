@@ -69,15 +69,6 @@ public class BlockListener implements Listener {
     public void onBlockPlace(BlockPlaceEvent event) {}
 
     /**
-     * Called when redstone changes.<br />
-     * From: the source of the redstone change.<br />
-     * To: The redstone dust that changed.
-     *
-     * @param event Relevant event details
-     */
-    public void onBlockRedstoneChange(BlockRedstoneEvent event) {}
-
-    /**
      * Called when leaves are decaying naturally.
      *<p />
      * If a Leaves Decay event is cancelled, the leaves will not decay.
@@ -85,15 +76,6 @@ public class BlockListener implements Listener {
      * @param event Relevant event details
      */
     public void onLeavesDecay(LeavesDecayEvent event) {}
-
-    /**
-     * Called when a sign is changed by a player.
-     * <p />
-     * If a Sign Change event is cancelled, the sign will not be changed.
-     *
-     * @param event Relevant event details
-     */
-    public void onSignChange(SignChangeEvent event) {}
 
     /**
      * Called when a block is destroyed as a result of being burnt by fire.
@@ -118,23 +100,6 @@ public class BlockListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {}
 
     /**
-     * Called when a block is formed or spreads based on world conditions.
-     * Use {@link BlockSpreadEvent} to catch blocks that actually spread and don't just "randomly" form.
-     *<p />
-     * Examples:
-     *<ul>
-     *     <li>Snow forming due to a snow storm.</li>
-     *     <li>Ice forming in a snowy Biome like Tiga or Tundra.</li>
-     * </ul>
-     *<p />
-     * If a Block Form event is cancelled, the block will not be formed or will not spread.
-     *
-     * @see BlockSpreadEvent
-     * @param event Relevant event details
-     */
-    public void onBlockForm(BlockFormEvent event) {}
-
-    /**
      * Called when a block spreads based on world conditions.
      * Use {@link BlockFormEvent} to catch blocks that "randomly" form instead of actually spread.
      *<p />
@@ -149,42 +114,4 @@ public class BlockListener implements Listener {
      * @param event Relevant event details
      */
     public void onBlockSpread(BlockSpreadEvent event) {}
-
-    /**
-     * Called when a block fades, melts or disappears based on world conditions
-     * <p />
-     * Examples:
-     * <ul>
-     *     <li>Snow melting due to being near a light source.</li>
-     *     <li>Ice melting due to being near a light source.</li>
-     * </ul>
-     * <p />
-     * If a Block Fade event is cancelled, the block will not fade, melt or disappear.
-     *
-     * @param event Relevant event details
-     */
-    public void onBlockFade(BlockFadeEvent event) {}
-
-    /**
-     * Called when an item is dispensed from a block.
-     *<p />
-     * If a Block Dispense event is cancelled, the block will not dispense the item.
-     *
-     * @param event Relevant event details
-     */
-    public void onBlockDispense(BlockDispenseEvent event) {}
-
-    /**
-     * Called when a piston retracts
-     *
-     * @param event Relevant event details
-     */
-    public void onBlockPistonRetract(BlockPistonRetractEvent event) {}
-
-    /**
-     * Called when a piston extends
-     *
-     * @param event Relevant event details
-     */
-    public void onBlockPistonExtend(BlockPistonExtendEvent event) {}
 }

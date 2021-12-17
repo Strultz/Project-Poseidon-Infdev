@@ -34,7 +34,6 @@ public class BlockSapling extends BlockFlower {
     }
 
     public void b(World world, int i, int j, int k, Random random) {
-        int l = world.getData(i, j, k) & 3;
 
         world.setRawTypeId(i, j, k, 0);
 
@@ -42,20 +41,10 @@ public class BlockSapling extends BlockFlower {
         boolean grownTree;
         BlockChangeWithNotify delegate = new BlockChangeWithNotify(world);
 
-        if (l == 1) {
-            grownTree = new WorldGenTaiga2().generate(delegate, random, i, j, k);
-        } else if (l == 2) {
-            grownTree = new WorldGenForest().generate(delegate, random, i, j, k);
-        } else {
-            if (random.nextInt(10) == 0) {
-                grownTree = new WorldGenBigTree().generate(delegate, random, i, j, k);
-            } else {
-                grownTree = new WorldGenTrees().generate(delegate, random, i, j, k);
-            }
-        }
+        grownTree = new WorldGenBigTree().generate(delegate, random, i, j, k);
 
         if (!grownTree) {
-            world.setRawTypeIdAndData(i, j, k, this.id, l);
+            world.setRawTypeId(i, j, k, this.id);
         }
         // CraftBukkit end
     }

@@ -1,7 +1,5 @@
 package org.bukkit.craftbukkit.block;
 
-import net.minecraft.server.BiomeBase;
-import net.minecraft.server.BlockRedstoneWire;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -195,106 +193,19 @@ public class CraftBlock implements Block {
         Material material = getType();
 
         switch (material) {
-            case SIGN:
-            case SIGN_POST:
-            case WALL_SIGN:
-                return new CraftSign(this);
             case CHEST:
                 return new CraftChest(this);
             case BURNING_FURNACE:
             case FURNACE:
                 return new CraftFurnace(this);
-            case DISPENSER:
-                return new CraftDispenser(this);
-            case MOB_SPAWNER:
-                return new CraftCreatureSpawner(this);
-            case NOTE_BLOCK:
-                return new CraftNoteBlock(this);
             default:
                 return new CraftBlockState(this);
         }
     }
 
-    public Biome getBiome() {
-        return biomeBaseToBiome(chunk.getHandle().world.getWorldChunkManager().getBiome(x, z));
-    }
-
-    public static final Biome biomeBaseToBiome(BiomeBase base) {
-        if (base == BiomeBase.RAINFOREST) {
-            return Biome.RAINFOREST;
-        } else if (base == BiomeBase.SWAMPLAND) {
-            return Biome.SWAMPLAND;
-        } else if (base == BiomeBase.SEASONAL_FOREST) {
-            return Biome.SEASONAL_FOREST;
-        } else if (base == BiomeBase.FOREST) {
-            return Biome.FOREST;
-        } else if (base == BiomeBase.SAVANNA) {
-            return Biome.SAVANNA;
-        } else if (base == BiomeBase.SHRUBLAND) {
-            return Biome.SHRUBLAND;
-        } else if (base == BiomeBase.TAIGA) {
-            return Biome.TAIGA;
-        } else if (base == BiomeBase.DESERT) {
-            return Biome.DESERT;
-        } else if (base == BiomeBase.PLAINS) {
-            return Biome.PLAINS;
-        } else if (base == BiomeBase.ICE_DESERT) {
-            return Biome.ICE_DESERT;
-        } else if (base == BiomeBase.TUNDRA) {
-            return Biome.TUNDRA;
-        } else if (base == BiomeBase.HELL) {
-            return Biome.HELL;
-        } else if (base == BiomeBase.SKY) {
-            return Biome.SKY;
-        }
-
-        return null;
-    }
-
-    public double getTemperature() {
-        return getWorld().getTemperature(x, z);
-    }
-
-    public double getHumidity() {
-        return getWorld().getHumidity(x, z);
-    }
-
-    public boolean isBlockPowered() {
-        return chunk.getHandle().world.isBlockPowered(x, y, z);
-    }
-
-    public boolean isBlockIndirectlyPowered() {
-        return chunk.getHandle().world.isBlockIndirectlyPowered(x, y, z);
-    }
-
     @Override
     public boolean equals(Object o) {
         return this == o;
-    }
-
-    public boolean isBlockFacePowered(BlockFace face) {
-        return chunk.getHandle().world.isBlockFacePowered(x, y, z, blockFaceToNotch(face));
-    }
-
-    public boolean isBlockFaceIndirectlyPowered(BlockFace face) {
-        return chunk.getHandle().world.isBlockFaceIndirectlyPowered(x, y, z, blockFaceToNotch(face));
-    }
-
-    public int getBlockPower(BlockFace face) {
-        int power = 0;
-        BlockRedstoneWire wire = (BlockRedstoneWire) net.minecraft.server.Block.REDSTONE_WIRE;
-        net.minecraft.server.World world = chunk.getHandle().world;
-        if ((face == BlockFace.DOWN || face == BlockFace.SELF) && world.isBlockFacePowered(x, y - 1, z, 0)) power = wire.getPower(world, x, y - 1, z, power);
-        if ((face == BlockFace.UP || face == BlockFace.SELF) && world.isBlockFacePowered(x, y + 1, z, 1)) power = wire.getPower(world, x, y + 1, z, power);
-        if ((face == BlockFace.EAST || face == BlockFace.SELF) && world.isBlockFacePowered(x, y, z - 1, 2)) power = wire.getPower(world, x, y, z - 1, power);
-        if ((face == BlockFace.WEST || face == BlockFace.SELF) && world.isBlockFacePowered(x, y, z + 1, 3)) power = wire.getPower(world, x, y, z + 1, power);
-        if ((face == BlockFace.NORTH || face == BlockFace.SELF) && world.isBlockFacePowered(x - 1, y, z, 4)) power = wire.getPower(world, x - 1, y, z, power);
-        if ((face == BlockFace.SOUTH || face == BlockFace.SELF) && world.isBlockFacePowered(x + 1, y, z, 5)) power = wire.getPower(world, x + 1, y, z, power);
-        return power > 0 ? power : (face == BlockFace.SELF ? isBlockIndirectlyPowered() : isBlockFaceIndirectlyPowered(face)) ? 15 : 0;
-    }
-
-    public int getBlockPower() {
-        return getBlockPower(BlockFace.SELF);
     }
 
     public boolean isEmpty() {
@@ -303,10 +214,5 @@ public class CraftBlock implements Block {
 
     public boolean isLiquid() {
         return (getType() == Material.WATER) || (getType() == Material.STATIONARY_WATER) || (getType() == Material.LAVA) || (getType() == Material.STATIONARY_LAVA);
-    }
-
-    public PistonMoveReaction getPistonMoveReaction() {
-        return PistonMoveReaction.getById(net.minecraft.server.Block.byId[this.getTypeId()].material.j());
-
     }
 }

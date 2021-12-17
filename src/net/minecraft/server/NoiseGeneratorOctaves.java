@@ -1,53 +1,58 @@
 package net.minecraft.server;
+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+// Jad home page: http://www.kpdus.com/jad.html
+// Decompiler options: packimports(3) braces deadcode 
 
 import java.util.Random;
 
-public class NoiseGeneratorOctaves extends NoiseGenerator {
+public class NoiseGeneratorOctaves extends NoiseGenerator
+{
 
-    private NoiseGeneratorPerlin[] a;
+	private NoiseGeneratorPerlin[] a;
     private int b;
-
-    public NoiseGeneratorOctaves(Random random, int i) {
-        this.b = i;
-        this.a = new NoiseGeneratorPerlin[i];
-
-        for (int j = 0; j < i; ++j) {
-            this.a[j] = new NoiseGeneratorPerlin(random);
+    
+    public NoiseGeneratorOctaves(final Random random, final int octaves) {
+        this.b = octaves;
+        this.a = new NoiseGeneratorPerlin[octaves];
+        for (int i = 0; i < octaves; ++i) {
+            this.a[i] = new NoiseGeneratorPerlin(random);
         }
     }
-
-    public double a(double d0, double d1) {
-        double d2 = 0.0D;
-        double d3 = 1.0D;
-
+    
+    public final double noiseGenerator(final double n, final double n2) {
+        double n3 = 0.0;
+        double n4 = 1.0;
         for (int i = 0; i < this.b; ++i) {
-            d2 += this.a[i].a(d0 * d3, d1 * d3) / d3;
-            d3 /= 2.0D;
+            n3 += this.a[i].func_a(n * n4, n2 * n4) / n4;
+            n4 /= 2.0;
         }
-
-        return d2;
+        return n3;
     }
-
-    public double[] a(double[] adouble, double d0, double d1, double d2, int i, int j, int k, double d3, double d4, double d5) {
-        if (adouble == null) {
-            adouble = new double[i * j * k];
-        } else {
-            for (int l = 0; l < adouble.length; ++l) {
-                adouble[l] = 0.0D;
+    
+    public final double func_a(final double n, final double n2, final double n3) {
+        double n4 = 0.0;
+        double n5 = 1.0;
+        for (int i = 0; i < this.b; ++i) {
+            n4 += this.a[i].func_a(n * n5, n2 * n5, n3 * n5) / n5;
+            n5 /= 2.0;
+        }
+        return n4;
+    }
+    
+    public final double[] generateNoiseOctaves(double[] array, final int n, final int n2, final int n3, final int n4, final int n5, final int n6, final double n7, final double n8, final double n9) {
+        if (array == null) {
+            array = new double[n4 * n5 * n6];
+        }
+        else {
+            for (int i = 0; i < array.length; ++i) {
+                array[i] = 0.0;
             }
         }
-
-        double d6 = 1.0D;
-
-        for (int i1 = 0; i1 < this.b; ++i1) {
-            this.a[i1].a(adouble, d0, d1, d2, i, j, k, d3 * d6, d4 * d6, d5 * d6, d6);
-            d6 /= 2.0D;
+        double n10 = 1.0;
+        for (int j = 0; j < this.b; ++j) {
+            this.a[j].populateNoiseArray(array, n, n2, n3, n4, n5, n6, n7 * n10, n8 * n10, n9 * n10, n10);
+            n10 /= 2.0;
         }
-
-        return adouble;
-    }
-
-    public double[] a(double[] adouble, int i, int j, int k, int l, double d0, double d1, double d2) {
-        return this.a(adouble, (double) i, 10.0D, (double) j, k, 1, l, d0, 1.0D, d1);
+        return array;
     }
 }

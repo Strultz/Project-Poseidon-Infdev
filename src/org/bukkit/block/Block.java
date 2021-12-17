@@ -190,56 +190,6 @@ public interface Block {
     BlockState getState();
 
     /**
-     * Returns the biome that this block resides in
-     *
-     * @return Biome type containing this block
-     */
-    Biome getBiome();
-
-    /**
-     * Returns true if the block is being powered by Redstone.
-     *
-     * @return
-     */
-    boolean isBlockPowered();
-
-    /**
-     * Returns true if the block is being indirectly powered by Redstone.
-     *
-     * @return
-     */
-    boolean isBlockIndirectlyPowered();
-
-    /**
-     * Returns true if the block face is being powered by Redstone.
-     *
-     * @return
-     */
-    boolean isBlockFacePowered(BlockFace face);
-
-    /**
-     * Returns true if the block face is being indirectly powered by Redstone.
-     *
-     * @return
-     */
-    boolean isBlockFaceIndirectlyPowered(BlockFace face);
-
-    /**
-     * Returns the redstone power being provided to this block face
-     *
-     * @param face the face of the block to query or BlockFace.SELF for the block itself
-     * @return
-     */
-    int getBlockPower(BlockFace face);
-
-    /**
-     * Returns the redstone power being provided to this block
-     *
-     * @return
-     */
-    int getBlockPower();
-
-    /**
      * Checks if this block is empty.
      *
      * A block is considered empty when {@link #getType()} returns {@link Material#AIR}.
@@ -256,25 +206,4 @@ public interface Block {
      * @return true if this block is liquid
      */
     boolean isLiquid();
-
-    /**
-     * Gets the temperature of the biome of this block
-     *
-     * @return Temperature of this block
-     */
-    double getTemperature();
-
-    /**
-     * Gets the humidity of the biome of this block
-     *
-     * @return Humidity of this block
-     */
-    double getHumidity();
-
-    /**
-     * Returns the reaction of the block when moved by a piston
-     *
-     * @return reaction
-     */
-    PistonMoveReaction getPistonMoveReaction();
 }

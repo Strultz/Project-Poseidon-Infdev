@@ -64,8 +64,10 @@ public class MinecraftServer implements Runnable, ICommandListener {
 
     //Poseidon Start
     private WatchDogThread watchDogThread;
-    private boolean modLoaderSupport = false;
+    //private boolean modLoaderSupport = false;
+    public boolean leafDecay;
     //Poseidon End
+	
 
     public MinecraftServer(OptionSet options) { // CraftBukkit - adds argument OptionSet
         new ThreadSleepForever(this);
@@ -94,7 +96,7 @@ public class MinecraftServer implements Runnable, ICommandListener {
         System.setErr(new PrintStream(new LoggerOutputStream(log, Level.SEVERE), true));
         // CraftBukkit end
 
-        modLoaderSupport = PoseidonConfig.getInstance().getBoolean("settings.support.modloader.enable", false);
+        /*modLoaderSupport = PoseidonConfig.getInstance().getBoolean("settings.support.modloader.enable", false);
 
         if (modLoaderSupport) {
             log.info("EXPERIMENTAL MODLOADERMP SUPPORT ENABLED.");
@@ -103,7 +105,7 @@ public class MinecraftServer implements Runnable, ICommandListener {
                 return false;
             }
             net.minecraft.server.ModLoader.Init(this);
-        }
+        }*/
 
         log.info("Starting minecraft server version Beta 1.7.3");
         if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L) {
@@ -115,10 +117,11 @@ public class MinecraftServer implements Runnable, ICommandListener {
         this.propertyManager = new PropertyManager(this.options); // CraftBukkit - CLI argument support
         String s = this.propertyManager.getString("server-ip", "");
 
-        this.onlineMode = this.propertyManager.getBoolean("online-mode", false); //Project Poseidon - False by default
+        this.onlineMode = this.propertyManager.getBoolean("online-mode", true); //Project Poseidon - False by default
         this.spawnAnimals = this.propertyManager.getBoolean("spawn-animals", true);
         this.pvpMode = this.propertyManager.getBoolean("pvp", true);
         this.allowFlight = this.propertyManager.getBoolean("allow-flight", false);
+        this.leafDecay = this.propertyManager.getBoolean("leaf-decay", false);
         InetAddress inetaddress = null;
 
         if (s.length() > 0) {
@@ -216,7 +219,6 @@ public class MinecraftServer implements Runnable, ICommandListener {
         }
 
         // CraftBukkit start
-        for (int j = 0; j < (this.propertyManager.getBoolean("allow-nether", true) ? 2 : 1); ++j) {
             WorldServer world;
             int dimension = j == 0 ? 0 : -1;
             String worldType = Environment.getEnvironment(dimension).toString().toLowerCase();
@@ -224,39 +226,7 @@ public class MinecraftServer implements Runnable, ICommandListener {
 
             ChunkGenerator gen = this.server.getGenerator(name);
 
-            if (j == 0) {
-                world = new WorldServer(this, new ServerNBTManager(new File("."), s, true), s, dimension, i, org.bukkit.World.Environment.getEnvironment(dimension), gen); // CraftBukkit
-            } else {
-                String dim = "DIM-1";
-
-                File newWorld = new File(new File(name), dim);
-                File oldWorld = new File(new File(s), dim);
-
-                if ((!newWorld.isDirectory()) && (oldWorld.isDirectory())) {
-                    log.info("---- Migration of old " + worldType + " folder required ----");
-                    log.info("Unfortunately due to the way that Minecraft implemented multiworld support in 1.6, Bukkit requires that you move your " + worldType + " folder to a new location in order to operate correctly.");
-                    log.info("We will move this folder for you, but it will mean that you need to move it back should you wish to stop using Bukkit in the future.");
-                    log.info("Attempting to move " + oldWorld + " to " + newWorld + "...");
-
-                    if (newWorld.exists()) {
-                        log.severe("A file or folder already exists at " + newWorld + "!");
-                        log.info("---- Migration of old " + worldType + " folder failed ----");
-                    } else if (newWorld.getParentFile().mkdirs()) {
-                        if (oldWorld.renameTo(newWorld)) {
-                            log.info("Success! To restore the nether in the future, simply move " + newWorld + " to " + oldWorld);
-                            log.info("---- Migration of old " + worldType + " folder complete ----");
-                        } else {
-                            log.severe("Could not move folder " + oldWorld + " to " + newWorld + "!");
-                            log.info("---- Migration of old " + worldType + " folder failed ----");
-                        }
-                    } else {
-                        log.severe("Could not create path for " + newWorld + "!");
-                        log.info("---- Migration of old " + worldType + " folder failed ----");
-                    }
-                }
-
-                world = new SecondaryWorldServer(this, new ServerNBTManager(new File("."), name, true), name, dimension, i, this.worlds.get(0), org.bukkit.World.Environment.getEnvironment(dimension), gen); // CraftBukkit
-            }
+            world = new WorldServer(this, new ServerNBTManager(new File("."), s, true), s, dimension, i, org.bukkit.World.Environment.getEnvironment(dimension), gen); // CraftBukkit
 
             if (gen != null) {
                 world.getWorld().getPopulators().addAll(gen.getDefaultPopulators(world.getWorld()));
@@ -270,7 +240,7 @@ public class MinecraftServer implements Runnable, ICommandListener {
             world.setSpawnFlags(this.propertyManager.getBoolean("spawn-monsters", true), this.spawnAnimals);
             this.worlds.add(world);
             this.serverConfigurationManager.setPlayerFileData(this.worlds.toArray(new WorldServer[0]));
-        }
+        
         // CraftBukkit end
 
         short short1 = 196;
@@ -312,8 +282,8 @@ public class MinecraftServer implements Runnable, ICommandListener {
         }
 
         // CraftBukkit start
-        for (World world : this.worlds) {
-            this.server.getPluginManager().callEvent(new WorldLoadEvent(world.getWorld()));
+        for (World world1 : this.worlds) {
+            this.server.getPluginManager().callEvent(new WorldLoadEvent(world1.getWorld()));
         }
         // CraftBukkit end
 
@@ -394,9 +364,9 @@ public class MinecraftServer implements Runnable, ICommandListener {
                 long i = System.currentTimeMillis();
 
                 for (long j = 0L; this.isRunning; Thread.sleep(1L)) {
-                    if (modLoaderSupport) {
+                    /*if (modLoaderSupport) {
                         net.minecraft.server.ModLoader.OnTick(this);
-                    }
+                    }*/
 
                     long k = System.currentTimeMillis();
                     long l = k - i;
@@ -413,17 +383,14 @@ public class MinecraftServer implements Runnable, ICommandListener {
 
                     j += l;
                     i = k;
-                    if (this.worlds.get(0).everyoneDeeplySleeping()) { // CraftBukkit
-                        this.h();
-                        j = 0L;
-                    } else {
+
                         while (j > 50L) {
                             MinecraftServer.currentTick = (int) (System.currentTimeMillis() / 50); // CraftBukkit
                             watchDogThread.tickUpdate(); // Project Poseidon
                             j -= 50L;
                             this.h();
                         }
-                    }
+                    
                 }
             } else {
                 while (this.isRunning) {
@@ -558,8 +525,6 @@ public class MinecraftServer implements Runnable, ICommandListener {
     }
 
     public static void main(final OptionSet options) { // CraftBukkit - replaces main(String args[])
-        StatisticList.a();
-
         try {
             MinecraftServer minecraftserver = new MinecraftServer(options); // CraftBukkit - pass in the options
 

@@ -117,17 +117,6 @@ public abstract class EntityLiving extends Entity {
             this.Q();
         }
 
-        if (this.T() && this.K()) {
-            // CraftBukkit start
-            EntityDamageEvent event = new EntityDamageEvent(this.getBukkitEntity(), EntityDamageEvent.DamageCause.SUFFOCATION, 1);
-            this.world.getServer().getPluginManager().callEvent(event);
-
-            if (!event.isCancelled()) {
-                this.damageEntity((Entity) null, event.getDamage());
-            }
-            // CraftBukkit end
-        }
-
         if (this.fireProof || this.world.isStatic) {
             this.fireTicks = 0;
         }
@@ -208,18 +197,12 @@ public abstract class EntityLiving extends Entity {
         }
     }
 
-    public void E() {
-        super.E();
-        this.M = this.N;
-        this.N = 0.0F;
-    }
-
     public void m_() {
         super.m_();
         this.v();
         double d0 = this.locX - this.lastX;
         double d1 = this.locZ - this.lastZ;
-        float f = MathHelper.a(d0 * d0 + d1 * d1);
+        float f = MathHelper.sqrt_double(d0 * d0 + d1 * d1);
         float f1 = this.K;
         float f2 = 0.0F;
 
@@ -420,7 +403,7 @@ public abstract class EntityLiving extends Entity {
     }
 
     public void a(Entity entity, int i, double d0, double d1) {
-        float f = MathHelper.a(d0 * d0 + d1 * d1);
+        float f = MathHelper.sqrt_double(d0 * d0 + d1 * d1);
         float f1 = 0.4F;
 
         this.motX /= 2.0D;
@@ -508,23 +491,27 @@ public abstract class EntityLiving extends Entity {
             d0 = this.locY;
             this.a(f, f1, 0.02F);
             this.move(this.motX, this.motY, this.motZ);
-            this.motX *= 0.800000011920929D;
-            this.motY *= 0.800000011920929D;
-            this.motZ *= 0.800000011920929D;
-            this.motY -= 0.02D;
-            if (this.positionChanged && this.d(this.motX, this.motY + 0.6000000238418579D - this.locY + d0, this.motZ)) {
-                this.motY = 0.30000001192092896D;
-            }
+            if (!(this instanceof EntityPlayer) || !velocityChanged) {
+	            this.motX *= 0.800000011920929D;
+	            this.motY *= 0.800000011920929D;
+	            this.motZ *= 0.800000011920929D;
+	            this.motY -= 0.02D;
+	            if (this.positionChanged && this.d(this.motX, this.motY + 0.6000000238418579D - this.locY + d0, this.motZ)) {
+	                this.motY = 0.30000001192092896D;
+	            }
+	        }
         } else if (this.ae()) {
             d0 = this.locY;
             this.a(f, f1, 0.02F);
             this.move(this.motX, this.motY, this.motZ);
-            this.motX *= 0.5D;
-            this.motY *= 0.5D;
-            this.motZ *= 0.5D;
-            this.motY -= 0.02D;
-            if (this.positionChanged && this.d(this.motX, this.motY + 0.6000000238418579D - this.locY + d0, this.motZ)) {
-                this.motY = 0.30000001192092896D;
+            if (!(this instanceof EntityPlayer) || !velocityChanged) {
+	            this.motX *= 0.5D;
+	            this.motY *= 0.5D;
+	            this.motZ *= 0.5D;
+	            this.motY -= 0.02D;
+	            if (this.positionChanged && this.d(this.motX, this.motY + 0.6000000238418579D - this.locY + d0, this.motZ)) {
+	                this.motY = 0.30000001192092896D;
+	            }
             }
         } else {
             float f2 = 0.91F;
@@ -551,50 +538,19 @@ public abstract class EntityLiving extends Entity {
                 }
             }
 
-            if (this.p()) {
-                float f4 = 0.15F;
-
-                if (this.motX < (double) (-f4)) {
-                    this.motX = (double) (-f4);
-                }
-
-                if (this.motX > (double) f4) {
-                    this.motX = (double) f4;
-                }
-
-                if (this.motZ < (double) (-f4)) {
-                    this.motZ = (double) (-f4);
-                }
-
-                if (this.motZ > (double) f4) {
-                    this.motZ = (double) f4;
-                }
-
-                this.fallDistance = 0.0F;
-                if (this.motY < -0.15D) {
-                    this.motY = -0.15D;
-                }
-
-                if (this.isSneaking() && this.motY < 0.0D) {
-                    this.motY = 0.0D;
-                }
-            }
-
             this.move(this.motX, this.motY, this.motZ);
-            if (this.positionChanged && this.p()) {
-                this.motY = 0.2D;
+            if (!(this instanceof EntityPlayer) || !velocityChanged) {
+	            this.motY -= 0.08D;
+	            this.motY *= 0.9800000190734863D;
+	            this.motX *= (double) f2;
+	            this.motZ *= (double) f2;
             }
-
-            this.motY -= 0.08D;
-            this.motY *= 0.9800000190734863D;
-            this.motX *= (double) f2;
-            this.motZ *= (double) f2;
         }
 
         this.an = this.ao;
         d0 = this.locX - this.lastX;
         double d1 = this.locZ - this.lastZ;
-        float f5 = MathHelper.a(d0 * d0 + d1 * d1) * 4.0F;
+        float f5 = MathHelper.sqrt_double(d0 * d0 + d1 * d1) * 4.0F;
 
         if (f5 > 1.0F) {
             f5 = 1.0F;
@@ -604,12 +560,7 @@ public abstract class EntityLiving extends Entity {
         this.ap += this.ao;
     }
 
-    public boolean p() {
-        int i = MathHelper.floor(this.locX);
-        int j = MathHelper.floor(this.boundingBox.b);
-        int k = MathHelper.floor(this.locZ);
-
-        return this.world.getTypeId(i, j, k) == Block.LADDER.id;
+    public void p() {
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -691,18 +642,22 @@ public abstract class EntityLiving extends Entity {
 
         if (this.aC) {
             if (flag) {
-                this.motY += 0.03999999910593033D;
+            	if (!(this instanceof EntityPlayer) || !velocityChanged)
+            		this.motY += 0.03999999910593033D;
             } else if (flag1) {
-                this.motY += 0.03999999910593033D;
+            	if (!(this instanceof EntityPlayer) || !velocityChanged)
+            		this.motY += 0.03999999910593033D;
             } else if (this.onGround) {
-                this.O();
+            	if (!(this instanceof EntityPlayer) || !velocityChanged)
+            		this.O();
             }
         }
 
         this.az *= 0.98F;
         this.aA *= 0.98F;
         this.aB *= 0.9F;
-        this.a(this.az, this.aA);
+        if (!(this instanceof EntityPlayer) || !velocityChanged)
+        	this.a(this.az, this.aA);
         List list1 = this.world.b((Entity) this, this.boundingBox.b(0.20000000298023224D, 0.0D, 0.20000000298023224D));
 
         if (list1 != null && list1.size() > 0) {
@@ -753,7 +708,7 @@ public abstract class EntityLiving extends Entity {
 
     protected void c_() {
         ++this.ay;
-        EntityHuman entityhuman = this.world.findNearbyPlayer(this, -1.0D);
+        /*EntityHuman entityhuman = this.world.findNearbyPlayer(this, -1.0D);
 
         this.U();
         this.az = 0.0F;
@@ -789,6 +744,21 @@ public abstract class EntityLiving extends Entity {
 
         if (flag || flag1) {
             this.aC = this.random.nextFloat() < 0.8F;
+        }*/
+    	if (this.random.nextFloat() < 0.07f) {
+            this.az = (this.random.nextFloat() - 0.5f) * this.aE;
+            this.aA = this.random.nextFloat() * this.aE;
+        }
+        this.aC = (this.random.nextFloat() < 0.01f);
+        if (this.random.nextFloat() < 0.04f) {
+            this.aB = (this.random.nextFloat() - 0.5f) * 60.0f;
+        }
+        this.yaw += this.aB;
+        this.pitch = 0.0f;
+        final boolean handleWaterMovement = this.ad();
+        final boolean handleLavaMovement = this.ae();
+        if (handleWaterMovement || handleLavaMovement) {
+            this.aC = (this.random.nextFloat() < 0.8f);
         }
     }
 
@@ -809,7 +779,7 @@ public abstract class EntityLiving extends Entity {
             d2 = (entity.boundingBox.b + entity.boundingBox.e) / 2.0D - (this.locY + (double) this.t());
         }
 
-        double d3 = (double) MathHelper.a(d0 * d0 + d1 * d1);
+        double d3 = (double) MathHelper.sqrt_double(d0 * d0 + d1 * d1);
         float f2 = (float) (Math.atan2(d1, d0) * 180.0D / 3.1415927410125732D) - 90.0F;
         float f3 = (float) (-(Math.atan2(d2, d3) * 180.0D / 3.1415927410125732D));
 
@@ -853,19 +823,6 @@ public abstract class EntityLiving extends Entity {
         return this.world.containsEntity(this.boundingBox) && this.world.getEntities(this, this.boundingBox).size() == 0 && !this.world.c(this.boundingBox);
     }
 
-    protected void Y() {
-        // CraftBukkit start
-        EntityDamageByBlockEvent event = new EntityDamageByBlockEvent(null, this.getBukkitEntity(), EntityDamageEvent.DamageCause.VOID, 4);
-        this.world.getServer().getPluginManager().callEvent(event);
-
-        if (event.isCancelled() || event.getDamage() == 0) {
-            return;
-        }
-
-        this.damageEntity((Entity) null, event.getDamage());
-        // CraftBukkit end
-    }
-
     public Vec3D Z() {
         return this.b(1.0F);
     }
@@ -896,9 +853,5 @@ public abstract class EntityLiving extends Entity {
 
     public int l() {
         return 4;
-    }
-
-    public boolean isSleeping() {
-        return false;
     }
 }

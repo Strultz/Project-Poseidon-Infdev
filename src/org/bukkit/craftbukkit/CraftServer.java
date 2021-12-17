@@ -19,7 +19,6 @@ import org.bukkit.craftbukkit.inventory.CraftFurnaceRecipe;
 import org.bukkit.craftbukkit.inventory.CraftRecipe;
 import org.bukkit.craftbukkit.inventory.CraftShapedRecipe;
 import org.bukkit.craftbukkit.inventory.CraftShapelessRecipe;
-import org.bukkit.craftbukkit.map.CraftMapView;
 import org.bukkit.craftbukkit.scheduler.CraftScheduler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.world.WorldInitEvent;
@@ -57,8 +56,8 @@ public final class CraftServer implements Server {
     private final String serverEnvironment = "POSEIDON";
     private final String serverVersion = "1.1.6";
     private final String releaseType = "DEVELOPMENT";
-    private final String protocolVersion = "1.7.3";
-    private final String GameVersion = "b1.7.3";
+    private final String protocolVersion = "20100420";
+    private final String GameVersion = "inf-20100420";
     private final ServicesManager servicesManager = new SimpleServicesManager();
     private final BukkitScheduler scheduler = new CraftScheduler(this);
     private final SimpleCommandMap commandMap = new SimpleCommandMap(this);
@@ -509,8 +508,6 @@ public final class CraftServer implements Server {
             return null;
         }
 
-        internal.worldMaps = console.worlds.get(0).worldMaps;
-
         internal.tracker = new EntityTracker(console, dimension);
         internal.addIWorldAccess((IWorldAccess) new WorldManager(console, internal));
         internal.spawnMonsters = 1;
@@ -746,21 +743,6 @@ public final class CraftServer implements Server {
         }
 
         return result;
-    }
-
-    public CraftMapView getMap(short id) {
-        WorldMapCollection collection = console.worlds.get(0).worldMaps;
-        WorldMap worldmap = (WorldMap) collection.a(WorldMap.class, "map_" + id);
-        if (worldmap == null) {
-            return null;
-        }
-        return worldmap.mapView;
-    }
-
-    public CraftMapView createMap(World world) {
-        ItemStack stack = new ItemStack(Item.MAP, 1, -1);
-        WorldMap worldmap = Item.MAP.a(stack, ((CraftWorld) world).getHandle());
-        return worldmap.mapView;
     }
 
     public void shutdown() {

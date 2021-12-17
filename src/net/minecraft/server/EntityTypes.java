@@ -67,7 +67,6 @@ public class EntityTypes {
 
     static {
         a(EntityArrow.class, "Arrow", 10);
-        a(EntitySnowball.class, "Snowball", 11);
         a(EntityItem.class, "Item", 1);
         a(EntityPainting.class, "Painting", 9);
         a(EntityLiving.class, "Mob", 48);
@@ -77,18 +76,8 @@ public class EntityTypes {
         a(EntitySpider.class, "Spider", 52);
         a(EntityGiantZombie.class, "Giant", 53);
         a(EntityZombie.class, "Zombie", 54);
-        a(EntitySlime.class, "Slime", 55);
-        a(EntityGhast.class, "Ghast", 56);
-        a(EntityPigZombie.class, "PigZombie", 57);
         a(EntityPig.class, "Pig", 90);
         a(EntitySheep.class, "Sheep", 91);
-        a(EntityCow.class, "Cow", 92);
-        a(EntityChicken.class, "Chicken", 93);
-        a(EntitySquid.class, "Squid", 94);
-        a(EntityWolf.class, "Wolf", 95);
         a(EntityTNTPrimed.class, "PrimedTnt", 20);
-        a(EntityFallingSand.class, "FallingSand", 21);
-        a(EntityMinecart.class, "Minecart", 40);
-        a(EntityBoat.class, "Boat", 41);
     }
 }

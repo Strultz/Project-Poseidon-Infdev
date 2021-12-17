@@ -3,7 +3,6 @@ package net.minecraft.server;
 // CraftBukkit start
 
 import org.bukkit.craftbukkit.entity.CraftEntity;
-import org.bukkit.event.entity.CreeperPowerEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 // CraftBukkit end
 
@@ -20,19 +19,14 @@ public class EntityCreeper extends EntityMonster {
     protected void b() {
         super.b();
         this.datawatcher.a(16, Byte.valueOf((byte) -1));
-        this.datawatcher.a(17, Byte.valueOf((byte) 0));
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        if (this.datawatcher.a(17) == 1) {
-            nbttagcompound.a("powered", true);
-        }
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.datawatcher.watch(17, Byte.valueOf((byte) (nbttagcompound.m("powered") ? 1 : 0)));
     }
 
     protected void b(Entity entity, float f) {
@@ -86,9 +80,6 @@ public class EntityCreeper extends EntityMonster {
 
     public void die(Entity entity) {
         super.die(entity);
-        if (entity instanceof EntitySkeleton) {
-            this.b(Item.GOLD_RECORD.id + this.random.nextInt(2), 1);
-        }
     }
 
     protected void a(Entity entity, float f) {
@@ -110,7 +101,7 @@ public class EntityCreeper extends EntityMonster {
                 ++this.fuseTicks;
                 if (this.fuseTicks >= 30) {
                     // CraftBukkit start
-                    float radius = this.isPowered() ? 6.0F : 3.0F;
+                    float radius = 3.0F;
 
                     ExplosionPrimeEvent event = new ExplosionPrimeEvent(CraftEntity.getEntity(this.world.getServer(), this), radius, false);
                     this.world.getServer().getPluginManager().callEvent(event);
@@ -129,10 +120,6 @@ public class EntityCreeper extends EntityMonster {
         }
     }
 
-    public boolean isPowered() {
-        return this.datawatcher.a(17) == 1;
-    }
-
     protected int j() {
         return Item.SULPHUR.id;
     }
@@ -143,27 +130,5 @@ public class EntityCreeper extends EntityMonster {
 
     private void e(int i) {
         this.datawatcher.watch(16, Byte.valueOf((byte) i));
-    }
-
-    public void a(EntityWeatherStorm entityweatherstorm) {
-        super.a(entityweatherstorm);
-
-        // CraftBukkit start
-        CreeperPowerEvent event = new CreeperPowerEvent(this.getBukkitEntity(), entityweatherstorm.getBukkitEntity(), CreeperPowerEvent.PowerCause.LIGHTNING);
-        this.world.getServer().getPluginManager().callEvent(event);
-
-        if (event.isCancelled()) {
-            return;
-        }
-
-        this.setPowered(true);
-    }
-
-    public void setPowered(boolean powered) {
-        if (!powered) {
-            this.datawatcher.watch(17, Byte.valueOf((byte) 0));
-        } else
-        // CraftBukkit end
-        this.datawatcher.watch(17, Byte.valueOf((byte) 1));
     }
 }

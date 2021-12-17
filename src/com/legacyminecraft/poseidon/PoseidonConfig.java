@@ -35,6 +35,7 @@ public class PoseidonConfig extends Configuration {
         //Main
         generateConfigOption("config-version", 2);
         //Setting
+        generateConfigOption("settings.use-uuids", true);
         generateConfigOption("settings.allow-graceful-uuids", true);
         generateConfigOption("settings.delete-duplicate-uuids", false);
         generateConfigOption("settings.save-playerdata-by-uuid", true);
@@ -53,19 +54,13 @@ public class PoseidonConfig extends Configuration {
         generateConfigOption("settings.statistics.enabled", true);
         //Word Settings
         generateConfigOption("world-settings.optimized-explosions", false);
-        generateConfigOption("world-settings.randomize-spawn", true);
+        generateConfigOption("world-settings.randomize-spawn", false);
         generateConfigOption("world-settings.teleport-to-highest-safe-block", true);
         generateConfigOption("world-settings.use-modern-fence-bounding-boxes", false);
         //TODO: Actually implement the tree growth functionality stuff
         generateConfigOption("world.settings.block-tree-growth.enabled", true);
         generateConfigOption("world.settings.block-tree-growth.list", "54,63,68");
         generateConfigOption("world.settings.block-tree-growth.info", "This setting allows for server owners to easily block trees growing from automatically destroying certain blocks. The list must be a string with numerical item ids separated by commas.");
-        //Release2Beta Settings
-        generateConfigOption("settings.release2beta.enable-ip-pass-through", false);
-        generateConfigOption("settings.release2beta.proxy-ip", "127.0.0.1");
-        //Modded Jar Support
-        generateConfigOption("settings.support.modloader.enable", false);
-        generateConfigOption("settings.support.modloader.info", "EXPERIMENTAL support for ModloaderMP.");
         //Offline Username Check
         generateConfigOption("settings.check-username-validity.enabled", true);
         generateConfigOption("settings.check-username-validity.info", "If enabled, verifies the validity of a usernames of cracked players.");

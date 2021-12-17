@@ -64,20 +64,10 @@ public class ItemInWorldManager {
 
         PlayerInteractEvent event = CraftEventFactory.callPlayerInteractEvent(this.player, Action.LEFT_CLICK_BLOCK, i, j, k, l, this.player.inventory.getItemInHand());
 
-        if (event.useInteractedBlock() == Event.Result.DENY) {
-            // If we denied a door from opening, we need to send a correcting update to the client, as it already opened the door.
-            if (i1 == Block.WOODEN_DOOR.id) {
-                // For some reason *BOTH* the bottom/top part have to be marked updated.
-                boolean bottom = (this.world.getData(i, j, k) & 8) == 0;
-                ((EntityPlayer) this.player).netServerHandler.sendPacket(new Packet53BlockChange(i, j, k, this.world));
-                ((EntityPlayer) this.player).netServerHandler.sendPacket(new Packet53BlockChange(i, j + (bottom ? 1 : -1), k, this.world));
-            } else if (i1 == Block.TRAP_DOOR.id) {
-                ((EntityPlayer) this.player).netServerHandler.sendPacket(new Packet53BlockChange(i, j, k, this.world));
-            }
-        } else {
+        if (event.useInteractedBlock() != Event.Result.DENY) {
             Block.byId[i1].b(this.world, i, j, k, this.player);
             // Allow fire punching to be blocked
-            this.world.douseFire((EntityHuman) null, i, j, k, l);
+           // this.world.douseFire((EntityHuman) null, i, j, k, l);
         }
 
         // Handle hitting a block
@@ -98,7 +88,7 @@ public class ItemInWorldManager {
         if (blockEvent.getInstaBreak()) {
             toolDamage = 2.0f;
         }
-
+        
         if (toolDamage >= 1.0F) {
             // CraftBukkit end
             this.c(i, j, k);
@@ -118,7 +108,6 @@ public class ItemInWorldManager {
             if (i1 != 0) {
                 Block block = Block.byId[i1];
                 float f = block.getDamage(this.player) * (float) (l + 1);
-
                 if (f >= 0.7F) {
                     this.c(i, j, k);
                 } else if (!this.i) {
@@ -217,11 +206,6 @@ public class ItemInWorldManager {
         if (i1 > 0) {
             PlayerInteractEvent event = CraftEventFactory.callPlayerInteractEvent(entityhuman, Action.RIGHT_CLICK_BLOCK, i, j, k, l, itemstack);
             if (event.useInteractedBlock() == Event.Result.DENY) {
-                // If we denied a door from opening, we need to send a correcting update to the client, as it already opened the door.
-                if (i1 == Block.WOODEN_DOOR.id) {
-                    boolean bottom = (world.getData(i, j, k) & 8) == 0;
-                    ((EntityPlayer) entityhuman).netServerHandler.sendPacket(new Packet53BlockChange(i, j + (bottom ? 1 : -1), k, world));
-                }
                 result = (event.useItemInHand() != Event.Result.ALLOW);
             } else {
                 result = Block.byId[i1].interact(world, i, j, k, entityhuman);

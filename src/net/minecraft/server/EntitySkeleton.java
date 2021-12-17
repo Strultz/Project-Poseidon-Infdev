@@ -55,7 +55,7 @@ public class EntitySkeleton extends EntityMonster {
 
                 ++entityarrow.locY;
                 double d2 = entity.locY + (double) entity.t() - 0.20000000298023224D - entityarrow.locY;
-                float f1 = MathHelper.a(d0 * d0 + d1 * d1) * 0.2F;
+                float f1 = MathHelper.sqrt_double(d0 * d0 + d1 * d1) * 0.2F;
 
                 this.world.makeSound(this, "random.bow", 1.0F, 1.0F / (this.random.nextFloat() * 0.4F + 0.8F));
                 entityarrow.a(d0, d2 + (double) f1, d1, 0.6F, 12.0F);
@@ -87,11 +87,6 @@ public class EntitySkeleton extends EntityMonster {
         int count = this.random.nextInt(3);
         if (count > 0) {
             loot.add(new org.bukkit.inventory.ItemStack(org.bukkit.Material.ARROW, count));
-        }
-
-        count = this.random.nextInt(3);
-        if (count > 0) {
-            loot.add(new org.bukkit.inventory.ItemStack(org.bukkit.Material.BONE, count));
         }
 
         org.bukkit.World bworld = this.world.getWorld();

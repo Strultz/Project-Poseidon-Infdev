@@ -437,10 +437,6 @@ public class Chunk {
         if (this.getTypeId(i, j, k) != 0 && Block.byId[this.getTypeId(i, j, k)] instanceof BlockContainer) {
             tileentity.j();
             this.tileEntities.put(chunkposition, tileentity);
-            // Poseidon start - Backport of 0021-Remove-invalid-mob-spawner-tile-entities.patch from PaperSpigot
-        } else if (tileentity instanceof TileEntityMobSpawner && !(Block.byId[this.getTypeId(i, j, k)] instanceof BlockMobSpawner)) {
-            this.tileEntities.remove(chunkposition);
-            // Poseidon end
         } else {
             System.out.println("Attempted to place a tile entity where there was no entity tile!");
         }

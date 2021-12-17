@@ -20,14 +20,6 @@ public class CraftSheep extends CraftAnimals implements Sheep {
         return "CraftSheep";
     }
 
-    public DyeColor getColor() {
-        return DyeColor.getByData((byte) getHandle().getColor());
-    }
-
-    public void setColor(DyeColor color) {
-        getHandle().setColor(color.getData());
-    }
-
     public boolean isSheared() {
         return getHandle().isSheared();
     }

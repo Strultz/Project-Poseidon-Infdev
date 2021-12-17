@@ -60,7 +60,7 @@ public abstract class BlockFluids extends Block {
     public boolean b(IBlockAccess iblockaccess, int i, int j, int k, int l) {
         Material material = iblockaccess.getMaterial(i, j, k);
 
-        return material == this.material ? false : (material == Material.ICE ? false : (l == 1 ? true : super.b(iblockaccess, i, j, k, l)));
+        return material == this.material ? false : (l == 1 ? true : super.b(iblockaccess, i, j, k, l));
     }
 
     public AxisAlignedBB e(World world, int i, int j, int k) {

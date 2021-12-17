@@ -15,11 +15,11 @@ public class Packet255KickDisconnect extends Packet {
     }
 
     public void a(DataInputStream datainputstream) throws IOException {
-        this.a = a(datainputstream, 100);
+        this.a = readString(datainputstream, 100);
     }
 
     public void a(DataOutputStream dataoutputstream) throws IOException {
-        a(this.a, dataoutputstream);
+        writeString(this.a, dataoutputstream);
     }
 
     public void a(NetHandler nethandler) {

@@ -164,7 +164,6 @@ public class Pathfinder {
                     int k1 = this.a.getTypeId(l, i1, j1);
 
                     if (k1 > 0) {
-                        if (k1 != Block.IRON_DOOR_BLOCK.id && k1 != Block.WOODEN_DOOR.id) {
                             Material material = Block.byId[k1].material;
 
                             if (material.isSolid()) {
@@ -178,13 +177,6 @@ public class Pathfinder {
                             if (material == Material.LAVA) {
                                 return -2;
                             }
-                        } else {
-                            int l1 = this.a.getData(l, i1, j1);
-
-                            if (!BlockDoor.e(l1)) {
-                                return 0;
-                            }
-                        }
                     }
                 }
             }

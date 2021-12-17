@@ -23,7 +23,7 @@ public class BlockSand extends Block {
     }
 
     private void g(World world, int i, int j, int k) {
-        if (c_(world, i, j - 1, k) && j >= 0) {
+        /*if (c_(world, i, j - 1, k) && j >= 0) {
             byte b0 = 32;
 
             if (!instaFall && world.a(i - b0, j - b0, k - b0, i + b0, j + b0, k + b0)) {
@@ -41,6 +41,26 @@ public class BlockSand extends Block {
                     world.setTypeId(i, j, k, this.id);
                 }
             }
+        }*/
+    	if (world.isStatic)
+        	return;
+        int n4 = j;
+        int n5;
+        Material blockMaterial;
+        while (((n5 = world.getTypeId(i, n4 - 1, k)) == 0 || n5 == Block.FIRE.id || (blockMaterial = Block.byId[n5].material) == Material.WATER || blockMaterial == Material.LAVA) && n4 >= 0) {
+        	--n4;
+            if (world.getTypeId(i, n4, k) == Block.FIRE.id) {
+                world.setTypeId(i, n4, k, 0);
+            }
+        }
+        if (n4 < 0) {
+            world.setTypeId(i, j, k, 0);
+        }
+        if (n4 != j) {
+            if ((n5 = world.getTypeId(i, n4, k)) > 0 && Block.byId[n5].material != Material.AIR) {
+                world.setTypeId(i, n4, k, 0);
+            }
+            world.swap(i, j, k, i, n4, k);
         }
     }
 
