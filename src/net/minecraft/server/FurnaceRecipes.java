@@ -19,7 +19,6 @@ public class FurnaceRecipes {
         this.registerRecipe(Block.SAND.id, new ItemStack(Block.GLASS));
         this.registerRecipe(Item.PORK.id, new ItemStack(Item.GRILLED_PORK));
         this.registerRecipe(Block.COBBLESTONE.id, new ItemStack(Block.STONE));
-        this.registerRecipe(Block.LOG.id, new ItemStack(Item.COAL, 1, 1));
     }
 
     public void registerRecipe(int i, ItemStack itemstack) {
