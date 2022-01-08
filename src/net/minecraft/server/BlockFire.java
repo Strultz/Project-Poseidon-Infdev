@@ -27,7 +27,9 @@ public class BlockFire extends Block {
         this.a(Block.LEAVES.id, 30, 60);
         this.a(Block.BOOKSHELF.id, 30, 20);
         this.a(Block.TNT.id, 15, 100);
-        this.a(Block.WOOL.id, 30, 60);
+        for (int i1 = 0; i1 < 16; ++i1) {
+            this.a(Block.RED_WOOL.id + i1, 30, 60);
+        }
     }
 
     private void a(int i, int j, int k) {
@@ -52,7 +54,7 @@ public class BlockFire extends Block {
     }
 
     public int c() {
-        return 40;
+        return 20;
     }
 
     public void a(World world, int i, int j, int k, Random random) {
@@ -62,7 +64,7 @@ public class BlockFire extends Block {
             int l = world.getData(i, j, k);
 
             if (l < 15) {
-                world.setRawData(i, j, k, l + random.nextInt(3) / 2);
+                world.setRawData(i, j, k, l + 1);
             }
 
             world.c(i, j, k, this.id, this.c());
@@ -75,8 +77,8 @@ public class BlockFire extends Block {
             } else {
                 this.a(world, i + 1, j, k, 300, random, l);
                 this.a(world, i - 1, j, k, 300, random, l);
-                this.a(world, i, j - 1, k, 250, random, l);
-                this.a(world, i, j + 1, k, 250, random, l);
+                this.a(world, i, j - 1, k, 100, random, l);
+                this.a(world, i, j + 1, k, 200, random, l);
                 this.a(world, i, j, k - 1, 300, random, l);
                 this.a(world, i, j, k + 1, 300, random, l);
 
@@ -158,14 +160,8 @@ public class BlockFire extends Block {
             }
             // CraftBukkit end
 
-            if (random.nextInt(i1 + 10) < 5) {
-                int k1 = i1 + random.nextInt(5) / 4;
-
-                if (k1 > 15) {
-                    k1 = 15;
-                }
-
-                world.setTypeIdAndData(i, j, k, this.id, k1);
+            if (random.nextInt(2) == 0) {
+                world.setTypeId(i, j, k, this.id);
             } else {
                 world.setTypeId(i, j, k, 0);
             }

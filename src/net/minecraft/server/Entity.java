@@ -619,7 +619,7 @@ public abstract class Entity {
     }
 
     public boolean f_() {
-        return this.world.a(this.boundingBox.b(0.0D, -0.4000000059604645D, 0.0D).shrink(0.0010D, 0.0010D, 0.0010D), Material.WATER, this);
+        return this.world.a(this.boundingBox.b(0.0D, -0.4000000059604645D, 0.0D), Material.WATER, this);
     }
 
     public boolean a(Material material) {
@@ -643,7 +643,7 @@ public abstract class Entity {
     }
 
     public boolean ae() {
-        return this.world.a(this.boundingBox.b(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D), Material.LAVA);
+        return this.world.a(this.boundingBox.b(0.0D, -0.4000000059604645D, 0.0D), Material.LAVA);
     }
 
     public void a(float f, float f1, float f2) {

@@ -14,9 +14,7 @@ public final class MobSpawner {
     }
     
     public final void func_a(final World world) {
-        if (world.a(this.field_b) < this.field_a) {
-            this.spawn(world, 1);
-        }
+        this.spawn(world, 1);
     }
     
     public int spawn(final World world, int n) {
@@ -24,6 +22,9 @@ public final class MobSpawner {
         for (int var3 = 0; var3 < world.players.size(); ++var3)
         {
             EntityPlayer entity = (EntityPlayer)world.players.get(var3);
+            if (world.a(this.field_b, entity.boundingBox.b(32d, 32d, 32d)).size() >= this.field_a) {
+                continue;
+            }
 	        final int floor_double = MathHelper.floor(entity.locX);
 	        final int floor_double2 = MathHelper.floor(entity.locZ);
 	        for (int i = 0; i <= 0; ++i) {
