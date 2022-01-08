@@ -47,8 +47,6 @@ public class ItemBlock extends Item {
 
         if (itemstack.count == 0) {
             return false;
-        } else if (j == 127 && Block.byId[this.id].material.isBuildable()) {
-            return false;
         } else if (world.a(this.id, i, j, k, false, l)) {
             Block block = Block.byId[this.id];
 
