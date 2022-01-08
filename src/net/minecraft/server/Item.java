@@ -75,7 +75,7 @@ public class Item {
     public static Item GOLDEN_APPLE = (new ItemFood(66, 42, false)).a(11, 0).a("appleGold");
     public final int id;
     protected int maxStackSize = 64;
-    private int durability = 0;
+    private int durability = 32;
     protected int textureId;
     protected boolean bi = false;
     protected boolean bj = false;
