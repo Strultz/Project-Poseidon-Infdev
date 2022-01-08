@@ -18,6 +18,7 @@ This project contains decompiled code that is copyrighted by Mojang AB typically
 1. Clone this project using Git or a desktop client.
 2. Open IntelliJ and create a new project in the same directory as the Project Poseidon folder.
    
+[![Server building](https://github.com/Strultz/Project-Poseidon-Infdev/actions/workflows/maven.yml/badge.svg)](https://github.com/Strultz/Project-Poseidon-Infdev/actions/workflows/maven.yml)
 ## How to Compile
 
 Compiling is done via maven. To compile a JAR, cd into the Project Poseidon directory and run the following command:
