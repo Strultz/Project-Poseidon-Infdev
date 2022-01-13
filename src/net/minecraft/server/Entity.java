@@ -281,7 +281,10 @@ public abstract class Entity {
             this.ab();
         }
 
-        if (this.locY < -64.0D) {
+        if (this.locY < -2.0D) {
+        	this.motX *= 0.85D;
+			this.motY *= 0.85D;
+			this.motZ *= 0.85D;
             this.Y();
         }
 
@@ -302,7 +305,7 @@ public abstract class Entity {
                 org.bukkit.block.Block damager = null; // ((WorldServer) this.l).getWorld().getBlockAt(i, j, k);
                 org.bukkit.entity.Entity damagee = this.getBukkitEntity();
 
-                EntityDamageByBlockEvent event = new EntityDamageByBlockEvent(damager, damagee, EntityDamageEvent.DamageCause.LAVA, 4);
+                EntityDamageByBlockEvent event = new EntityDamageByBlockEvent(damager, damagee, EntityDamageEvent.DamageCause.LAVA, 10);
                 server.getPluginManager().callEvent(event);
 
                 if (!event.isCancelled()) {
@@ -325,7 +328,7 @@ public abstract class Entity {
             }
             // CraftBukkit end
 
-            this.damageEntity((Entity) null, 4);
+            this.damageEntity((Entity) null, 10);
             this.fireTicks = 600;
         }
     }
