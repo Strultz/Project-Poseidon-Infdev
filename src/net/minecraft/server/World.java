@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.legacyminecraft.poseidon.PoseidonConfig;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
@@ -896,46 +897,28 @@ public class World implements IBlockAccess {
         this.u.add(iworldaccess);
     }
 
-    public List getEntities(Entity entity, AxisAlignedBB axisalignedbb) {
-        this.K.clear();
-        int i = MathHelper.floor(axisalignedbb.a);
-        int j = MathHelper.floor(axisalignedbb.d + 1.0D);
-        int k = MathHelper.floor(axisalignedbb.b);
-        int l = MathHelper.floor(axisalignedbb.e + 1.0D);
-        int i1 = MathHelper.floor(axisalignedbb.c);
-        int j1 = MathHelper.floor(axisalignedbb.f + 1.0D);
+    public List getEntities(AxisAlignedBB var1) {
+    	ArrayList var2 = new ArrayList();
+		int var3 = MathHelper.floor(var1.a);
+		int var4 = MathHelper.floor(var1.b + 1.0D);
+		int var5 = MathHelper.floor(var1.c);
+		int var6 = MathHelper.floor(var1.d + 1.0D);
+		int var7 = MathHelper.floor(var1.e);
+		int var8 = MathHelper.floor(var1.f + 1.0D);
 
-        for (int k1 = i; k1 < j; ++k1) {
-            for (int l1 = i1; l1 < j1; ++l1) {
-                if (this.isLoaded(k1, 64, l1)) {
-                    for (int i2 = k - 1; i2 < l; ++i2) {
-                        Block block = Block.byId[this.getTypeId(k1, i2, l1)];
+		for(; var3 < var4; ++var3) {
+			for(int var9 = var5 - 1; var9 < var6; ++var9) {
+				for(int var10 = var7; var10 < var8; ++var10) {
+					Block var11;
+					AxisAlignedBB var12;
+					if((var11 = Block.byId[this.getTypeId(var3, var9, var10)]) != null && (var12 = var11.e(this, var3, var9, var10)) != null && var1.a(var12)) {
+						var2.add(var12);
+					}
+				}
+			}
+		}
 
-                        if (block != null) {
-                            block.a(this, k1, i2, l1, axisalignedbb, this.K);
-                        }
-                    }
-                }
-            }
-        }
-
-        double d0 = 0.25D;
-        List list = this.b(entity, axisalignedbb.b(d0, d0, d0));
-
-        for (int j2 = 0; j2 < list.size(); ++j2) {
-            AxisAlignedBB axisalignedbb1 = ((Entity) list.get(j2)).e_();
-
-            if (axisalignedbb1 != null && axisalignedbb1.a(axisalignedbb)) {
-                this.K.add(axisalignedbb1);
-            }
-
-            axisalignedbb1 = entity.a_((Entity) list.get(j2));
-            if (axisalignedbb1 != null && axisalignedbb1.a(axisalignedbb)) {
-                this.K.add(axisalignedbb1);
-            }
-        }
-
-        return this.K;
+		return var2;
     }
 
     public int a(float f) {

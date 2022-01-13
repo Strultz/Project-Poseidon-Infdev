@@ -649,7 +649,7 @@ public abstract class EntityLiving extends Entity {
             --this.aq;
             this.setPosition(d0, d1, d2);
             this.c(this.yaw, this.pitch);
-            List list = this.world.getEntities(this, this.boundingBox.shrink(0.03125D, 0.0D, 0.03125D));
+            List list = this.world.getEntities(this.boundingBox.shrink(0.03125D, 0.0D, 0.03125D));
 
             if (list.size() > 0) {
                 double d4 = 0.0D;
@@ -821,7 +821,7 @@ public abstract class EntityLiving extends Entity {
     public void X() {}
 
     public boolean d() {
-        return this.world.containsEntity(this.boundingBox) && this.world.getEntities(this, this.boundingBox).size() == 0 && !this.world.c(this.boundingBox);
+        return this.world.containsEntity(this.boundingBox) && this.world.getEntities(this.boundingBox).size() == 0 && !this.world.c(this.boundingBox);
     }
 
     protected void Y() {

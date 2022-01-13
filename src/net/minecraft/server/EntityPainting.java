@@ -138,7 +138,7 @@ public class EntityPainting extends Entity {
     }
 
     public boolean h() {
-        if (this.world.getEntities(this, this.boundingBox).size() > 0) {
+        if (this.world.getEntities(this.boundingBox).size() > 0) {
             return false;
         } else {
             int i = this.e.B / 16;

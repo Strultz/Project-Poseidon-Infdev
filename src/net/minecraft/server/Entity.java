@@ -339,7 +339,7 @@ public abstract class Entity {
 
     public boolean d(double d0, double d1, double d2) {
         AxisAlignedBB axisalignedbb = this.boundingBox.c(d0, d1, d2);
-        List list = this.world.getEntities(this, axisalignedbb);
+        List list = this.world.getEntities(axisalignedbb);
 
         return list.size() > 0 ? false : !this.world.c(axisalignedbb);
     }
@@ -370,7 +370,7 @@ public abstract class Entity {
             double d7 = d2;
             AxisAlignedBB axisalignedbb = this.boundingBox.clone();
 
-            List list = this.world.getEntities(this, this.boundingBox.a(d0, d1, d2));
+            List list = this.world.getEntities(this.boundingBox.a(d0, d1, d2));
 
             for (int i = 0; i < list.size(); ++i) {
                 d1 = ((AxisAlignedBB) list.get(i)).b(this.boundingBox, d1);
@@ -424,7 +424,7 @@ public abstract class Entity {
                 AxisAlignedBB axisalignedbb1 = this.boundingBox.clone();
 
                 this.boundingBox.b(axisalignedbb);
-                list = this.world.getEntities(this, this.boundingBox.a(d5, d1, d7));
+                list = this.world.getEntities(this.boundingBox.a(d5, d1, d7));
 
                 for (k = 0; k < list.size(); ++k) {
                     d1 = ((AxisAlignedBB) list.get(k)).b(this.boundingBox, d1);
@@ -1024,20 +1024,10 @@ public abstract class Entity {
     }
 
     public boolean K() {
-        for (int i = 0; i < 8; ++i) {
-            float f = ((float) ((i >> 0) % 2) - 0.5F) * this.length * 0.9F;
-            float f1 = ((float) ((i >> 1) % 2) - 0.5F) * 0.1F;
-            float f2 = ((float) ((i >> 2) % 2) - 0.5F) * this.length * 0.9F;
-            int j = MathHelper.floor(this.locX + (double) f);
-            int k = MathHelper.floor(this.locY + (double) this.t() + (double) f1);
-            int l = MathHelper.floor(this.locZ + (double) f2);
-
-            if (this.world.p(j, k, l)) {
-                return true;
-            }
-        }
-
-        return false;
+    	int var1 = MathHelper.floor(this.locX);
+		int var2 = MathHelper.floor(this.locY + (double)this.t());
+		int var3 = MathHelper.floor(this.locZ);
+		return this.world.p(var1, var2, var3);
     }
 
     public boolean a(EntityHuman entityhuman) {
