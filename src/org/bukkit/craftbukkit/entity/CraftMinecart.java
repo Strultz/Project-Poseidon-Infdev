@@ -2,17 +2,25 @@ package org.bukkit.craftbukkit.entity;
 
 import net.minecraft.server.EntityMinecart;
 import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.entity.Minecart;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.util.Vector;
 
 public class CraftMinecart extends CraftVehicle implements Minecart {
     protected EntityMinecart minecart;
+    protected CraftInventory inventory;
 
     public CraftMinecart(CraftServer server, EntityMinecart entity) {
         super(server, entity);
         minecart = entity;
+        inventory = new CraftInventory(entity);
     }
 
+    public Inventory getInventory() {
+        return inventory;
+    }
+    
     public void setDamage(int damage) {
         minecart.damage = damage;
     }
@@ -61,7 +69,7 @@ public class CraftMinecart extends CraftVehicle implements Minecart {
 
     @Override
     public String toString() {
-        return "CraftMinecart";
+        return "CraftMinecart{" + "inventory=" + inventory + '}';
     }
 
 }

@@ -1,5 +1,6 @@
 package org.bukkit.entity;
 
+import org.bukkit.inventory.Inventory;
 import org.bukkit.util.Vector;
 
 /**
@@ -81,4 +82,11 @@ public interface Minecart extends Vehicle {
      * @param visible speed
      */
     public void setDerailedVelocityMod(Vector derailed);
+    
+    /**
+     * Return the inventory object for this Minecart.
+     *
+     * @return The inventory for this Minecart
+     */
+    public Inventory getInventory();
 }
