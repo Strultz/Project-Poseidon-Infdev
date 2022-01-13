@@ -28,8 +28,7 @@ public class BlockLeaves extends BlockLeavesBase {
 					}
 				}
 	
-				this.g(var1, var2, var3, var4, var1.getData(var2, var3, var4));
-				var1.setTypeId(var2, var3, var4, 0);
+				this.g(var1, var2, var3, var4);
 			}
 		}
     }
