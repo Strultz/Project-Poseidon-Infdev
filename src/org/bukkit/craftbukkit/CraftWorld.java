@@ -5,14 +5,11 @@ import net.minecraft.server.*;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.*;
-import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.entity.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-import org.bukkit.event.weather.ThunderChangeEvent;
-import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.world.SpawnChangeEvent;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
@@ -27,7 +24,6 @@ import java.util.concurrent.ConcurrentMap;
 
 public class CraftWorld implements World {
     private final WorldServer world;
-    private Environment environment;
     private final CraftServer server = (CraftServer)Bukkit.getServer();
 //    private ConcurrentMap<Integer, CraftChunk> unloadedChunks = new MapMaker().weakValues().makeMap();
     private final ChunkGenerator generator;
@@ -35,11 +31,9 @@ public class CraftWorld implements World {
 
     private static final Random rand = new Random();
 
-    public CraftWorld(WorldServer world, ChunkGenerator gen, Environment env) {
+    public CraftWorld(WorldServer world, ChunkGenerator gen) {
         this.world = world;
         this.generator = gen;
-
-        environment = env;
     }
 
 //    public void preserveChunk(CraftChunk chunk) {
@@ -323,18 +317,6 @@ public class CraftWorld implements World {
         return creature;
     }
 
-    public LightningStrike strikeLightning(Location loc) {
-        EntityWeatherStorm lightning = new EntityWeatherStorm(world, loc.getX(), loc.getY(), loc.getZ());
-        world.strikeLightning(lightning);
-        return new CraftLightningStrike(server, lightning);
-    }
-
-    public LightningStrike strikeLightningEffect(Location loc) {
-        EntityWeatherStorm lightning = new EntityWeatherStorm(world, loc.getX(), loc.getY(), loc.getZ(), true);
-        world.strikeLightning(lightning);
-        return new CraftLightningStrike(server, lightning);
-    }
-
     public boolean generateTree(Location loc, TreeType type) {
         return generateTree(loc, type, world);
     }
@@ -343,15 +325,9 @@ public class CraftWorld implements World {
         switch (type) {
             case BIG_TREE:
                 return new WorldGenBigTree().generate(delegate, rand, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-            case BIRCH:
-                return new WorldGenForest().generate(delegate, rand, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-            case REDWOOD:
-                return new WorldGenTaiga2().generate(delegate, rand, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-            case TALL_REDWOOD:
-                return new WorldGenTaiga1().generate(delegate, rand, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
             case TREE:
             default:
-                return new WorldGenTrees().generate(delegate, rand, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+                return new WorldGenTree().generate(delegate, rand, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
         }
     }
 
@@ -419,17 +395,6 @@ public class CraftWorld implements World {
         return createExplosion(loc.getX(), loc.getY(), loc.getZ(), power, setFire);
     }
 
-    public Environment getEnvironment() {
-        return environment;
-    }
-
-    public void setEnvironment(Environment env) {
-        if (environment != env) {
-            environment = env;
-            world.worldProvider = WorldProvider.byDimension(environment.getId());
-        }
-    }
-
     public Block getBlockAt(Location location) {
         return getBlockAt(location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }
@@ -460,48 +425,6 @@ public class CraftWorld implements World {
 
     public Block getHighestBlockAt(Location location) {
         return getHighestBlockAt(location.getBlockX(), location.getBlockZ());
-    }
-
-    public Biome getBiome(int x, int z) {
-        BiomeBase base = getHandle().getWorldChunkManager().getBiome(x, z);
-
-        if (base == BiomeBase.RAINFOREST) {
-            return Biome.RAINFOREST;
-        } else if (base == BiomeBase.SWAMPLAND) {
-            return Biome.SWAMPLAND;
-        } else if (base == BiomeBase.SEASONAL_FOREST) {
-            return Biome.SEASONAL_FOREST;
-        } else if (base == BiomeBase.FOREST) {
-            return Biome.FOREST;
-        } else if (base == BiomeBase.SAVANNA) {
-            return Biome.SAVANNA;
-        } else if (base == BiomeBase.SHRUBLAND) {
-            return Biome.SHRUBLAND;
-        } else if (base == BiomeBase.TAIGA) {
-            return Biome.TAIGA;
-        } else if (base == BiomeBase.DESERT) {
-            return Biome.DESERT;
-        } else if (base == BiomeBase.PLAINS) {
-            return Biome.PLAINS;
-        } else if (base == BiomeBase.ICE_DESERT) {
-            return Biome.ICE_DESERT;
-        } else if (base == BiomeBase.TUNDRA) {
-            return Biome.TUNDRA;
-        } else if (base == BiomeBase.HELL) {
-            return Biome.HELL;
-        } else if (base == BiomeBase.SKY) {
-            return Biome.SKY;
-        }
-
-        return null;
-    }
-
-    public double getTemperature(int x, int z) {
-        return getHandle().getWorldChunkManager().a((double[])null, x, z, 1, 1)[0];
-    }
-
-    public double getHumidity(int x, int z) {
-        return getHandle().getWorldChunkManager().getHumidity(x, z);
     }
 
     public List<Entity> getEntities() {
@@ -574,64 +497,6 @@ public class CraftWorld implements World {
         world.canSave = !value;
     }
 
-    public boolean hasStorm() {
-        return world.worldData.hasStorm();
-    }
-
-    public void setStorm(boolean hasStorm) {
-        CraftServer server = world.getServer();
-
-        WeatherChangeEvent weather = new WeatherChangeEvent((org.bukkit.World) this, hasStorm);
-        server.getPluginManager().callEvent(weather);
-        if (!weather.isCancelled()) {
-            world.worldData.setStorm(hasStorm);
-
-            // These numbers are from Minecraft
-            if (hasStorm) {
-                setWeatherDuration(rand.nextInt(12000) + 12000);
-            } else {
-                setWeatherDuration(rand.nextInt(168000) + 12000);
-            }
-        }
-    }
-
-    public int getWeatherDuration() {
-        return world.worldData.getWeatherDuration();
-    }
-
-    public void setWeatherDuration(int duration) {
-        world.worldData.setWeatherDuration(duration);
-    }
-
-    public boolean isThundering() {
-        return world.worldData.isThundering();
-    }
-
-    public void setThundering(boolean thundering) {
-        CraftServer server = world.getServer();
-
-        ThunderChangeEvent thunder = new ThunderChangeEvent((org.bukkit.World) this, thundering);
-        server.getPluginManager().callEvent(thunder);
-        if (!thunder.isCancelled()) {
-            world.worldData.setThundering(thundering);
-
-            // These numbers are from Minecraft
-            if (thundering) {
-                setThunderDuration(rand.nextInt(12000) + 3600);
-            } else {
-                setThunderDuration(rand.nextInt(168000) + 12000);
-            }
-        }
-    }
-
-    public int getThunderDuration() {
-        return world.worldData.getThunderDuration();
-    }
-
-    public void setThunderDuration(int duration) {
-        world.worldData.setThunderDuration(duration);
-    }
-
     public long getSeed() {
         return world.worldData.getSeed();
     }
@@ -679,42 +544,17 @@ public class CraftWorld implements World {
         float yaw = location.getYaw();
 
         // order is important for some of these
-        if (Boat.class.isAssignableFrom(clazz)) {
-            entity = new EntityBoat(world, x, y, z);
-        } else if (Egg.class.isAssignableFrom(clazz)) {
-            entity = new EntityEgg(world, x, y, z);
-        } else if (FallingSand.class.isAssignableFrom(clazz)) {
+        if (FallingSand.class.isAssignableFrom(clazz)) {
             entity = new EntityFallingSand(world, x, y, z, 0);
-        } else if (Fireball.class.isAssignableFrom(clazz)) {
-            entity = new EntityFireball(world);
-            ((EntityFireball) entity).setPositionRotation(x, y, z, yaw, pitch);
-            Vector direction = location.getDirection().multiply(10);
-            ((EntityFireball) entity).setDirection(direction.getX(), direction.getY(), direction.getZ());
-        } else if (Snowball.class.isAssignableFrom(clazz)) {
-            entity = new EntitySnowball(world, x, y, z);
         } else if (Minecart.class.isAssignableFrom(clazz)) {
-
-            if (PoweredMinecart.class.isAssignableFrom(clazz)) {
-                entity = new EntityMinecart(world, x, y, z, CraftMinecart.Type.PoweredMinecart.getId());
-            } else if (StorageMinecart.class.isAssignableFrom(clazz)) {
-                entity = new EntityMinecart(world, x, y, z, CraftMinecart.Type.StorageMinecart.getId());
-            } else {
-                entity = new EntityMinecart(world, x, y, z, CraftMinecart.Type.Minecart.getId());
-            }
-
+        	entity = new EntityMinecart(world, x, y, z);
         } else if (Arrow.class.isAssignableFrom(clazz)) {
             entity = new EntityArrow(world);
             entity.setPositionRotation(x, y, z, 0, 0);
         } else if (LivingEntity.class.isAssignableFrom(clazz)) {
 
-            if (Chicken.class.isAssignableFrom(clazz)) {
-                entity = new EntityChicken(world);
-            } else if (Cow.class.isAssignableFrom(clazz)) {
-                entity = new EntityCow(world);
-            } else if (Creeper.class.isAssignableFrom(clazz)) {
+            if (Creeper.class.isAssignableFrom(clazz)) {
                 entity = new EntityCreeper(world);
-            } else if (Ghast.class.isAssignableFrom(clazz)) {
-                entity = new EntityGhast(world);
             } else if (Pig.class.isAssignableFrom(clazz)) {
                 entity = new EntityPig(world);
             } else if (Player.class.isAssignableFrom(clazz)) {
@@ -723,16 +563,8 @@ public class CraftWorld implements World {
                 entity = new EntitySheep(world);
             } else if (Skeleton.class.isAssignableFrom(clazz)) {
                 entity = new EntitySkeleton(world);
-            } else if (Slime.class.isAssignableFrom(clazz)) {
-                entity = new EntitySlime(world);
             } else if (Spider.class.isAssignableFrom(clazz)) {
                 entity = new EntitySpider(world);
-            } else if (Squid.class.isAssignableFrom(clazz)) {
-                entity = new EntitySquid(world);
-            } else if (Wolf.class.isAssignableFrom(clazz)) {
-                entity = new EntityWolf(world);
-            } else if (PigZombie.class.isAssignableFrom(clazz)) {
-                entity = new EntityPigZombie(world);
             } else if (Zombie.class.isAssignableFrom(clazz)) {
                 entity = new EntityZombie(world);
             }
@@ -745,15 +577,6 @@ public class CraftWorld implements World {
             // negative
         } else if (TNTPrimed.class.isAssignableFrom(clazz)) {
             entity = new EntityTNTPrimed(world, x, y, z);
-        } else if (Weather.class.isAssignableFrom(clazz)) {
-            // not sure what this can do
-            entity = new EntityWeatherStorm(world, x, y, z);
-        } else if (LightningStrike.class.isAssignableFrom(clazz)) {
-            // what is this, I don't even
-        } else if (Fish.class.isAssignableFrom(clazz)) {
-            // this is not a fish, it's a bobber, and it's probably useless
-            entity = new EntityFish(world);
-            entity.setLocation(x, y, z, pitch, yaw);
         }
 
         if (entity != null) {
@@ -764,8 +587,8 @@ public class CraftWorld implements World {
         throw new IllegalArgumentException("Cannot spawn an entity for " + clazz.getName());
     }
 
-    public ChunkSnapshot getEmptyChunkSnapshot(int x, int z, boolean includeBiome, boolean includeBiomeTempRain) {
-        return CraftChunk.getEmptyChunkSnapshot(x, z, this, includeBiome, includeBiomeTempRain);
+    public ChunkSnapshot getEmptyChunkSnapshot(int x, int z) {
+        return CraftChunk.getEmptyChunkSnapshot(x, z, this);
     }
 
     public void setSpawnFlags(boolean allowMonsters, boolean allowAnimals) {

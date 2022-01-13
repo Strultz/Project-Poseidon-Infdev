@@ -6,7 +6,6 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.map.MapView;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicesManager;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -244,7 +243,7 @@ public interface Server {
      * @param environment Environment type of the world
      * @return Newly created or loaded World
      */
-    public World createWorld(String name, World.Environment environment);
+    public World createWorld(String name);
 
     /**
      * Creates or loads a world with the given name.
@@ -256,7 +255,7 @@ public interface Server {
      * @param seed Seed value to create the world with
      * @return Newly created or loaded World
      */
-    public World createWorld(String name, World.Environment environment, long seed);
+    public World createWorld(String name, long seed);
 
     /**
      * Creates or loads a world with the given name.
@@ -268,7 +267,7 @@ public interface Server {
      * @param generator ChunkGenerator to use in the construction of the new world
      * @return Newly created or loaded World
      */
-    public World createWorld(String name, World.Environment environment, ChunkGenerator generator);
+    public World createWorld(String name, ChunkGenerator generator);
 
     /**
      * Creates or loads a world with the given name.
@@ -281,7 +280,7 @@ public interface Server {
      * @param generator ChunkGenerator to use in the construction of the new world
      * @return Newly created or loaded World
      */
-    public World createWorld(String name, World.Environment environment, long seed, ChunkGenerator generator);
+    public World createWorld(String name, long seed, ChunkGenerator generator);
 
      /**
      * Unloads a world with the given name.
@@ -316,22 +315,6 @@ public interface Server {
      * @return World with the given Unique ID, or null if none exists.
      */
     public World getWorld(UUID uid);
-    
-    /**
-     * Gets the map from the given item ID.
-     * 
-     * @param id ID of the map to get.
-     * @return The MapView if it exists, or null otherwise.
-     */
-    public MapView getMap(short id);
-    
-    /**
-     * Create a new map with an automatically assigned ID.
-     * 
-     * @param world The world the map will belong to.
-     * @return The MapView just created.
-     */
-    public MapView createMap(World world);
 
     /**
      * Reloads the server, refreshing settings and plugin information

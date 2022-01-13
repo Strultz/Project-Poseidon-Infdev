@@ -69,15 +69,6 @@ public class BlockListener implements Listener {
     public void onBlockPlace(BlockPlaceEvent event) {}
 
     /**
-     * Called when redstone changes.<br />
-     * From: the source of the redstone change.<br />
-     * To: The redstone dust that changed.
-     *
-     * @param event Relevant event details
-     */
-    public void onBlockRedstoneChange(BlockRedstoneEvent event) {}
-
-    /**
      * Called when leaves are decaying naturally.
      *<p />
      * If a Leaves Decay event is cancelled, the leaves will not decay.
@@ -173,18 +164,4 @@ public class BlockListener implements Listener {
      * @param event Relevant event details
      */
     public void onBlockDispense(BlockDispenseEvent event) {}
-
-    /**
-     * Called when a piston retracts
-     *
-     * @param event Relevant event details
-     */
-    public void onBlockPistonRetract(BlockPistonRetractEvent event) {}
-
-    /**
-     * Called when a piston extends
-     *
-     * @param event Relevant event details
-     */
-    public void onBlockPistonExtend(BlockPistonExtendEvent event) {}
 }

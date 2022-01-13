@@ -9,14 +9,6 @@ public class CraftPig extends CraftAnimals implements Pig {
         super(server, entity);
     }
 
-    public boolean hasSaddle() {
-        return getHandle().hasSaddle();
-    }
-
-    public void setSaddle(boolean saddled) {
-        getHandle().setSaddle(saddled);
-    }
-
     public EntityPig getHandle() {
         return (EntityPig) super.getHandle();
     }

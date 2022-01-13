@@ -3,19 +3,13 @@ package net.minecraft.server;
 public abstract class WorldProvider {
 
     public World a;
-    public WorldChunkManager b;
-    public boolean c = false;
-    public boolean d = false;
-    public boolean e = false;
     public float[] f = new float[16];
-    public int dimension = 0;
     private float[] h = new float[4];
 
     public WorldProvider() {}
 
     public final void a(World world) {
         this.a = world;
-        this.a();
         this.c();
     }
 
@@ -27,10 +21,6 @@ public abstract class WorldProvider {
 
             this.f[i] = (1.0F - f1) / (f1 * 3.0F + 1.0F) * (1.0F - f) + f;
         }
-    }
-
-    protected void a() {
-        this.b = new WorldChunkManager(this.a);
     }
 
     public IChunkProvider getChunkProvider() {
@@ -66,7 +56,7 @@ public abstract class WorldProvider {
         return true;
     }
 
-    public static WorldProvider byDimension(int i) {
-        return (WorldProvider) (i == -1 ? new WorldProviderHell() : (i == 0 ? new WorldProviderNormal() : (i == 1 ? new WorldProviderSky() : null)));
+    public static WorldProvider byDimension() {
+        return new WorldProviderNormal();
     }
 }

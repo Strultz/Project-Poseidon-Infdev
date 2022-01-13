@@ -33,14 +33,6 @@ public interface LivingEntity extends Entity {
     public double getEyeHeight();
 
     /**
-     * Gets the height of the entity's head above its Location
-     *
-     * @param boolean If set to true, the effects of sneaking will be ignored
-     * @return Height of the entity's eyes above its Location
-     */
-    public double getEyeHeight(boolean ignoreSneaking);
-
-    /**
      * Get a Location detailing the current eye position of the LivingEntity.
      *
      * @return a Location at the eyes of the LivingEntity.
@@ -77,45 +69,11 @@ public interface LivingEntity extends Entity {
     public List<Block> getLastTwoTargetBlocks(HashSet<Byte> transparent, int maxDistance);
 
     /**
-     * Throws an egg from the entity.
-     */
-    public Egg throwEgg();
-
-    /**
-     * Throws a snowball from the entity.
-     */
-    public Snowball throwSnowball();
-
-    /**
      * Shoots an arrow from the entity.
      *
      * @return
      */
     public Arrow shootArrow();
-
-    /**
-     * Returns whether this entity is inside a vehicle.
-     *
-     * @return
-     */
-    public boolean isInsideVehicle();
-
-    /**
-     * Leave the current vehicle. If the entity is currently in a vehicle
-     * (and is removed from it), true will be returned, otherwise false will
-     * be returned.
-     *
-     * @return
-     */
-    public boolean leaveVehicle();
-
-    /**
-     * Get the vehicle that this player is inside. If there is no vehicle,
-     * null will be returned.
-     *
-     * @return
-     */
-    public Vehicle getVehicle();
 
     /**
      * Returns the amount of air that this entity has remaining, in ticks

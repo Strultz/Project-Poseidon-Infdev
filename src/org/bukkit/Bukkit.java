@@ -1,13 +1,11 @@
 package org.bukkit;
 
 import com.avaje.ebean.config.ServerConfig;
-import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.map.MapView;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicesManager;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -130,20 +128,20 @@ public final class Bukkit {
         return server.getWorlds();
     }
 
-    public static World createWorld(String name, Environment environment) {
-        return server.createWorld(name, environment);
+    public static World createWorld(String name) {
+        return server.createWorld(name);
     }
 
-    public static World createWorld(String name, Environment environment, long seed) {
-        return server.createWorld(name, environment, seed);
+    public static World createWorld(String name, long seed) {
+        return server.createWorld(name, seed);
     }
 
-    public static World createWorld(String name, Environment environment, ChunkGenerator generator) {
-        return server.createWorld(name, environment, generator);
+    public static World createWorld(String name, ChunkGenerator generator) {
+        return server.createWorld(name, generator);
     }
 
-    public static World createWorld(String name, Environment environment, long seed, ChunkGenerator generator) {
-        return server.createWorld(name, environment, seed, generator);
+    public static World createWorld(String name, long seed, ChunkGenerator generator) {
+        return server.createWorld(name, seed, generator);
     }
 
     public static boolean unloadWorld(String name, boolean save) {
@@ -160,14 +158,6 @@ public final class Bukkit {
 
     public static World getWorld(UUID uid) {
         return server.getWorld(uid);
-    }
-
-    public static MapView getMap(short id) {
-        return server.getMap(id);
-    }
-
-    public static MapView createMap(World world) {
-        return server.createMap(world);
     }
 
     public static void reload() {

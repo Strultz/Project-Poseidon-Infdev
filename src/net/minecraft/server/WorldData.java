@@ -12,13 +12,8 @@ public class WorldData {
     private long f;
     private long g;
     private NBTTagCompound h;
-    private int i;
     public String name; // CraftBukkit - private -> public
     private int k;
-    private boolean l;
-    private int m;
-    private boolean n;
-    private int o;
 
     public WorldData(NBTTagCompound nbttagcompound) {
         this.a = nbttagcompound.getLong("RandomSeed");
@@ -30,13 +25,8 @@ public class WorldData {
         this.g = nbttagcompound.getLong("SizeOnDisk");
         this.name = nbttagcompound.getString("LevelName");
         this.k = nbttagcompound.e("version");
-        this.m = nbttagcompound.e("rainTime");
-        this.l = nbttagcompound.m("raining");
-        this.o = nbttagcompound.e("thunderTime");
-        this.n = nbttagcompound.m("thundering");
         if (nbttagcompound.hasKey("Player")) {
             this.h = nbttagcompound.k("Player");
-            this.i = this.h.e("Dimension");
         }
     }
 
@@ -54,13 +44,8 @@ public class WorldData {
         this.f = worlddata.f;
         this.g = worlddata.g;
         this.h = worlddata.h;
-        this.i = worlddata.i;
         this.name = worlddata.name;
         this.k = worlddata.k;
-        this.m = worlddata.m;
-        this.l = worlddata.l;
-        this.o = worlddata.o;
-        this.n = worlddata.n;
     }
 
     public NBTTagCompound a() {
@@ -98,10 +83,6 @@ public class WorldData {
         nbttagcompound.setLong("LastPlayed", System.currentTimeMillis());
         nbttagcompound.setString("LevelName", this.name);
         nbttagcompound.a("version", this.k);
-        nbttagcompound.a("rainTime", this.m);
-        nbttagcompound.a("raining", this.l);
-        nbttagcompound.a("thunderTime", this.o);
-        nbttagcompound.a("thundering", this.n);
         if (nbttagcompound1 != null) {
             nbttagcompound.a("Player", nbttagcompound1);
         }
@@ -131,10 +112,6 @@ public class WorldData {
         return this.g;
     }
 
-    public int h() {
-        return this.i;
-    }
-
     public void a(long i) {
         this.e = i;
     }
@@ -159,37 +136,5 @@ public class WorldData {
 
     public void a(int i) {
         this.k = i;
-    }
-
-    public boolean isThundering() {
-        return this.n;
-    }
-
-    public void setThundering(boolean flag) {
-        this.n = flag;
-    }
-
-    public int getThunderDuration() {
-        return this.o;
-    }
-
-    public void setThunderDuration(int i) {
-        this.o = i;
-    }
-
-    public boolean hasStorm() {
-        return this.l;
-    }
-
-    public void setStorm(boolean flag) {
-        this.l = flag;
-    }
-
-    public int getWeatherDuration() {
-        return this.m;
-    }
-
-    public void setWeatherDuration(int i) {
-        this.m = i;
     }
 }

@@ -40,20 +40,6 @@ public class VehicleListener implements Listener {
     public void onVehicleEntityCollision(VehicleEntityCollisionEvent event) {}
 
     /**
-     * Called when an entity enters a vehicle.
-     *
-     * @param event
-     */
-    public void onVehicleEnter(VehicleEnterEvent event) {}
-
-    /**
-     * Called when an entity exits a vehicle.
-     *
-     * @param event
-     */
-    public void onVehicleExit(VehicleExitEvent event) {}
-
-    /**
      * Called when an vehicle moves.
      *
      * @param event

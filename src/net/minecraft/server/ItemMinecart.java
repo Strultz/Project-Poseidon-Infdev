@@ -7,13 +7,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 // CraftBukkit end
 
 public class ItemMinecart extends Item {
-
-    public int a;
-
-    public ItemMinecart(int i, int j) {
+    public ItemMinecart(int i) {
         super(i);
         this.maxStackSize = 1;
-        this.a = j;
     }
 
     public boolean a(ItemStack itemstack, EntityHuman entityhuman, World world, int i, int j, int k, int l) {
@@ -29,7 +25,7 @@ public class ItemMinecart extends Item {
                 }
                 // CraftBukkit end
 
-                world.addEntity(new EntityMinecart(world, (double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F), this.a));
+                world.addEntity(new EntityMinecart(world, (double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F)));
             }
 
             --itemstack.count;

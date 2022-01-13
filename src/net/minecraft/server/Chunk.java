@@ -86,19 +86,17 @@ public class Chunk {
                     i = l;
                 }
 
-                if (!this.world.worldProvider.e) {
-                    int j1 = 15;
-                    int k1 = 127;
+                int j1 = 15;
+                int k1 = 127;
 
-                    do {
-                        j1 -= Block.q[this.b[i1 + k1] & 255];
-                        if (j1 > 0) {
-                            this.f.a(j, k1, k, j1);
-                        }
+                do {
+                    j1 -= Block.q[this.b[i1 + k1] & 255];
+                    if (j1 > 0) {
+                        this.f.a(j, k1, k, j1);
+                    }
 
-                        --k1;
-                    } while (k1 > 0 && j1 > 0);
-                }
+                    --k1;
+                } while (k1 > 0 && j1 > 0);
             }
         }
 
@@ -238,18 +236,15 @@ public class Chunk {
             }
 
             this.e.a(i, j, k, i1);
-            if (!this.world.worldProvider.e) {
-                if (Block.q[b0 & 255] != 0) {
-                    if (j >= j1) {
-                        this.g(i, j + 1, k);
-                    }
-                } else if (j == j1 - 1) {
-                    this.g(i, j, k);
+            if (Block.q[b0 & 255] != 0) {
+                if (j >= j1) {
+                    this.g(i, j + 1, k);
                 }
-
-                this.world.a(EnumSkyBlock.SKY, l1, j, i2, l1, j, i2);
+            } else if (j == j1 - 1) {
+                this.g(i, j, k);
             }
 
+            this.world.a(EnumSkyBlock.SKY, l1, j, i2, l1, j, i2);
             this.world.a(EnumSkyBlock.BLOCK, l1, j, i2, l1, j, i2);
             this.c(i, k);
             this.e.a(i, j, k, i1);
@@ -437,10 +432,6 @@ public class Chunk {
         if (this.getTypeId(i, j, k) != 0 && Block.byId[this.getTypeId(i, j, k)] instanceof BlockContainer) {
             tileentity.j();
             this.tileEntities.put(chunkposition, tileentity);
-            // Poseidon start - Backport of 0021-Remove-invalid-mob-spawner-tile-entities.patch from PaperSpigot
-        } else if (tileentity instanceof TileEntityMobSpawner && !(Block.byId[this.getTypeId(i, j, k)] instanceof BlockMobSpawner)) {
-            this.tileEntities.remove(chunkposition);
-            // Poseidon end
         } else {
             System.out.println("Attempted to place a tile entity where there was no entity tile!");
         }

@@ -202,9 +202,7 @@ public abstract class Packet {
         a(14, false, true, Packet14BlockDig.class);
         a(15, false, true, Packet15Place.class);
         a(16, false, true, Packet16BlockItemSwitch.class);
-        a(17, true, false, Packet17.class);
         a(18, true, true, Packet18ArmAnimation.class);
-        a(19, false, true, Packet19EntityAction.class);
         a(20, true, false, Packet20NamedEntitySpawn.class);
         a(21, true, false, Packet21PickupSpawn.class);
         a(22, true, false, Packet22Collect.class);
@@ -220,17 +218,13 @@ public abstract class Packet {
         a(33, true, false, Packet33RelEntityMoveLook.class);
         a(34, true, false, Packet34EntityTeleport.class);
         a(38, true, false, Packet38EntityStatus.class);
-        a(39, true, false, Packet39AttachEntity.class);
         a(40, true, false, Packet40EntityMetadata.class);
         a(50, true, false, Packet50PreChunk.class);
         a(51, true, false, Packet51MapChunk.class);
         a(52, true, false, Packet52MultiBlockChange.class);
         a(53, true, false, Packet53BlockChange.class);
-        a(54, true, false, Packet54PlayNoteBlock.class);
         a(60, true, false, Packet60Explosion.class);
         a(61, true, false, Packet61.class);
-        a(70, true, false, Packet70Bed.class);
-        a(71, true, false, Packet71Weather.class);
         a(100, true, false, Packet100OpenWindow.class);
         a(101, true, true, Packet101CloseWindow.class);
         a(102, false, true, Packet102WindowClick.class);
@@ -239,8 +233,6 @@ public abstract class Packet {
         a(105, true, false, Packet105CraftProgressBar.class);
         a(106, true, true, Packet106Transaction.class);
         a(130, true, true, Packet130UpdateSign.class);
-        a(131, true, false, Packet131.class);
-        a(200, true, false, Packet200Statistic.class);
         a(255, true, true, Packet255KickDisconnect.class);
         packetClassToIdMap.put(ArtificialPacket53BlockChange.class, 53); //Poseidon - Artificial Block Change Packet
         e = new HashMap();

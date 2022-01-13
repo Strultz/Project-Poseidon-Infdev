@@ -146,7 +146,6 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
         s = event.getReason();
         // CraftBukkit end
 
-        this.player.B();
         this.sendPacket(new Packet255KickDisconnect(s));
         this.networkManager.d();
 
@@ -261,56 +260,6 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
             double d3;
             double d4;
 
-            if (this.player.vehicle != null) {
-                float f = this.player.yaw;
-                float f1 = this.player.pitch;
-
-                this.player.vehicle.f();
-                d1 = this.player.locX;
-                d2 = this.player.locY;
-                d3 = this.player.locZ;
-                double d5 = 0.0D;
-
-                d4 = 0.0D;
-                if (packet10flying.hasLook) {
-                    f = packet10flying.yaw;
-                    f1 = packet10flying.pitch;
-                }
-
-                if (packet10flying.h && packet10flying.y == -999.0D && packet10flying.stance == -999.0D) {
-                    d5 = packet10flying.x;
-                    d4 = packet10flying.z;
-                }
-
-                this.player.onGround = packet10flying.g;
-                this.player.a(true);
-                this.player.move(d5, 0.0D, d4);
-                this.player.setLocation(d1, d2, d3, f, f1);
-                this.player.motX = d5;
-                this.player.motZ = d4;
-                if (this.player.vehicle != null) {
-                    worldserver.vehicleEnteredWorld(this.player.vehicle, true);
-                }
-
-                if (this.player.vehicle != null) {
-                    this.player.vehicle.f();
-                }
-
-                this.minecraftServer.serverConfigurationManager.d(this.player);
-                this.x = this.player.locX;
-                this.y = this.player.locY;
-                this.z = this.player.locZ;
-                worldserver.playerJoinedWorld(this.player);
-                return;
-            }
-
-            if (this.player.isSleeping()) {
-                this.player.a(true);
-                this.player.setLocation(this.x, this.y, this.z, this.player.yaw, this.player.pitch);
-                worldserver.playerJoinedWorld(this.player);
-                return;
-            }
-
             d0 = this.player.locY;
             this.x = this.player.locX;
             this.y = this.player.locY;
@@ -330,7 +279,7 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
                 d2 = packet10flying.y;
                 d3 = packet10flying.z;
                 d4 = packet10flying.stance - packet10flying.y;
-                if (!this.player.isSleeping() && (d4 > 1.65D || d4 < 0.1D)) {
+                if (d4 > 1.65D || d4 < 0.1D) {
                     this.disconnect("Illegal stance");
                     a.warning(this.player.name + " had an illegal stance: " + d4);
                     return;
@@ -379,7 +328,7 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
             d8 = d4 * d4 + d6 * d6 + d7 * d7;
             boolean flag1 = false;
 
-            if (d8 > 0.0625D && !this.player.isSleeping()) {
+            if (d8 > 0.0625D) {
                 flag1 = true;
                 a.warning(this.player.name + " moved wrongly!");
                 System.out.println("Got position " + d1 + ", " + d2 + ", " + d3);
@@ -389,7 +338,7 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
             this.player.setLocation(d1, d2, d3, f2, f3);
             boolean flag2 = worldserver.getEntities(this.player, this.player.boundingBox.clone().shrink((double) f4, (double) f4, (double) f4)).size() == 0;
 
-            if (flag && (flag1 || !flag2) && !this.player.isSleeping()) {
+            if (flag && (flag1 || !flag2)) {
                 this.a(this.x, this.y, this.z, f2, f3);
                 return;
             }
@@ -922,36 +871,6 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
         }
     }
 
-    public void a(Packet19EntityAction packet19entityaction) {
-        // poseidon
-        PacketReceivedEvent pevent = new PacketReceivedEvent(server.getPlayer(player), packet19entityaction);
-        server.getPluginManager().callEvent(pevent);
-        if (pevent.isCancelled())
-            return;
-
-        // CraftBukkit start
-        if (this.player.dead) return;
-
-        if (packet19entityaction.animation == 1 || packet19entityaction.animation == 2) {
-            PlayerToggleSneakEvent event = new PlayerToggleSneakEvent(this.getPlayer(), packet19entityaction.animation == 1);
-            this.server.getPluginManager().callEvent(event);
-
-            if (event.isCancelled()) {
-                return;
-            }
-        }
-        // CraftBukkit end
-
-        if (packet19entityaction.animation == 1) {
-            this.player.setSneak(true);
-        } else if (packet19entityaction.animation == 2) {
-            this.player.setSneak(false);
-        } else if (packet19entityaction.animation == 3) {
-            this.player.a(false, true, true);
-            this.checkMovement = false;
-        }
-    }
-
     public void a(Packet0KeepAlive packet0KeepAlive) {
         this.receivedKeepAlive = true;
     }
@@ -996,11 +915,6 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
                 Player player = (Player) this.getPlayer();
                 org.bukkit.entity.Entity bukkitEntity = entity.getBukkitEntity();
                 // CraftBukkit start
-                //Project Poseidon Start - Fixes a Minecart dupe glitch
-                if (player.isInsideVehicle() && bukkitEntity instanceof StorageMinecart) {
-                    return;
-                }
-                //Project Poseidon End
                 PlayerInteractEntityEvent event = new PlayerInteractEntityEvent(player, bukkitEntity);
                 this.server.getPluginManager().callEvent(event);
 

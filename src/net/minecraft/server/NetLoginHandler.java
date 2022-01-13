@@ -95,18 +95,8 @@ public class NetLoginHandler extends NetHandler {
             }
         } else {
             //Project Poseidon - Start (Release2Beta)
-            if (packet1login.d == (byte) -999 || packet1login.d == (byte) 25) {
-                connectionType = ConnectionType.RELEASE2BETA_OFFLINE_MODE_IP_FORWARDING;
-            } else if (packet1login.d == (byte) 26) {
-                connectionType = ConnectionType.RELEASE2BETA_ONLINE_MODE_IP_FORWARDING;
-            } else if (packet1login.d == (byte) 1) {
-                connectionType = ConnectionType.RELEASE2BETA;
-            } else if (packet1login.d == (byte) 2) {
-                connectionType = ConnectionType.BUNGEECORD_OFFLINE_MODE_IP_FORWARDING;
-            } else {
-                connectionType = ConnectionType.NORMAL;
-            }
-            rawConnectionType = packet1login.d;
+        	connectionType = ConnectionType.NORMAL;
+            rawConnectionType = 0;
             //TODO: We need to find a better and cleaner way to support these different Beta proxies, Maybe a handler class???
             if (connectionType.equals(ConnectionType.RELEASE2BETA_OFFLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.RELEASE2BETA_ONLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.BUNGEECORD_OFFLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.BUNGEECORD_ONLINE_MODE_IP_FORWARDING)) {
                 //Proxy has IP Forwarding enabled
@@ -162,7 +152,7 @@ public class NetLoginHandler extends NetHandler {
             netserverhandler.setRawConnectionType(rawConnectionType);
             netserverhandler.setReceivedKeepAlive(receivedKeepAlive);
             //Poseidon End
-            netserverhandler.sendPacket(new Packet1Login("", entityplayer.id, worldserver.getSeed(), (byte) worldserver.worldProvider.dimension));
+            netserverhandler.sendPacket(new Packet1Login("", entityplayer.id, worldserver.getSeed()));
             netserverhandler.sendPacket(new Packet6SpawnPosition(chunkcoordinates.x, chunkcoordinates.y, chunkcoordinates.z));
             this.server.serverConfigurationManager.a(entityplayer, worldserver);
             // this.server.serverConfigurationManager.sendAll(new Packet3Chat("\u00A7e" + entityplayer.name + " joined the game."));  // CraftBukkit - message moved to join event

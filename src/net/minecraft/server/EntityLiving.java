@@ -208,12 +208,6 @@ public abstract class EntityLiving extends Entity {
         }
     }
 
-    public void E() {
-        super.E();
-        this.M = this.N;
-        this.N = 0.0F;
-    }
-
     public void m_() {
         super.m_();
         this.v();
@@ -574,10 +568,6 @@ public abstract class EntityLiving extends Entity {
                 if (this.motY < -0.15D) {
                     this.motY = -0.15D;
                 }
-
-                if (this.isSneaking() && this.motY < 0.0D) {
-                    this.motY = 0.0D;
-                }
             }
 
             this.move(this.motX, this.motY, this.motZ);
@@ -609,7 +599,7 @@ public abstract class EntityLiving extends Entity {
         int j = MathHelper.floor(this.boundingBox.b);
         int k = MathHelper.floor(this.locZ);
 
-        return this.world.getTypeId(i, j, k) == Block.LADDER.id;
+        return this.world.getTypeId(i, j, k) == Block.LADDER.id || this.world.getTypeId(i, j + 1, k) == Block.LADDER.id;
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -896,9 +886,5 @@ public abstract class EntityLiving extends Entity {
 
     public int l() {
         return 4;
-    }
-
-    public boolean isSleeping() {
-        return false;
     }
 }

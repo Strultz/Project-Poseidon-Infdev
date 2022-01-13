@@ -14,14 +14,6 @@ public class EntitySpider extends EntityMonster {
         this.aE = 0.8F;
     }
 
-    public double m() {
-        return (double) this.width * 0.75D - 0.5D;
-    }
-
-    protected boolean n() {
-        return false;
-    }
-
     protected Entity findTarget() {
         float f = this.c(1.0F);
 
@@ -90,9 +82,5 @@ public class EntitySpider extends EntityMonster {
 
     protected int j() {
         return Item.STRING.id;
-    }
-
-    public boolean p() {
-        return this.positionChanged;
     }
 }

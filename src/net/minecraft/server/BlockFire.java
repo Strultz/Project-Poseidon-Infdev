@@ -23,14 +23,14 @@ public class BlockFire extends Block {
 
     public void h() {
         this.a(Block.WOOD.id, 5, 20);
-        this.a(Block.FENCE.id, 5, 20);
-        this.a(Block.WOOD_STAIRS.id, 5, 20);
         this.a(Block.LOG.id, 5, 5);
         this.a(Block.LEAVES.id, 30, 60);
         this.a(Block.BOOKSHELF.id, 30, 20);
         this.a(Block.TNT.id, 15, 100);
-        this.a(Block.LONG_GRASS.id, 60, 100);
-        this.a(Block.WOOL.id, 30, 60);
+        
+        for (int i = 0; i < 16; i++) {
+        	this.a(Block.RED_WOOL.id + i, 30, 60);
+        }
     }
 
     private void a(int i, int j, int k) {
@@ -59,35 +59,30 @@ public class BlockFire extends Block {
     }
 
     public void a(World world, int i, int j, int k, Random random) {
-        boolean flag = world.getTypeId(i, j - 1, k) == Block.NETHERRACK.id;
-
         if (!this.canPlace(world, i, j, k)) {
             world.setTypeId(i, j, k, 0);
         }
 
-        if (!flag && world.v() && (world.s(i, j, k) || world.s(i - 1, j, k) || world.s(i + 1, j, k) || world.s(i, j, k - 1) || world.s(i, j, k + 1))) {
-            world.setTypeId(i, j, k, 0);
-        } else {
             int l = world.getData(i, j, k);
 
             if (l < 15) {
-                world.setRawData(i, j, k, l + random.nextInt(3) / 2);
+                world.setRawData(i, j, k, l + 1);
             }
 
             world.c(i, j, k, this.id, this.c());
-            if (!flag && !this.g(world, i, j, k)) {
+            if (!this.g(world, i, j, k)) {
                 if (!world.e(i, j - 1, k) || l > 3) {
                     world.setTypeId(i, j, k, 0);
                 }
-            } else if (!flag && !this.b(world, i, j - 1, k) && l == 15 && random.nextInt(4) == 0) {
+            } else if (!this.b(world, i, j - 1, k) && l == 15 && random.nextInt(4) == 0) {
                 world.setTypeId(i, j, k, 0);
             } else {
-                this.a(world, i + 1, j, k, 300, random, l);
-                this.a(world, i - 1, j, k, 300, random, l);
-                this.a(world, i, j - 1, k, 250, random, l);
-                this.a(world, i, j + 1, k, 250, random, l);
-                this.a(world, i, j, k - 1, 300, random, l);
-                this.a(world, i, j, k + 1, 300, random, l);
+                this.a(world, i + 1, j, k, 300, random);
+                this.a(world, i - 1, j, k, 300, random);
+                this.a(world, i, j - 1, k, 100, random);
+                this.a(world, i, j + 1, k, 200, random);
+                this.a(world, i, j, k - 1, 300, random);
+                this.a(world, i, j, k + 1, 300, random);
 
                 // CraftBukkit start - Call to stop spread of fire.
                 org.bukkit.Server server = world.getServer();
@@ -112,7 +107,7 @@ public class BlockFire extends Block {
                                 if (i2 > 0) {
                                     int j2 = (i2 + 40) / (l + 30);
 
-                                    if (j2 > 0 && random.nextInt(l1) <= j2 && (!world.v() || !world.s(i1, k1, j1)) && !world.s(i1 - 1, k1, k) && !world.s(i1 + 1, k1, j1) && !world.s(i1, k1, j1 - 1) && !world.s(i1, k1, j1 + 1)) {
+                                    if (j2 > 0 && random.nextInt(l1) <= j2 && !world.v()) {
                                         int k2 = l + random.nextInt(5) / 4;
 
                                         if (k2 > 15) {
@@ -148,10 +143,9 @@ public class BlockFire extends Block {
                     }
                 }
             }
-        }
     }
 
-    private void a(World world, int i, int j, int k, int l, Random random, int i1) {
+    private void a(World world, int i, int j, int k, int l, Random random) {
         int j1 = this.b[world.getTypeId(i, j, k)];
 
         if (random.nextInt(l) < j1) {
@@ -167,14 +161,8 @@ public class BlockFire extends Block {
             }
             // CraftBukkit end
 
-            if (random.nextInt(i1 + 10) < 5 && !world.s(i, j, k)) {
-                int k1 = i1 + random.nextInt(5) / 4;
-
-                if (k1 > 15) {
-                    k1 = 15;
-                }
-
-                world.setTypeIdAndData(i, j, k, this.id, k1);
+            if (random.nextInt(2) < 5) {
+                world.setTypeId(i, j, k, this.id);
             } else {
                 world.setTypeId(i, j, k, 0);
             }
@@ -231,12 +219,10 @@ public class BlockFire extends Block {
     }
 
     public void c(World world, int i, int j, int k) {
-        if (world.getTypeId(i, j - 1, k) != Block.OBSIDIAN.id || !Block.PORTAL.a_(world, i, j, k)) {
-            if (!world.e(i, j - 1, k) && !this.g(world, i, j, k)) {
-                world.setTypeId(i, j, k, 0);
-            } else {
-                world.c(i, j, k, this.id, this.c());
-            }
+    	if (!world.e(i, j - 1, k) && !this.g(world, i, j, k)) {
+            world.setTypeId(i, j, k, 0);
+        } else {
+            world.c(i, j, k, this.id, this.c());
         }
     }
 }

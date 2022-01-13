@@ -79,7 +79,7 @@ public class EntityTrackerEntry {
             int movementUpdateTreshold = 1;
             int rotationUpdateTreshold = 1;
             boolean needsPositionUpdate = Math.abs(encodedDiffX) >= movementUpdateTreshold || Math.abs(encodedDiffY) >= movementUpdateTreshold || Math.abs(encodedDiffZ) >= movementUpdateTreshold
-            		|| tracker instanceof EntityBoat || tracker instanceof EntityMinecart;
+            		|| tracker instanceof EntityMinecart;
             
             boolean needsRotationUpdate = Math.abs(newEncodedRotationYaw - this.g) >= rotationUpdateTreshold || Math.abs(newEncodedRotationPitch - this.h) >= rotationUpdateTreshold;
 
@@ -224,10 +224,6 @@ public class EntityTrackerEntry {
 
                     if (this.tracker instanceof EntityHuman) {
                         EntityHuman entityhuman = (EntityHuman) this.tracker;
-
-                        if (entityhuman.isSleeping()) {
-                            entityplayer.netServerHandler.sendPacket(new Packet17(this.tracker, 0, MathHelper.floor(this.tracker.locX), MathHelper.floor(this.tracker.locY), MathHelper.floor(this.tracker.locZ)));
-                        }
                     }
                 }
             } else if (this.trackedPlayers.contains(entityplayer)) {
@@ -262,46 +258,15 @@ public class EntityTrackerEntry {
             return new Packet20NamedEntitySpawn((EntityHuman) this.tracker);
         } else {
             if (this.tracker instanceof EntityMinecart) {
-                EntityMinecart entityminecart = (EntityMinecart) this.tracker;
-
-                if (entityminecart.type == 0) {
-                    return new Packet23VehicleSpawn(this.tracker, 10);
-                }
-
-                if (entityminecart.type == 1) {
-                    return new Packet23VehicleSpawn(this.tracker, 11);
-                }
-
-                if (entityminecart.type == 2) {
-                    return new Packet23VehicleSpawn(this.tracker, 12);
-                }
+            	return new Packet23VehicleSpawn(this.tracker, 10);
             }
 
-            if (this.tracker instanceof EntityBoat) {
-                return new Packet23VehicleSpawn(this.tracker, 1);
-            } else if (this.tracker instanceof IAnimal) {
+            if (this.tracker instanceof IAnimal) {
                 return new Packet24MobSpawn((EntityLiving) this.tracker);
-            } else if (this.tracker instanceof EntityFish) {
-                return new Packet23VehicleSpawn(this.tracker, 90);
             } else if (this.tracker instanceof EntityArrow) {
                 EntityLiving entityliving = ((EntityArrow) this.tracker).shooter;
 
                 return new Packet23VehicleSpawn(this.tracker, 60, entityliving != null ? entityliving.id : this.tracker.id);
-            } else if (this.tracker instanceof EntitySnowball) {
-                return new Packet23VehicleSpawn(this.tracker, 61);
-            } else if (this.tracker instanceof EntityFireball) {
-                EntityFireball entityfireball = (EntityFireball) this.tracker;
-                // CraftBukkit start - added check for null shooter
-                int shooter = ((EntityFireball) this.tracker).shooter != null ? ((EntityFireball) this.tracker).shooter.id : 1;
-                Packet23VehicleSpawn packet23vehiclespawn = new Packet23VehicleSpawn(this.tracker, 63, shooter);
-                // CraftBukkit end
-
-                packet23vehiclespawn.e = (int) (entityfireball.c * 8000.0D);
-                packet23vehiclespawn.f = (int) (entityfireball.d * 8000.0D);
-                packet23vehiclespawn.g = (int) (entityfireball.e * 8000.0D);
-                return packet23vehiclespawn;
-            } else if (this.tracker instanceof EntityEgg) {
-                return new Packet23VehicleSpawn(this.tracker, 62);
             } else if (this.tracker instanceof EntityTNTPrimed) {
                 return new Packet23VehicleSpawn(this.tracker, 50);
             } else {

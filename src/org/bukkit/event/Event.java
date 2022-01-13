@@ -368,14 +368,6 @@ public abstract class Event implements Serializable {
          */
         SIGN_CHANGE(Category.BLOCK),
         /**
-         * Called when a block changes redstone current. Only triggered on blocks
-         * that are actually capable of transmitting or carrying a redstone
-         * current
-         *
-         * @see org.bukkit.event.block.BlockRedstoneEvent
-         */
-        REDSTONE_CHANGE(Category.BLOCK),
-        /**
          * Called when a block is broken by a player
          *
          * @see org.bukkit.event.block.BlockBreakEvent
@@ -399,18 +391,6 @@ public abstract class Event implements Serializable {
          * @see org.bukkit.event.block.BlockFadeEvent
          */
         BLOCK_FADE(Category.BLOCK),
-        /**
-         * Called when a piston extends
-         *
-         * @see org.bukkit.event.block.PistonExtendEvent
-         */
-        BLOCK_PISTON_EXTEND(Category.BLOCK),
-        /**
-         * Called when a piston retracts
-         *
-         * @see org.bukkit.event.block.PistonRetractEvent
-         */
-        BLOCK_PISTON_RETRACT(Category.BLOCK),
 
         /**
          * INVENTORY EVENTS
@@ -481,12 +461,6 @@ public abstract class Event implements Serializable {
          * @see org.bukkit.event.server.ServerCommandEvent
          */
         SERVER_COMMAND(Category.SERVER),
-        /**
-         * Called when a map is initialized (created or loaded into memory)
-         *
-         * @see org.bukkit.event.server.MapInitializeEvent
-         */
-        MAP_INITIALIZE(Category.SERVER),
 
         /**
          * WORLD EVENTS
@@ -580,12 +554,6 @@ public abstract class Event implements Serializable {
          * @see org.bukkit.event.painting.PaintingBreakEvent
          */
         PAINTING_BREAK(Category.ENTITY),
-        /**
-         * Called when an entity touches a portal block
-         *
-         * @see org.bukkit.event.entity.EntityPortalEnterEvent
-         */
-        ENTITY_PORTAL_ENTER(Category.ENTITY),
 
         /**
          * LIVING_ENTITY EVENTS
@@ -653,24 +621,6 @@ public abstract class Event implements Serializable {
          */
         ENTITY_INTERACT(Category.LIVING_ENTITY),
         /**
-         * Called when a creeper gains or loses a power shell
-         *
-         * @see org.bukkit.event.entity.CreeperPowerEvent
-         */
-        CREEPER_POWER(Category.LIVING_ENTITY),
-        /**
-         * Called when a pig is zapped, zombifying it
-         *
-         * @see org.bukkit.event.entity.PigZapEvent
-         */
-        PIG_ZAP(Category.LIVING_ENTITY),
-        /**
-         * Called when a LivingEntity is tamed
-         *
-         * @see org.bukkit.event.entity.EntityTameEvent
-         */
-        ENTITY_TAME(Category.LIVING_ENTITY),
-        /**
          * Called when a {@link Projectile} hits something
          *
          * @see org.bukkit.event.entity.ProjectileHitEvent
@@ -683,29 +633,6 @@ public abstract class Event implements Serializable {
          * @see org.bukkit.event.entity.EntityRegainHealthEvent
          */
         ENTITY_REGAIN_HEALTH(Category.LIVING_ENTITY),
-
-        /**
-         * WEATHER EVENTS
-         */
-
-        /**
-         * Called when a lightning entity strikes somewhere
-         *
-         * @see org.bukkit.event.weather.LightningStrikeEvent
-         */
-        LIGHTNING_STRIKE(Category.WEATHER),
-        /**
-         * Called when the weather in a world changes
-         *
-         * @see org.bukkit.event.weather.WeatherChangeEvent
-         */
-        WEATHER_CHANGE(Category.WEATHER),
-        /**
-         * Called when the thunder state in a world changes
-         *
-         * @see org.bukkit.event.weather.ThunderChangeEvent
-         */
-        THUNDER_CHANGE(Category.WEATHER),
 
         /**
          * VEHICLE EVENTS
@@ -741,18 +668,6 @@ public abstract class Event implements Serializable {
          * @see org.bukkit.event.vehicle.VehicleBlockCollisionEvent
          */
         VEHICLE_COLLISION_BLOCK(Category.VEHICLE),
-        /**
-         * Called when a vehicle is entered by a LivingEntity
-         *
-         * @see org.bukkit.event.vehicle.VehicleEnterEvent
-         */
-        VEHICLE_ENTER(Category.VEHICLE),
-        /**
-         * Called when a vehicle is exited by a LivingEntity
-         *
-         * @see org.bukkit.event.vehicle.VehicleExitEvent
-         */
-        VEHICLE_EXIT(Category.VEHICLE),
         /**
          * Called when a vehicle moves position in the world
          *

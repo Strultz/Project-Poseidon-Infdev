@@ -36,7 +36,7 @@ public class BlockSoil extends Block {
 
     public void a(World world, int i, int j, int k, Random random) {
         if (random.nextInt(5) == 0) {
-            if (!this.h(world, i, j, k) && !world.s(i, j + 1, k)) {
+            if (!this.h(world, i, j, k)) {
                 int l = world.getData(i, j, k);
 
                 if (l > 0) {

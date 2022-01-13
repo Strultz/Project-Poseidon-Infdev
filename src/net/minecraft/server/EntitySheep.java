@@ -17,8 +17,20 @@ public class EntitySheep extends EntityAnimal {
         this.datawatcher.a(16, new Byte((byte) 0));
     }
 
-    public boolean damageEntity(Entity entity, int i) {
-        return super.damageEntity(entity, i);
+    public boolean damageEntity(Entity entity, int id) {
+    	if (!this.world.isStatic && !this.isSheared()) {
+            this.setSheared(true);
+            int i = 1 + this.random.nextInt(3);
+
+            for (int j = 0; j < i; ++j) {
+                EntityItem entityitem = this.a(new ItemStack(Block.WOOL, 1), 1.0F);
+
+                entityitem.motY += (double) (this.random.nextFloat() * 0.05F);
+                entityitem.motX += (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.1F);
+                entityitem.motZ += (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.1F);
+            }
+        }
+        return super.damageEntity(entity, id);
     }
 
     protected void q() {
@@ -26,7 +38,7 @@ public class EntitySheep extends EntityAnimal {
         java.util.List<org.bukkit.inventory.ItemStack> loot = new java.util.ArrayList<org.bukkit.inventory.ItemStack>();
 
         if (!this.isSheared()) {
-            loot.add(new org.bukkit.inventory.ItemStack(org.bukkit.Material.WOOL, 1, (short) 0, (byte) this.getColor()));
+            loot.add(new org.bukkit.inventory.ItemStack(org.bukkit.Material.WOOL, 1, (short) 0));
         }
 
         org.bukkit.World bworld = this.world.getWorld();
@@ -41,43 +53,14 @@ public class EntitySheep extends EntityAnimal {
         // CraftBukkit end
     }
 
-    protected int j() {
-        return Block.WOOL.id;
-    }
-
-    public boolean a(EntityHuman entityhuman) {
-        ItemStack itemstack = entityhuman.inventory.getItemInHand();
-
-        if (itemstack != null && itemstack.id == Item.SHEARS.id && !this.isSheared()) {
-            if (!this.world.isStatic) {
-                this.setSheared(true);
-                int i = 2 + this.random.nextInt(3);
-
-                for (int j = 0; j < i; ++j) {
-                    EntityItem entityitem = this.a(new ItemStack(Block.WOOL.id, 1, this.getColor()), 1.0F);
-
-                    entityitem.motY += (double) (this.random.nextFloat() * 0.05F);
-                    entityitem.motX += (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.1F);
-                    entityitem.motZ += (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.1F);
-                }
-            }
-
-            itemstack.damage(1, entityhuman);
-        }
-
-        return false;
-    }
-
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.a("Sheared", this.isSheared());
-        nbttagcompound.a("Color", (byte) this.getColor());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.setSheared(nbttagcompound.m("Sheared"));
-        this.setColor(nbttagcompound.c("Color"));
     }
 
     protected String g() {
@@ -90,16 +73,6 @@ public class EntitySheep extends EntityAnimal {
 
     protected String i() {
         return "mob.sheep";
-    }
-
-    public int getColor() {
-        return this.datawatcher.a(16) & 15;
-    }
-
-    public void setColor(int i) {
-        byte b0 = this.datawatcher.a(16);
-
-        this.datawatcher.watch(16, Byte.valueOf((byte) (b0 & 240 | i & 15)));
     }
 
     public boolean isSheared() {

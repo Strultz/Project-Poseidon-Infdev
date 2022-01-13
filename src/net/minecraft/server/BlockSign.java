@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import org.bukkit.event.block.BlockRedstoneEvent;
-
 import java.util.Random;
 
 public class BlockSign extends BlockContainer {
@@ -14,14 +12,7 @@ public class BlockSign extends BlockContainer {
         this.b = flag;
         this.textureId = 4;
         this.a = oclass;
-        float f = 0.25F;
-        float f1 = 1.0F;
-
-        this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f1, 0.5F + f);
-    }
-
-    public AxisAlignedBB e(World world, int i, int j, int k) {
-        return null;
+        this.a(0.25F, 0.0F, 0.25F, 0.75F, 1.625F, 0.75F);
     }
 
     public void a(IBlockAccess iblockaccess, int i, int j, int k) {
@@ -106,15 +97,5 @@ public class BlockSign extends BlockContainer {
         }
 
         super.doPhysics(world, i, j, k, l);
-
-        // CraftBukkit start
-        if (net.minecraft.server.Block.byId[l] != null && net.minecraft.server.Block.byId[l].isPowerSource()) {
-            org.bukkit.block.Block block = world.getWorld().getBlockAt(i, j, k);
-            int power = block.getBlockPower();
-
-            BlockRedstoneEvent eventRedstone = new BlockRedstoneEvent(block, power, power);
-            world.getServer().getPluginManager().callEvent(eventRedstone);
-        }
-        // CraftBukkit end
     }
 }

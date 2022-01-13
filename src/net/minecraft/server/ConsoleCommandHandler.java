@@ -179,8 +179,6 @@ public class ConsoleCommandHandler {
                                             icommandlistener.sendMessage("Can\'t find user " + astring[1] + ". No tp.");
                                         } else if (entityplayer2 == null) {
                                             icommandlistener.sendMessage("Can\'t find user " + astring[2] + ". No tp.");
-                                        } else if (entityplayer.dimension != entityplayer2.dimension) {
-                                            icommandlistener.sendMessage("User " + astring[1] + " and " + astring[2] + " are in different dimensions. No tp.");
                                         } else {
                                             entityplayer.netServerHandler.a(entityplayer2.locX, entityplayer2.locY, entityplayer2.locZ, entityplayer2.yaw, entityplayer2.pitch);
                                             this.print(s1, "Teleporting " + astring[1] + " to " + astring[2] + ".");

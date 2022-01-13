@@ -19,10 +19,6 @@ import org.bukkit.event.painting.PaintingPlaceEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.server.*;
 import org.bukkit.event.vehicle.*;
-import org.bukkit.event.weather.LightningStrikeEvent;
-import org.bukkit.event.weather.ThunderChangeEvent;
-import org.bukkit.event.weather.WeatherChangeEvent;
-import org.bukkit.event.weather.WeatherListener;
 import org.bukkit.event.world.*;
 import org.bukkit.plugin.*;
 import org.jetbrains.annotations.NotNull;
@@ -640,15 +636,6 @@ public class JavaPluginLoader implements PluginLoader
                     }
                 };
 
-            case REDSTONE_CHANGE:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((BlockListener) listener).onBlockRedstoneChange((BlockRedstoneEvent) event);
-                    }
-                };
-
             case BLOCK_BURN:
                 return new EventExecutor()
                 {
@@ -703,24 +690,6 @@ public class JavaPluginLoader implements PluginLoader
                     }
                 };
 
-            case BLOCK_PISTON_RETRACT:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((BlockListener) listener).onBlockPistonRetract((BlockPistonRetractEvent) event);
-                    }
-                };
-
-            case BLOCK_PISTON_EXTEND:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((BlockListener) listener).onBlockPistonExtend((BlockPistonExtendEvent) event);
-                    }
-                };
-
             // Server Events
             case PLUGIN_ENABLE:
                 return new EventExecutor()
@@ -746,15 +715,6 @@ public class JavaPluginLoader implements PluginLoader
                     public void execute(Listener listener, Event event)
                     {
                         ((ServerListener) listener).onServerCommand((ServerCommandEvent) event);
-                    }
-                };
-
-            case MAP_INITIALIZE:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((ServerListener) listener).onMapInitialize((MapInitializeEvent) event);
                     }
                 };
 
@@ -939,15 +899,6 @@ public class JavaPluginLoader implements PluginLoader
                     }
                 };
 
-            case ENTITY_PORTAL_ENTER:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((EntityListener) listener).onEntityPortalEnter((EntityPortalEnterEvent) event);
-                    }
-                };
-
             case CREATURE_SPAWN:
                 return new EventExecutor()
                 {
@@ -963,33 +914,6 @@ public class JavaPluginLoader implements PluginLoader
                     public void execute(Listener listener, Event event)
                     {
                         ((EntityListener) listener).onItemSpawn((ItemSpawnEvent) event);
-                    }
-                };
-
-            case PIG_ZAP:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((EntityListener) listener).onPigZap((PigZapEvent) event);
-                    }
-                };
-
-            case CREEPER_POWER:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((EntityListener) listener).onCreeperPower((CreeperPowerEvent) event);
-                    }
-                };
-
-            case ENTITY_TAME:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((EntityListener) listener).onEntityTame((EntityTameEvent) event);
                     }
                 };
 
@@ -1057,24 +981,6 @@ public class JavaPluginLoader implements PluginLoader
                     }
                 };
 
-            case VEHICLE_ENTER:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((VehicleListener) listener).onVehicleEnter((VehicleEnterEvent) event);
-                    }
-                };
-
-            case VEHICLE_EXIT:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((VehicleListener) listener).onVehicleExit((VehicleExitEvent) event);
-                    }
-                };
-
             case VEHICLE_MOVE:
                 return new EventExecutor()
                 {
@@ -1090,34 +996,6 @@ public class JavaPluginLoader implements PluginLoader
                     public void execute(Listener listener, Event event)
                     {
                         ((VehicleListener) listener).onVehicleUpdate((VehicleUpdateEvent) event);
-                    }
-                };
-
-            // Weather Events
-            case WEATHER_CHANGE:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((WeatherListener) listener).onWeatherChange((WeatherChangeEvent) event);
-                    }
-                };
-
-            case THUNDER_CHANGE:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((WeatherListener) listener).onThunderChange((ThunderChangeEvent) event);
-                    }
-                };
-
-            case LIGHTNING_STRIKE:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((WeatherListener) listener).onLightningStrike((LightningStrikeEvent) event);
                     }
                 };
 

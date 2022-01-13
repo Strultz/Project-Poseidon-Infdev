@@ -50,28 +50,8 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
         return "CraftLivingEntity{" + "id=" + getEntityId() + '}';
     }
 
-    public Egg throwEgg() {
-        net.minecraft.server.World world = ((CraftWorld) getWorld()).getHandle();
-        EntityEgg egg = new EntityEgg(world, getHandle());
-
-        world.addEntity(egg);
-        return (Egg) egg.getBukkitEntity();
-    }
-
-    public Snowball throwSnowball() {
-        net.minecraft.server.World world = ((CraftWorld) getWorld()).getHandle();
-        EntitySnowball snowball = new EntitySnowball(world, getHandle());
-
-        world.addEntity(snowball);
-        return (Snowball) snowball.getBukkitEntity();
-    }
-
     public double getEyeHeight() {
         return 1.0D;
-    }
-
-    public double getEyeHeight(boolean ignoreSneaking) {
-        return getEyeHeight();
     }
 
     private List<Block> getLineOfSight(HashSet<Byte> transparent, int maxDistance, int maxLength) {
@@ -119,32 +99,6 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
         world.addEntity(arrow);
         return (Arrow) arrow.getBukkitEntity();
-    }
-
-    public boolean isInsideVehicle() {
-        return getHandle().vehicle != null;
-    }
-
-    public boolean leaveVehicle() {
-        if (getHandle().vehicle == null) {
-            return false;
-        }
-
-        getHandle().setPassengerOf(null);
-        return true;
-    }
-
-    public Vehicle getVehicle() {
-        if (getHandle().vehicle == null) {
-            return null;
-        }
-
-        org.bukkit.entity.Entity vehicle = (getHandle().vehicle.getBukkitEntity());
-        if (vehicle instanceof Vehicle) {
-            return (Vehicle) vehicle;
-        }
-
-        return null;
     }
 
     public int getRemainingAir() {

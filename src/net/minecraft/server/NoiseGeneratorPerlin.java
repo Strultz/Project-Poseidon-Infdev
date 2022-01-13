@@ -2,243 +2,152 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class NoiseGeneratorPerlin extends NoiseGenerator {
+public final class NoiseGeneratorPerlin extends NoiseGenerator {
+	private int[] permutations;
+	private double xCoord;
+	private double yCoord;
+	private double zCoord;
 
-    private int[] d;
-    public double a;
-    public double b;
-    public double c;
+	public NoiseGeneratorPerlin() {
+		this(new Random());
+	}
 
-    public NoiseGeneratorPerlin() {
-        this(new Random());
-    }
+	public NoiseGeneratorPerlin(Random var1) {
+		this.permutations = new int[512];
+		this.xCoord = var1.nextDouble() * 256.0D;
+		this.yCoord = var1.nextDouble() * 256.0D;
+		this.zCoord = var1.nextDouble() * 256.0D;
 
-    public NoiseGeneratorPerlin(Random random) {
-        this.d = new int[512];
-        this.a = random.nextDouble() * 256.0D;
-        this.b = random.nextDouble() * 256.0D;
-        this.c = random.nextDouble() * 256.0D;
+		int var2;
+		for(var2 = 0; var2 < 256; this.permutations[var2] = var2++) {
+			;
+		}
 
-        int i;
+		for(var2 = 0; var2 < 256; ++var2) {
+			int var3 = var1.nextInt(256 - var2) + var2;
+			int var4 = this.permutations[var2];
+			this.permutations[var2] = this.permutations[var3];
+			this.permutations[var3] = var4;
+			this.permutations[var2 + 256] = this.permutations[var2];
+		}
 
-        for (i = 0; i < 256; this.d[i] = i++) {
-            ;
-        }
+	}
 
-        for (i = 0; i < 256; ++i) {
-            int j = random.nextInt(256 - i) + i;
-            int k = this.d[i];
+	private double generateNoise(double var1, double var3, double var5) {
+		double var7 = var1 + this.xCoord;
+		double var9 = var3 + this.yCoord;
+		double var11 = var5 + this.zCoord;
+		int var25 = (int)var7;
+		int var2 = (int)var9;
+		int var26 = (int)var11;
+		if(var7 < (double)var25) {
+			--var25;
+		}
 
-            this.d[i] = this.d[j];
-            this.d[j] = k;
-            this.d[i + 256] = this.d[i];
-        }
-    }
+		if(var9 < (double)var2) {
+			--var2;
+		}
 
-    public double a(double d0, double d1, double d2) {
-        double d3 = d0 + this.a;
-        double d4 = d1 + this.b;
-        double d5 = d2 + this.c;
-        int i = (int) d3;
-        int j = (int) d4;
-        int k = (int) d5;
+		if(var11 < (double)var26) {
+			--var26;
+		}
 
-        if (d3 < (double) i) {
-            --i;
-        }
+		int var4 = var25 & 255;
+		int var27 = var2 & 255;
+		int var6 = var26 & 255;
+		var7 -= (double)var25;
+		var9 -= (double)var2;
+		var11 -= (double)var26;
+		double var19 = var7 * var7 * var7 * (var7 * (var7 * 6.0D - 15.0D) + 10.0D);
+		double var21 = var9 * var9 * var9 * (var9 * (var9 * 6.0D - 15.0D) + 10.0D);
+		double var23 = var11 * var11 * var11 * (var11 * (var11 * 6.0D - 15.0D) + 10.0D);
+		var25 = this.permutations[var4] + var27;
+		var2 = this.permutations[var25] + var6;
+		var25 = this.permutations[var25 + 1] + var6;
+		var26 = this.permutations[var4 + 1] + var27;
+		var4 = this.permutations[var26] + var6;
+		var26 = this.permutations[var26 + 1] + var6;
+		return lerp(var23, lerp(var21, lerp(var19, grad(this.permutations[var2], var7, var9, var11), grad(this.permutations[var4], var7 - 1.0D, var9, var11)), lerp(var19, grad(this.permutations[var25], var7, var9 - 1.0D, var11), grad(this.permutations[var26], var7 - 1.0D, var9 - 1.0D, var11))), lerp(var21, lerp(var19, grad(this.permutations[var2 + 1], var7, var9, var11 - 1.0D), grad(this.permutations[var4 + 1], var7 - 1.0D, var9, var11 - 1.0D)), lerp(var19, grad(this.permutations[var25 + 1], var7, var9 - 1.0D, var11 - 1.0D), grad(this.permutations[var26 + 1], var7 - 1.0D, var9 - 1.0D, var11 - 1.0D))));
+	}
 
-        if (d4 < (double) j) {
-            --j;
-        }
+	private static double lerp(double var0, double var2, double var4) {
+		return var2 + var0 * (var4 - var2);
+	}
 
-        if (d5 < (double) k) {
-            --k;
-        }
+	private static double grad(int var0, double var1, double var3, double var5) {
+		double var8 = (var0 &= 15) < 8 ? var1 : var3;
+		double var10 = var0 < 4 ? var3 : (var0 != 12 && var0 != 14 ? var5 : var1);
+		return ((var0 & 1) == 0 ? var8 : -var8) + ((var0 & 2) == 0 ? var10 : -var10);
+	}
 
-        int l = i & 255;
-        int i1 = j & 255;
-        int j1 = k & 255;
+	public final double generateNoise(double var1, double var3) {
+		return this.generateNoise(var1, var3, 0.0D);
+	}
 
-        d3 -= (double) i;
-        d4 -= (double) j;
-        d5 -= (double) k;
-        double d6 = d3 * d3 * d3 * (d3 * (d3 * 6.0D - 15.0D) + 10.0D);
-        double d7 = d4 * d4 * d4 * (d4 * (d4 * 6.0D - 15.0D) + 10.0D);
-        double d8 = d5 * d5 * d5 * (d5 * (d5 * 6.0D - 15.0D) + 10.0D);
-        int k1 = this.d[l] + i1;
-        int l1 = this.d[k1] + j1;
-        int i2 = this.d[k1 + 1] + j1;
-        int j2 = this.d[l + 1] + i1;
-        int k2 = this.d[j2] + j1;
-        int l2 = this.d[j2 + 1] + j1;
+	public final double generateNoise_func_a(double var1, double var3, double var5) {
+		return this.generateNoise(var1, var3, var5);
+	}
 
-        return this.b(d8, this.b(d7, this.b(d6, this.a(this.d[l1], d3, d4, d5), this.a(this.d[k2], d3 - 1.0D, d4, d5)), this.b(d6, this.a(this.d[i2], d3, d4 - 1.0D, d5), this.a(this.d[l2], d3 - 1.0D, d4 - 1.0D, d5))), this.b(d7, this.b(d6, this.a(this.d[l1 + 1], d3, d4, d5 - 1.0D), this.a(this.d[k2 + 1], d3 - 1.0D, d4, d5 - 1.0D)), this.b(d6, this.a(this.d[i2 + 1], d3, d4 - 1.0D, d5 - 1.0D), this.a(this.d[l2 + 1], d3 - 1.0D, d4 - 1.0D, d5 - 1.0D))));
-    }
+	public final void populateNoiseArray(double[] var1, int var2, int var3, int var4, int var5, int var6, int var7, double var8, double var10, double var12, double var14) {
+		int var16 = 0;
+		double var17 = 1.0D / var14;
+		int var61 = -1;
+		double var26 = 0.0D;
+		double var28 = 0.0D;
+		double var30 = 0.0D;
+		double var32 = 0.0D;
 
-    public final double b(double d0, double d1, double d2) {
-        return d1 + d0 * (d2 - d1);
-    }
+		for(int var22 = 0; var22 < var5; ++var22) {
+			double var35;
+			int var15 = (int)(var35 = (double)(var2 + var22) * var8 + this.xCoord);
+			if(var35 < (double)var15) {
+				--var15;
+			}
 
-    public final double a(int i, double d0, double d1) {
-        int j = i & 15;
-        double d2 = (double) (1 - ((j & 8) >> 3)) * d0;
-        double d3 = j < 4 ? 0.0D : (j != 12 && j != 14 ? d1 : d0);
+			int var23 = var15 & 255;
+			double var39 = (var35 -= (double)var15) * var35 * var35 * (var35 * (var35 * 6.0D - 15.0D) + 10.0D);
 
-        return ((j & 1) == 0 ? d2 : -d2) + ((j & 2) == 0 ? d3 : -d3);
-    }
+			for(int var24 = 0; var24 < var7; ++var24) {
+				double var42;
+				var15 = (int)(var42 = (double)(var4 + var24) * var12 + this.zCoord);
+				if(var42 < (double)var15) {
+					--var15;
+				}
 
-    public final double a(int i, double d0, double d1, double d2) {
-        int j = i & 15;
-        double d3 = j < 8 ? d0 : d1;
-        double d4 = j < 4 ? d1 : (j != 12 && j != 14 ? d2 : d0);
+				int var25 = var15 & 255;
+				double var46 = (var42 -= (double)var15) * var42 * var42 * (var42 * (var42 * 6.0D - 15.0D) + 10.0D);
 
-        return ((j & 1) == 0 ? d3 : -d3) + ((j & 2) == 0 ? d4 : -d4);
-    }
+				for(int var34 = 0; var34 < var6; ++var34) {
+					double var49;
+					var15 = (int)(var49 = (double)(var3 + var34) * var10 + this.yCoord);
+					if(var49 < (double)var15) {
+						--var15;
+					}
 
-    public double a(double d0, double d1) {
-        return this.a(d0, d1, 0.0D);
-    }
+					int var20 = var15 & 255;
+					double var53 = (var49 -= (double)var15) * var49 * var49 * (var49 * (var49 * 6.0D - 15.0D) + 10.0D);
+					if(var34 == 0 || var20 != var61) {
+						var61 = var20;
+						var15 = this.permutations[var23] + var20;
+						int var19 = this.permutations[var15] + var25;
+						var15 = this.permutations[var15 + 1] + var25;
+						var20 += this.permutations[var23 + 1];
+						int var21 = this.permutations[var20] + var25;
+						var20 = this.permutations[var20 + 1] + var25;
+						var26 = lerp(var39, grad(this.permutations[var19], var35, var49, var42), grad(this.permutations[var21], var35 - 1.0D, var49, var42));
+						var28 = lerp(var39, grad(this.permutations[var15], var35, var49 - 1.0D, var42), grad(this.permutations[var20], var35 - 1.0D, var49 - 1.0D, var42));
+						var30 = lerp(var39, grad(this.permutations[var19 + 1], var35, var49, var42 - 1.0D), grad(this.permutations[var21 + 1], var35 - 1.0D, var49, var42 - 1.0D));
+						var32 = lerp(var39, grad(this.permutations[var15 + 1], var35, var49 - 1.0D, var42 - 1.0D), grad(this.permutations[var20 + 1], var35 - 1.0D, var49 - 1.0D, var42 - 1.0D));
+					}
 
-    public void a(double[] adouble, double d0, double d1, double d2, int i, int j, int k, double d3, double d4, double d5, double d6) {
-        int l;
-        int i1;
-        double d7;
-        double d8;
-        double d9;
-        int j1;
-        double d10;
-        int k1;
-        int l1;
-        int i2;
-        int j2;
+					double var55 = lerp(var53, var26, var28);
+					double var57 = lerp(var53, var30, var32);
+					double var59 = lerp(var46, var55, var57);
+					int var10001 = var16++;
+					var1[var10001] += var59 * var17;
+				}
+			}
+		}
 
-        if (j == 1) {
-            boolean flag = false;
-            boolean flag1 = false;
-            boolean flag2 = false;
-            boolean flag3 = false;
-            double d11 = 0.0D;
-            double d12 = 0.0D;
-
-            j2 = 0;
-            double d13 = 1.0D / d6;
-
-            for (int k2 = 0; k2 < i; ++k2) {
-                d7 = (d0 + (double) k2) * d3 + this.a;
-                int l2 = (int) d7;
-
-                if (d7 < (double) l2) {
-                    --l2;
-                }
-
-                int i3 = l2 & 255;
-
-                d7 -= (double) l2;
-                d8 = d7 * d7 * d7 * (d7 * (d7 * 6.0D - 15.0D) + 10.0D);
-
-                for (j1 = 0; j1 < k; ++j1) {
-                    d9 = (d2 + (double) j1) * d5 + this.c;
-                    k1 = (int) d9;
-                    if (d9 < (double) k1) {
-                        --k1;
-                    }
-
-                    l1 = k1 & 255;
-                    d9 -= (double) k1;
-                    d10 = d9 * d9 * d9 * (d9 * (d9 * 6.0D - 15.0D) + 10.0D);
-                    l = this.d[i3] + 0;
-                    int j3 = this.d[l] + l1;
-                    int k3 = this.d[i3 + 1] + 0;
-
-                    i1 = this.d[k3] + l1;
-                    d11 = this.b(d8, this.a(this.d[j3], d7, d9), this.a(this.d[i1], d7 - 1.0D, 0.0D, d9));
-                    d12 = this.b(d8, this.a(this.d[j3 + 1], d7, 0.0D, d9 - 1.0D), this.a(this.d[i1 + 1], d7 - 1.0D, 0.0D, d9 - 1.0D));
-                    double d14 = this.b(d10, d11, d12);
-
-                    i2 = j2++;
-                    adouble[i2] += d14 * d13;
-                }
-            }
-        } else {
-            l = 0;
-            double d15 = 1.0D / d6;
-
-            i1 = -1;
-            boolean flag4 = false;
-            boolean flag5 = false;
-            boolean flag6 = false;
-            boolean flag7 = false;
-            boolean flag8 = false;
-            boolean flag9 = false;
-            double d16 = 0.0D;
-
-            d7 = 0.0D;
-            double d17 = 0.0D;
-
-            d8 = 0.0D;
-
-            for (j1 = 0; j1 < i; ++j1) {
-                d9 = (d0 + (double) j1) * d3 + this.a;
-                k1 = (int) d9;
-                if (d9 < (double) k1) {
-                    --k1;
-                }
-
-                l1 = k1 & 255;
-                d9 -= (double) k1;
-                d10 = d9 * d9 * d9 * (d9 * (d9 * 6.0D - 15.0D) + 10.0D);
-
-                for (int l3 = 0; l3 < k; ++l3) {
-                    double d18 = (d2 + (double) l3) * d5 + this.c;
-                    int i4 = (int) d18;
-
-                    if (d18 < (double) i4) {
-                        --i4;
-                    }
-
-                    int j4 = i4 & 255;
-
-                    d18 -= (double) i4;
-                    double d19 = d18 * d18 * d18 * (d18 * (d18 * 6.0D - 15.0D) + 10.0D);
-
-                    for (int k4 = 0; k4 < j; ++k4) {
-                        double d20 = (d1 + (double) k4) * d4 + this.b;
-                        int l4 = (int) d20;
-
-                        if (d20 < (double) l4) {
-                            --l4;
-                        }
-
-                        int i5 = l4 & 255;
-
-                        d20 -= (double) l4;
-                        double d21 = d20 * d20 * d20 * (d20 * (d20 * 6.0D - 15.0D) + 10.0D);
-
-                        if (k4 == 0 || i5 != i1) {
-                            i1 = i5;
-                            int j5 = this.d[l1] + i5;
-                            int k5 = this.d[j5] + j4;
-                            int l5 = this.d[j5 + 1] + j4;
-                            int i6 = this.d[l1 + 1] + i5;
-
-                            j2 = this.d[i6] + j4;
-                            int j6 = this.d[i6 + 1] + j4;
-
-                            d16 = this.b(d10, this.a(this.d[k5], d9, d20, d18), this.a(this.d[j2], d9 - 1.0D, d20, d18));
-                            d7 = this.b(d10, this.a(this.d[l5], d9, d20 - 1.0D, d18), this.a(this.d[j6], d9 - 1.0D, d20 - 1.0D, d18));
-                            d17 = this.b(d10, this.a(this.d[k5 + 1], d9, d20, d18 - 1.0D), this.a(this.d[j2 + 1], d9 - 1.0D, d20, d18 - 1.0D));
-                            d8 = this.b(d10, this.a(this.d[l5 + 1], d9, d20 - 1.0D, d18 - 1.0D), this.a(this.d[j6 + 1], d9 - 1.0D, d20 - 1.0D, d18 - 1.0D));
-                        }
-
-                        double d22 = this.b(d21, d16, d7);
-                        double d23 = this.b(d21, d17, d8);
-                        double d24 = this.b(d19, d22, d23);
-
-                        i2 = l++;
-                        adouble[i2] += d24 * d15;
-                    }
-                }
-            }
-        }
-    }
+	}
 }

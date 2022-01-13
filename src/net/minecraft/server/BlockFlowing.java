@@ -36,7 +36,7 @@ public class BlockFlowing extends BlockFluids {
         int l = this.g(world, i, j, k);
         byte b0 = 1;
 
-        if (this.material == Material.LAVA && !world.worldProvider.d) {
+        if (this.material == Material.LAVA) {
             b0 = 2;
         }
 
@@ -256,7 +256,7 @@ public class BlockFlowing extends BlockFluids {
     private boolean k(World world, int i, int j, int k) {
         int l = world.getTypeId(i, j, k);
 
-        if (l != Block.WOODEN_DOOR.id && l != Block.IRON_DOOR_BLOCK.id && l != Block.SIGN_POST.id && l != Block.LADDER.id && l != Block.SUGAR_CANE_BLOCK.id) {
+        if (l != Block.WOODEN_DOOR.id && l != Block.SIGN_POST.id && l != Block.LADDER.id) {
             if (l == 0) {
                 return false;
             } else {

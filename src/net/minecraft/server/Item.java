@@ -13,7 +13,7 @@ public class Item {
     public static Item APPLE = (new ItemFood(4, 4, false)).a(10, 0).a("apple");
     public static Item BOW = (new ItemBow(5)).a(5, 1).a("bow");
     public static Item ARROW = (new Item(6)).a(5, 2).a("arrow");
-    public static Item COAL = (new ItemCoal(7)).a(7, 0).a("coal");
+    public static Item COAL = (new Item(7)).a(7, 0).a("coal");
     public static Item DIAMOND = (new Item(8)).a(7, 3).a("emerald");
     public static Item IRON_INGOT = (new Item(9)).a(7, 1).a("ingotIron");
     public static Item GOLD_INGOT = (new Item(10)).a(7, 2).a("ingotGold");
@@ -74,44 +74,11 @@ public class Item {
     public static Item PAINTING = (new ItemPainting(65)).a(10, 1).a("painting");
     public static Item GOLDEN_APPLE = (new ItemFood(66, 42, false)).a(11, 0).a("appleGold");
     public static Item SIGN = (new ItemSign(67)).a(10, 2).a("sign");
-    public static Item WOOD_DOOR = (new ItemDoor(68, Material.WOOD)).a(11, 2).a("doorWood");
+    public static Item WOOD_DOOR = (new ItemDoor(68)).a(11, 2).a("doorWood");
     public static Item BUCKET = (new ItemBucket(69, 0)).a(10, 4).a("bucket");
     public static Item WATER_BUCKET = (new ItemBucket(70, Block.WATER.id)).a(11, 4).a("bucketWater").a(BUCKET);
     public static Item LAVA_BUCKET = (new ItemBucket(71, Block.LAVA.id)).a(12, 4).a("bucketLava").a(BUCKET);
-    public static Item MINECART = (new ItemMinecart(72, 0)).a(7, 8).a("minecart");
-    public static Item SADDLE = (new ItemSaddle(73)).a(8, 6).a("saddle");
-    public static Item IRON_DOOR = (new ItemDoor(74, Material.ORE)).a(12, 2).a("doorIron");
-    public static Item REDSTONE = (new ItemRedstone(75)).a(8, 3).a("redstone");
-    public static Item SNOW_BALL = (new ItemSnowball(76)).a(14, 0).a("snowball");
-    public static Item BOAT = (new ItemBoat(77)).a(8, 8).a("boat");
-    public static Item LEATHER = (new Item(78)).a(7, 6).a("leather");
-    public static Item MILK_BUCKET = (new ItemBucket(79, -1)).a(13, 4).a("milk").a(BUCKET);
-    public static Item CLAY_BRICK = (new Item(80)).a(6, 1).a("brick");
-    public static Item CLAY_BALL = (new Item(81)).a(9, 3).a("clay");
-    public static Item SUGAR_CANE = (new ItemReed(82, Block.SUGAR_CANE_BLOCK)).a(11, 1).a("reeds");
-    public static Item PAPER = (new Item(83)).a(10, 3).a("paper");
-    public static Item BOOK = (new Item(84)).a(11, 3).a("book");
-    public static Item SLIME_BALL = (new Item(85)).a(14, 1).a("slimeball");
-    public static Item STORAGE_MINECART = (new ItemMinecart(86, 1)).a(7, 9).a("minecartChest");
-    public static Item POWERED_MINECART = (new ItemMinecart(87, 2)).a(7, 10).a("minecartFurnace");
-    public static Item EGG = (new ItemEgg(88)).a(12, 0).a("egg");
-    public static Item COMPASS = (new Item(89)).a(6, 3).a("compass");
-    public static Item FISHING_ROD = (new ItemFishingRod(90)).a(5, 4).a("fishingRod");
-    public static Item WATCH = (new Item(91)).a(6, 4).a("clock");
-    public static Item GLOWSTONE_DUST = (new Item(92)).a(9, 4).a("yellowDust");
-    public static Item RAW_FISH = (new ItemFood(93, 2, false)).a(9, 5).a("fishRaw");
-    public static Item COOKED_FISH = (new ItemFood(94, 5, false)).a(10, 5).a("fishCooked");
-    public static Item INK_SACK = (new ItemDye(95)).a(14, 4).a("dyePowder");
-    public static Item BONE = (new Item(96)).a(12, 1).a("bone").g();
-    public static Item SUGAR = (new Item(97)).a(13, 0).a("sugar").g();
-    public static Item CAKE = (new ItemReed(98, Block.CAKE_BLOCK)).c(1).a(13, 1).a("cake");
-    public static Item BED = (new ItemBed(99)).c(1).a(13, 2).a("bed");
-    public static Item DIODE = (new ItemReed(100, Block.DIODE_OFF)).a(6, 5).a("diode");
-    public static Item COOKIE = (new ItemCookie(101, 1, false, 8)).a(12, 5).a("cookie");
-    public static ItemWorldMap MAP = (ItemWorldMap) (new ItemWorldMap(102)).a(12, 3).a("map");
-    public static ItemShears SHEARS = (ItemShears) (new ItemShears(103)).a(13, 5).a("shears");
-    public static Item GOLD_RECORD = (new ItemRecord(2000, "13")).a(0, 15).a("record");
-    public static Item GREEN_RECORD = (new ItemRecord(2001, "cat")).a(1, 15).a("record");
+    public static Item MINECART = (new ItemMinecart(72)).a(7, 8).a("minecart");
     public final int id;
     protected int maxStackSize = 64;
     private int durability = 0;
@@ -246,9 +213,5 @@ public class Item {
 
     public boolean b() {
         return false;
-    }
-
-    static {
-        StatisticList.c();
     }
 }

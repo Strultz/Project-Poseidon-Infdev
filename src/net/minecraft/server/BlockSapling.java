@@ -39,22 +39,9 @@ public class BlockSapling extends BlockFlower {
         world.setRawTypeId(i, j, k, 0);
 
         // CraftBukkit start - fixes client updates on recently grown trees
-        boolean grownTree;
         BlockChangeWithNotify delegate = new BlockChangeWithNotify(world);
 
-        if (l == 1) {
-            grownTree = new WorldGenTaiga2().generate(delegate, random, i, j, k);
-        } else if (l == 2) {
-            grownTree = new WorldGenForest().generate(delegate, random, i, j, k);
-        } else {
-            if (random.nextInt(10) == 0) {
-                grownTree = new WorldGenBigTree().generate(delegate, random, i, j, k);
-            } else {
-                grownTree = new WorldGenTrees().generate(delegate, random, i, j, k);
-            }
-        }
-
-        if (!grownTree) {
+        if (!new WorldGenTree().generate(delegate, random, i, j, k)) {
             world.setRawTypeIdAndData(i, j, k, this.id, l);
         }
         // CraftBukkit end

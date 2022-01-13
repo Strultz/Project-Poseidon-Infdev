@@ -10,7 +10,6 @@ import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
-import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Type;
@@ -20,7 +19,6 @@ import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -176,32 +174,18 @@ public class CraftEventFactory {
 
         CreatureType type = null;
 
-        if (entityliving instanceof EntityChicken) {
-            type = CreatureType.CHICKEN;
-        } else if (entityliving instanceof EntityCow) {
-            type = CreatureType.COW;
-        } else if (entityliving instanceof EntityCreeper) {
+        if (entityliving instanceof EntityCreeper) {
             type = CreatureType.CREEPER;
-        } else if (entityliving instanceof EntityGhast) {
-            type = CreatureType.GHAST;
         } else if (entityliving instanceof EntityGiantZombie) {
             type = CreatureType.GIANT;
-        } else if (entityliving instanceof EntityWolf) {
-            type = CreatureType.WOLF;
         } else if (entityliving instanceof EntityPig) {
             type = CreatureType.PIG;
-        } else if (entityliving instanceof EntityPigZombie) {
-            type = CreatureType.PIG_ZOMBIE;
         } else if (entityliving instanceof EntitySheep) {
             type = CreatureType.SHEEP;
         } else if (entityliving instanceof EntitySkeleton) {
             type = CreatureType.SKELETON;
-        } else if (entityliving instanceof EntitySlime) {
-            type = CreatureType.SLIME;
         } else if (entityliving instanceof EntitySpider) {
             type = CreatureType.SPIDER;
-        } else if (entityliving instanceof EntitySquid) {
-            type = CreatureType.SQUID;
         } else if (entityliving instanceof EntityZombie) {
             type = CreatureType.ZOMBIE;
         // Supertype of many, last!
@@ -210,19 +194,6 @@ public class CraftEventFactory {
         }
 
         CreatureSpawnEvent event = new CreatureSpawnEvent(entity, type, entity.getLocation(), spawnReason);
-        craftServer.getPluginManager().callEvent(event);
-        return event;
-    }
-
-    /**
-     * EntityTameEvent
-     */
-    public static EntityTameEvent callEntityTameEvent(EntityLiving entity, EntityHuman tamer) {
-        org.bukkit.entity.Entity bukkitEntity = entity.getBukkitEntity();
-        org.bukkit.entity.AnimalTamer bukkitTamer = (tamer != null ? (AnimalTamer) tamer.getBukkitEntity() : null);
-        CraftServer craftServer = (CraftServer) bukkitEntity.getServer();
-
-        EntityTameEvent event = new EntityTameEvent(bukkitEntity, bukkitTamer);
         craftServer.getPluginManager().callEvent(event);
         return event;
     }

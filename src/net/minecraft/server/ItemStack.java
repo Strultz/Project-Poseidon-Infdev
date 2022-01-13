@@ -53,13 +53,7 @@ public final class ItemStack {
     }
 
     public boolean placeItem(EntityHuman entityhuman, World world, int i, int j, int k, int l) {
-        boolean flag = this.getItem().a(this, entityhuman, world, i, j, k, l);
-
-        if (flag) {
-            entityhuman.a(StatisticList.E[this.id], 1);
-        }
-
-        return flag;
+        return this.getItem().a(this, entityhuman, world, i, j, k, l);
     }
 
     public float a(Block block) {
@@ -123,10 +117,6 @@ public final class ItemStack {
         if (this.d()) {
             this.damage += i;
             if (this.damage > this.i()) {
-                if (entity instanceof EntityHuman) {
-                    ((EntityHuman) entity).a(StatisticList.F[this.id], 1);
-                }
-
                 --this.count;
                 if (this.count < 0) {
                     this.count = 0;
@@ -138,19 +128,11 @@ public final class ItemStack {
     }
 
     public void a(EntityLiving entityliving, EntityHuman entityhuman) {
-        boolean flag = Item.byId[this.id].a(this, entityliving, (EntityLiving) entityhuman);
-
-        if (flag) {
-            entityhuman.a(StatisticList.E[this.id], 1);
-        }
+        Item.byId[this.id].a(this, entityliving, (EntityLiving) entityhuman);
     }
 
     public void a(int i, int j, int k, int l, EntityHuman entityhuman) {
-        boolean flag = Item.byId[this.id].a(this, i, j, k, l, entityhuman);
-
-        if (flag) {
-            entityhuman.a(StatisticList.E[this.id], 1);
-        }
+        Item.byId[this.id].a(this, i, j, k, l, entityhuman);
     }
 
     public int a(Entity entity) {
@@ -200,7 +182,6 @@ public final class ItemStack {
     }
 
     public void b(World world, EntityHuman entityhuman) {
-        entityhuman.a(StatisticList.D[this.id], this.count);
         Item.byId[this.id].c(this, world, entityhuman);
     }
 

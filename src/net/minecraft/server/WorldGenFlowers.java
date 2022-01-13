@@ -2,25 +2,23 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class WorldGenFlowers extends WorldGenerator {
+public final class WorldGenFlowers extends WorldGenerator {
+	private int blockId;
 
-    private int a;
+	public WorldGenFlowers(int var1) {
+		this.blockId = var1;
+	}
 
-    public WorldGenFlowers(int i) {
-        this.a = i;
-    }
+	public final boolean a(World var1, Random var2, int var3, int var4, int var5) {
+		for(int var6 = 0; var6 < 64; ++var6) {
+			int var7 = var3 + var2.nextInt(8) - var2.nextInt(8);
+			int var8 = var4 + var2.nextInt(4) - var2.nextInt(4);
+			int var9 = var5 + var2.nextInt(8) - var2.nextInt(8);
+			if(var1.getTypeId(var7, var8, var9) == 0 && ((BlockFlower)Block.byId[this.blockId]).f(var1, var7, var8, var9)) {
+				var1.setRawTypeId(var7, var8, var9, this.blockId);
+			}
+		}
 
-    public boolean a(World world, Random random, int i, int j, int k) {
-        for (int l = 0; l < 64; ++l) {
-            int i1 = i + random.nextInt(8) - random.nextInt(8);
-            int j1 = j + random.nextInt(4) - random.nextInt(4);
-            int k1 = k + random.nextInt(8) - random.nextInt(8);
-
-            if (world.isEmpty(i1, j1, k1) && ((BlockFlower) Block.byId[this.a]).f(world, i1, j1, k1)) {
-                world.setRawTypeId(i1, j1, k1, this.a);
-            }
-        }
-
-        return true;
-    }
+		return true;
+	}
 }

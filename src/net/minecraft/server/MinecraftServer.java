@@ -5,7 +5,6 @@ import com.projectposeidon.johnymuffin.UUIDManager;
 import com.legacyminecraft.poseidon.watchdog.WatchDogThread;
 import jline.ConsoleReader;
 import joptsimple.OptionSet;
-import org.bukkit.World.Environment;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.LoggerOutputStream;
 import org.bukkit.craftbukkit.command.ColouredConsoleSender;
@@ -204,61 +203,25 @@ public class MinecraftServer implements Runnable, ICommandListener {
         }
 
         // CraftBukkit start
-        for (int j = 0; j < (this.propertyManager.getBoolean("allow-nether", true) ? 2 : 1); ++j) {
-            WorldServer world;
-            int dimension = j == 0 ? 0 : -1;
-            String worldType = Environment.getEnvironment(dimension).toString().toLowerCase();
-            String name = (dimension == 0) ? s : s + "_" + worldType;
+        WorldServer world;
+        String name = s;
 
-            ChunkGenerator gen = this.server.getGenerator(name);
+        ChunkGenerator gen = this.server.getGenerator(name);
 
-            if (j == 0) {
-                world = new WorldServer(this, new ServerNBTManager(new File("."), s, true), s, dimension, i, org.bukkit.World.Environment.getEnvironment(dimension), gen); // CraftBukkit
-            } else {
-                String dim = "DIM-1";
+        world = new WorldServer(this, new ServerNBTManager(new File("."), s, true), s, 0, i, gen); // CraftBukkit
 
-                File newWorld = new File(new File(name), dim);
-                File oldWorld = new File(new File(s), dim);
-
-                if ((!newWorld.isDirectory()) && (oldWorld.isDirectory())) {
-                    log.info("---- Migration of old " + worldType + " folder required ----");
-                    log.info("Unfortunately due to the way that Minecraft implemented multiworld support in 1.6, Bukkit requires that you move your " + worldType + " folder to a new location in order to operate correctly.");
-                    log.info("We will move this folder for you, but it will mean that you need to move it back should you wish to stop using Bukkit in the future.");
-                    log.info("Attempting to move " + oldWorld + " to " + newWorld + "...");
-
-                    if (newWorld.exists()) {
-                        log.severe("A file or folder already exists at " + newWorld + "!");
-                        log.info("---- Migration of old " + worldType + " folder failed ----");
-                    } else if (newWorld.getParentFile().mkdirs()) {
-                        if (oldWorld.renameTo(newWorld)) {
-                            log.info("Success! To restore the nether in the future, simply move " + newWorld + " to " + oldWorld);
-                            log.info("---- Migration of old " + worldType + " folder complete ----");
-                        } else {
-                            log.severe("Could not move folder " + oldWorld + " to " + newWorld + "!");
-                            log.info("---- Migration of old " + worldType + " folder failed ----");
-                        }
-                    } else {
-                        log.severe("Could not create path for " + newWorld + "!");
-                        log.info("---- Migration of old " + worldType + " folder failed ----");
-                    }
-                }
-
-                world = new SecondaryWorldServer(this, new ServerNBTManager(new File("."), name, true), name, dimension, i, this.worlds.get(0), org.bukkit.World.Environment.getEnvironment(dimension), gen); // CraftBukkit
-            }
-
-            if (gen != null) {
-                world.getWorld().getPopulators().addAll(gen.getDefaultPopulators(world.getWorld()));
-            }
-
-            this.server.getPluginManager().callEvent(new WorldInitEvent(world.getWorld()));
-
-            world.tracker = new EntityTracker(this, dimension);
-            world.addIWorldAccess(new WorldManager(this, world));
-            world.spawnMonsters = this.propertyManager.getBoolean("spawn-monsters", true) ? 1 : 0;
-            world.setSpawnFlags(this.propertyManager.getBoolean("spawn-monsters", true), this.spawnAnimals);
-            this.worlds.add(world);
-            this.serverConfigurationManager.setPlayerFileData(this.worlds.toArray(new WorldServer[0]));
+        if (gen != null) {
+            world.getWorld().getPopulators().addAll(gen.getDefaultPopulators(world.getWorld()));
         }
+
+        this.server.getPluginManager().callEvent(new WorldInitEvent(world.getWorld()));
+
+        world.tracker = new EntityTracker(this, 0);
+        world.addIWorldAccess(new WorldManager(this, world));
+        world.spawnMonsters = this.propertyManager.getBoolean("spawn-monsters", true) ? 1 : 0;
+        world.setSpawnFlags(this.propertyManager.getBoolean("spawn-monsters", true), this.spawnAnimals);
+        this.worlds.add(world);
+        this.serverConfigurationManager.setPlayerFileData(this.worlds.toArray(new WorldServer[0]));
         // CraftBukkit end
 
         short short1 = 196;
@@ -300,8 +263,8 @@ public class MinecraftServer implements Runnable, ICommandListener {
         }
 
         // CraftBukkit start
-        for (World world : this.worlds) {
-            this.server.getPluginManager().callEvent(new WorldLoadEvent(world.getWorld()));
+        for (World weorld : this.worlds) {
+            this.server.getPluginManager().callEvent(new WorldLoadEvent(weorld.getWorld()));
         }
         // CraftBukkit end
 
@@ -397,16 +360,11 @@ public class MinecraftServer implements Runnable, ICommandListener {
 
                     j += l;
                     i = k;
-                    if (this.worlds.get(0).everyoneDeeplySleeping()) { // CraftBukkit
+                    while (j > 50L) {
+                        MinecraftServer.currentTick = (int) (System.currentTimeMillis() / 50); // CraftBukkit
+                        watchDogThread.tickUpdate(); // Project Poseidon
+                        j -= 50L;
                         this.h();
-                        j = 0L;
-                    } else {
-                        while (j > 50L) {
-                            MinecraftServer.currentTick = (int) (System.currentTimeMillis() / 50); // CraftBukkit
-                            watchDogThread.tickUpdate(); // Project Poseidon
-                            j -= 50L;
-                            this.h();
-                        }
                     }
                 }
             } else {
@@ -542,8 +500,6 @@ public class MinecraftServer implements Runnable, ICommandListener {
     }
 
     public static void main(final OptionSet options) { // CraftBukkit - replaces main(String args[])
-        StatisticList.a();
-
         try {
             MinecraftServer minecraftserver = new MinecraftServer(options); // CraftBukkit - pass in the options
 

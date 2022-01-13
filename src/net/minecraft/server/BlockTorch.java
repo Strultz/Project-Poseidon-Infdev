@@ -22,7 +22,7 @@ public class BlockTorch extends Block {
     }
 
     private boolean g(World world, int i, int j, int k) {
-        return world.e(i, j, k) || world.getTypeId(i, j, k) == Block.FENCE.id;
+        return world.e(i, j, k);
     }
 
     public boolean canPlace(World world, int i, int j, int k) {

@@ -7,7 +7,7 @@ import org.bukkit.permissions.Permissible;
 /**
  * Represents a human entity, such as an NPC or a player
  */
-public interface HumanEntity extends LivingEntity, AnimalTamer, Permissible {
+public interface HumanEntity extends LivingEntity, Permissible {
 
     /**
      * Returns the name of this player
@@ -46,18 +46,4 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, Permissible {
      *
      public void selectItemInHand(int index);
      */
-
-    /**
-     * Returns whether this player is slumbering.
-     *
-     * @return slumber state
-     */
-    public boolean isSleeping();
-
-    /**
-     * Get the sleep ticks of the player. This value may be capped.
-     *
-     * @return slumber ticks
-     */
-    public int getSleepTicks();
 }

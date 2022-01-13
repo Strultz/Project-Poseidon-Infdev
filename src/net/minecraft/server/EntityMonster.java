@@ -41,28 +41,24 @@ public class EntityMonster extends EntityCreature implements IMonster {
 
     public boolean damageEntity(Entity entity, int i) {
         if (super.damageEntity(entity, i)) {
-            if (this.passenger != entity && this.vehicle != entity) {
-                if (entity != this) {
-                    // CraftBukkit start
-                    org.bukkit.entity.Entity bukkitTarget = entity == null ? null : entity.getBukkitEntity();
+        	if (entity != this) {
+                // CraftBukkit start
+                org.bukkit.entity.Entity bukkitTarget = entity == null ? null : entity.getBukkitEntity();
 
-                    EntityTargetEvent event = new EntityTargetEvent(this.getBukkitEntity(), bukkitTarget, EntityTargetEvent.TargetReason.TARGET_ATTACKED_ENTITY);
-                    this.world.getServer().getPluginManager().callEvent(event);
+                EntityTargetEvent event = new EntityTargetEvent(this.getBukkitEntity(), bukkitTarget, EntityTargetEvent.TargetReason.TARGET_ATTACKED_ENTITY);
+                this.world.getServer().getPluginManager().callEvent(event);
 
-                    if (!event.isCancelled()) {
-                        if (event.getTarget() == null) {
-                            this.target = null;
-                        } else {
-                            this.target = ((CraftEntity) event.getTarget()).getHandle();
-                        }
+                if (!event.isCancelled()) {
+                    if (event.getTarget() == null) {
+                        this.target = null;
+                    } else {
+                        this.target = ((CraftEntity) event.getTarget()).getHandle();
                     }
-                    // CraftBukkit end
                 }
-
-                return true;
-            } else {
-                return true;
+                // CraftBukkit end
             }
+
+            return true;
         } else {
             return false;
         }
@@ -108,20 +104,6 @@ public class EntityMonster extends EntityCreature implements IMonster {
         int j = MathHelper.floor(this.boundingBox.b);
         int k = MathHelper.floor(this.locZ);
 
-        if (this.world.a(EnumSkyBlock.SKY, i, j, k) > this.random.nextInt(32)) {
-            return false;
-        } else {
-            int l = this.world.getLightLevel(i, j, k);
-
-            if (this.world.u()) {
-                int i1 = this.world.f;
-
-                this.world.f = 10;
-                l = this.world.getLightLevel(i, j, k);
-                this.world.f = i1;
-            }
-
-            return l <= this.random.nextInt(8) && super.d();
-        }
+        return this.world.getLightLevel(i, j, k) <= this.random.nextInt(8) && super.d();
     }
 }

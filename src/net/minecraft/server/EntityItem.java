@@ -149,14 +149,6 @@ public class EntityItem extends Entity {
             // CraftBukkit end
 
             if (this.pickupDelay == 0 && entityhuman.inventory.pickup(this.itemStack)) {
-                if (this.itemStack.id == Block.LOG.id) {
-                    entityhuman.a((Statistic) AchievementList.g);
-                }
-
-                if (this.itemStack.id == Item.LEATHER.id) {
-                    entityhuman.a((Statistic) AchievementList.t);
-                }
-
                 this.world.makeSound(this, "random.pop", 0.2F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 entityhuman.receive(this, i);
                 if (this.itemStack.count <= 0) {

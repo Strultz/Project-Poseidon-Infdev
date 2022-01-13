@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import org.bukkit.event.block.BlockRedstoneEvent;
-
 import java.util.Random;
 
 public class BlockDoor extends Block {
@@ -138,10 +136,6 @@ public class BlockDoor extends Block {
             if (world.getTypeId(i, j - 1, k) != this.id) {
                 world.setTypeId(i, j, k, 0);
             }
-
-            if (l > 0 && Block.byId[l].isPowerSource()) {
-                this.doPhysics(world, i, j - 1, k, l);
-            }
         } else {
             boolean flag = false;
 
@@ -162,30 +156,12 @@ public class BlockDoor extends Block {
                 if (!world.isStatic) {
                     this.g(world, i, j, k, i1);
                 }
-            } else if (l > 0 && Block.byId[l].isPowerSource()) {
-                // CraftBukkit start
-                org.bukkit.World bworld = world.getWorld();
-                org.bukkit.block.Block block = bworld.getBlockAt(i, j, k);
-                org.bukkit.block.Block blockTop = bworld.getBlockAt(i, j + 1, k);
-
-                int power = block.getBlockPower();
-                int powerTop = blockTop.getBlockPower();
-                if (powerTop > power) power = powerTop;
-                int oldPower = (world.getData(i, j, k) & 4) > 0 ? 15 : 0;
-
-                if (oldPower == 0 ^ power == 0) {
-                    BlockRedstoneEvent eventRedstone = new BlockRedstoneEvent(block, oldPower, power);
-                    world.getServer().getPluginManager().callEvent(eventRedstone);
-
-                    this.setDoor(world, i, j, k, eventRedstone.getNewCurrent() > 0);
-                }
-                // CraftBukkit end
             }
         }
     }
 
     public int a(int i, Random random) {
-        return (i & 8) != 0 ? 0 : (this.material == Material.ORE ? Item.IRON_DOOR.id : Item.WOOD_DOOR.id);
+        return (i & 8) != 0 ? 0 : Item.WOOD_DOOR.id;
     }
 
     public MovingObjectPosition a(World world, int i, int j, int k, Vec3D vec3d, Vec3D vec3d1) {

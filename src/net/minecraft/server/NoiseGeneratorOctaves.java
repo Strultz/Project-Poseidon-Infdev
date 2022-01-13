@@ -2,52 +2,60 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class NoiseGeneratorOctaves extends NoiseGenerator {
+public final class NoiseGeneratorOctaves extends NoiseGenerator {
+	private NoiseGeneratorPerlin[] generatorCollection;
+	private int octaves;
 
-    private NoiseGeneratorPerlin[] a;
-    private int b;
+	public NoiseGeneratorOctaves(Random var1, int var2) {
+		this.octaves = var2;
+		this.generatorCollection = new NoiseGeneratorPerlin[var2];
 
-    public NoiseGeneratorOctaves(Random random, int i) {
-        this.b = i;
-        this.a = new NoiseGeneratorPerlin[i];
+		for(int var3 = 0; var3 < var2; ++var3) {
+			this.generatorCollection[var3] = new NoiseGeneratorPerlin(var1);
+		}
 
-        for (int j = 0; j < i; ++j) {
-            this.a[j] = new NoiseGeneratorPerlin(random);
-        }
-    }
+	}
 
-    public double a(double d0, double d1) {
-        double d2 = 0.0D;
-        double d3 = 1.0D;
+	public final double generateNoise(double var1, double var3) {
+		double var5 = 0.0D;
+		double var7 = 1.0D;
 
-        for (int i = 0; i < this.b; ++i) {
-            d2 += this.a[i].a(d0 * d3, d1 * d3) / d3;
-            d3 /= 2.0D;
-        }
+		for(int var9 = 0; var9 < this.octaves; ++var9) {
+			var5 += this.generatorCollection[var9].generateNoise(var1 * var7, var3 * var7) / var7;
+			var7 /= 2.0D;
+		}
 
-        return d2;
-    }
+		return var5;
+	}
 
-    public double[] a(double[] adouble, double d0, double d1, double d2, int i, int j, int k, double d3, double d4, double d5) {
-        if (adouble == null) {
-            adouble = new double[i * j * k];
-        } else {
-            for (int l = 0; l < adouble.length; ++l) {
-                adouble[l] = 0.0D;
-            }
-        }
+	public final double func_a(double var1, double var3, double var5) {
+		double var7 = 0.0D;
+		double var9 = 1.0D;
 
-        double d6 = 1.0D;
+		for(int var11 = 0; var11 < this.octaves; ++var11) {
+			var7 += this.generatorCollection[var11].generateNoise_func_a(var1 * var9, var3 * var9, var5 * var9) / var9;
+			var9 /= 2.0D;
+		}
 
-        for (int i1 = 0; i1 < this.b; ++i1) {
-            this.a[i1].a(adouble, d0, d1, d2, i, j, k, d3 * d6, d4 * d6, d5 * d6, d6);
-            d6 /= 2.0D;
-        }
+		return var7;
+	}
 
-        return adouble;
-    }
+	public final double[] generateNoiseOctaves(double[] var1, int var2, int var3, int var4, int var5, int var6, int var7, double var8, double var10, double var12) {
+		if(var1 == null) {
+			var1 = new double[var5 * var6 * var7];
+		} else {
+			for(int var14 = 0; var14 < var1.length; ++var14) {
+				var1[var14] = 0.0D;
+			}
+		}
 
-    public double[] a(double[] adouble, int i, int j, int k, int l, double d0, double d1, double d2) {
-        return this.a(adouble, (double) i, 10.0D, (double) j, k, 1, l, d0, 1.0D, d1);
-    }
+		double var17 = 1.0D;
+
+		for(int var16 = 0; var16 < this.octaves; ++var16) {
+			this.generatorCollection[var16].populateNoiseArray(var1, var2, var3, var4, var5, var6, var7, var8 * var17, var10 * var17, var12 * var17, var17);
+			var17 /= 2.0D;
+		}
+
+		return var1;
+	}
 }

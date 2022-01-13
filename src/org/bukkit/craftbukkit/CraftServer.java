@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -19,7 +18,6 @@ import org.bukkit.craftbukkit.inventory.CraftFurnaceRecipe;
 import org.bukkit.craftbukkit.inventory.CraftRecipe;
 import org.bukkit.craftbukkit.inventory.CraftShapedRecipe;
 import org.bukkit.craftbukkit.inventory.CraftShapelessRecipe;
-import org.bukkit.craftbukkit.map.CraftMapView;
 import org.bukkit.craftbukkit.scheduler.CraftScheduler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.world.WorldInitEvent;
@@ -468,19 +466,19 @@ public final class CraftServer implements Server {
         return "CraftServer{" + "serverName=" + serverName + ",serverVersion=" + serverVersion + ",protocolVersion=" + protocolVersion + '}';
     }
 
-    public World createWorld(String name, World.Environment environment) {
-        return createWorld(name, environment, (new Random()).nextLong());
+    public World createWorld(String name) {
+        return createWorld(name, (new Random()).nextLong());
     }
 
-    public World createWorld(String name, World.Environment environment, long seed) {
-        return createWorld(name, environment, seed, null);
+    public World createWorld(String name, long seed) {
+        return createWorld(name, seed, null);
     }
 
-    public World createWorld(String name, Environment environment, ChunkGenerator generator) {
-        return createWorld(name, environment, (new Random()).nextLong(), generator);
+    public World createWorld(String name, ChunkGenerator generator) {
+        return createWorld(name, (new Random()).nextLong(), generator);
     }
 
-    public World createWorld(String name, Environment environment, long seed, ChunkGenerator generator) {
+    public World createWorld(String name, long seed, ChunkGenerator generator) {
         File folder = new File(name);
         World world = getWorld(name);
 
@@ -503,13 +501,11 @@ public final class CraftServer implements Server {
         }
 
         int dimension = 10 + console.worlds.size();
-        WorldServer internal = new WorldServer(console, new ServerNBTManager(new File("."), name, true), name, dimension, seed, environment, generator);
+        WorldServer internal = new WorldServer(console, new ServerNBTManager(new File("."), name, true), name, dimension, seed, generator);
 
         if (!(worlds.containsKey(name.toLowerCase()))) {
             return null;
         }
-
-        internal.worldMaps = console.worlds.get(0).worldMaps;
 
         internal.tracker = new EntityTracker(console, dimension);
         internal.addIWorldAccess((IWorldAccess) new WorldManager(console, internal));
@@ -746,21 +742,6 @@ public final class CraftServer implements Server {
         }
 
         return result;
-    }
-
-    public CraftMapView getMap(short id) {
-        WorldMapCollection collection = console.worlds.get(0).worldMaps;
-        WorldMap worldmap = (WorldMap) collection.a(WorldMap.class, "map_" + id);
-        if (worldmap == null) {
-            return null;
-        }
-        return worldmap.mapView;
-    }
-
-    public CraftMapView createMap(World world) {
-        ItemStack stack = new ItemStack(Item.MAP, 1, -1);
-        WorldMap worldmap = Item.MAP.a(stack, ((CraftWorld) world).getHandle());
-        return worldmap.mapView;
     }
 
     public void shutdown() {

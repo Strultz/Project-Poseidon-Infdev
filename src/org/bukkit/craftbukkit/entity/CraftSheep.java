@@ -1,7 +1,6 @@
 package org.bukkit.craftbukkit.entity;
 
 import net.minecraft.server.EntitySheep;
-import org.bukkit.DyeColor;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.Sheep;
 
@@ -18,14 +17,6 @@ public class CraftSheep extends CraftAnimals implements Sheep {
     @Override
     public String toString() {
         return "CraftSheep";
-    }
-
-    public DyeColor getColor() {
-        return DyeColor.getByData((byte) getHandle().getColor());
-    }
-
-    public void setColor(DyeColor color) {
-        getHandle().setColor(color.getData());
     }
 
     public boolean isSheared() {

@@ -50,18 +50,8 @@ public abstract class ChunkGenerator {
     public boolean canSpawn(World world, int x, int z) {
         Block highest = world.getBlockAt(x, world.getHighestBlockYAt(x, z), z);
 
-        switch (world.getEnvironment()) {
-            case NETHER:
-                return true;
-            case SKYLANDS:
-                return highest.getType() != Material.AIR
-                        && highest.getType() != Material.WATER
-                        && highest.getType() != Material.LAVA;
-            case NORMAL:
-            default:
-                return highest.getType() == Material.SAND
-                        || highest.getType() == Material.GRAVEL;
-        }
+        return highest.getType() == Material.SAND
+                || highest.getType() == Material.GRAVEL;
     }
 
     /**

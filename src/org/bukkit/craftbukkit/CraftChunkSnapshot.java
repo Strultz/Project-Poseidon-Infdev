@@ -1,8 +1,6 @@
 package org.bukkit.craftbukkit;
 
-import net.minecraft.server.BiomeBase;
 import org.bukkit.ChunkSnapshot;
-import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.block.CraftBlock;
 /**
  * Represents a static, thread-safe snapshot of chunk of blocks
@@ -14,9 +12,6 @@ public class CraftChunkSnapshot implements ChunkSnapshot {
     private final byte[] buf; // Flat buffer in uncompressed chunk file format
     private final byte[] hmap; // Height map
     private final long captureFulltime;
-    private final BiomeBase[] biome;
-    private final double[] biomeTemp;
-    private final double[] biomeRain;
 
     private static final int BLOCKDATA_OFF = 32768;
     private static final int BLOCKLIGHT_OFF = BLOCKDATA_OFF + 16384;
@@ -25,16 +20,13 @@ public class CraftChunkSnapshot implements ChunkSnapshot {
     /**
      * Constructor
      */
-    CraftChunkSnapshot(int x, int z, String wname, long wtime, byte[] buf, byte[] hmap, BiomeBase[] biome, double[] biomeTemp, double[] biomeRain) {
+    CraftChunkSnapshot(int x, int z, String wname, long wtime, byte[] buf, byte[] hmap) {
         this.x = x;
         this.z = z;
         this.worldname = wname;
         this.captureFulltime = wtime;
         this.buf = buf;
         this.hmap = hmap;
-        this.biome = biome;
-        this.biomeTemp = biomeTemp;
-        this.biomeRain = biomeRain;
     }
 
     /**
@@ -127,39 +119,6 @@ public class CraftChunkSnapshot implements ChunkSnapshot {
      */
     public int getHighestBlockYAt(int x, int z) {
         return hmap[z << 4 | x] & 255;
-    }
-
-    /**
-     * Get biome at given coordinates
-     *
-     * @param x X-coordinate
-     * @param z Z-coordinate
-     * @return Biome at given coordinate
-     */
-    public Biome getBiome(int x, int z) {
-        return CraftBlock.biomeBaseToBiome(biome[x << 4 | z]);
-    }
-
-    /**
-     * Get raw biome temperature (0.0-1.0) at given coordinate
-     *
-     * @param x X-coordinate
-     * @param z Z-coordinate
-     * @return temperature at given coordinate
-     */
-    public double getRawBiomeTemperature(int x, int z) {
-        return biomeTemp[x << 4 | z];
-    }
-
-    /**
-     * Get raw biome rainfall (0.0-1.0) at given coordinate
-     *
-     * @param x X-coordinate
-     * @param z Z-coordinate
-     * @return rainfall at given coordinate
-     */
-    public double getRawBiomeRainfall(int x, int z) {
-        return biomeRain[x << 4 | z];
     }
 
     /**

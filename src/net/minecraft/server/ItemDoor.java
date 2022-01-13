@@ -8,11 +8,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 public class ItemDoor extends Item {
 
-    private Material a;
-
-    public ItemDoor(int i, Material material) {
+    public ItemDoor(int i) {
         super(i);
-        this.a = material;
         this.maxStackSize = 1;
     }
 
@@ -23,13 +20,7 @@ public class ItemDoor extends Item {
             int clickedX = i, clickedY = j, clickedZ = k; // CraftBukkit
 
             ++j;
-            Block block;
-
-            if (this.a == Material.WOOD) {
-                block = Block.WOODEN_DOOR;
-            } else {
-                block = Block.IRON_DOOR_BLOCK;
-            }
+            Block block = Block.WOODEN_DOOR;
 
             if (!block.canPlace(world, i, j, k)) {
                 return false;
@@ -78,7 +69,7 @@ public class ItemDoor extends Item {
 
                 // CraftBukkit start - bed
                 world.suppressPhysics = false;
-                world.applyPhysics(i, j, k, Block.REDSTONE_WIRE.id);
+                world.applyPhysics(i, j, k, block.id);
                 BlockPlaceEvent event = CraftEventFactory.callBlockPlaceEvent(world, entityhuman, blockState, clickedX, clickedY, clickedZ, block);
 
                 if (event.isCancelled() || !event.canBuild()) {
@@ -91,7 +82,7 @@ public class ItemDoor extends Item {
                 world.setTypeIdAndData(i, j + 1, k, block.id, i1 + 8);
                 world.suppressPhysics = false;
                 // world.applyPhysics(i, j, k, block.id); // CraftBukkit - moved up
-                world.applyPhysics(i, j + 1, k, Block.REDSTONE_WIRE.id);
+                world.applyPhysics(i, j + 1, k, block.id);
                 --itemstack.count;
                 return true;
             }

@@ -69,22 +69,6 @@ public class CreatureSpawnEvent extends EntityEvent implements Cancellable {
          */
         NATURAL,
         /**
-         * When a creature spawns from a spawner
-         */
-        SPAWNER,
-        /**
-         * When a creature spawns from an egg
-         */
-        EGG,
-        /**
-         * When a creature spawns because of a lightning strike
-         */
-        LIGHTNING,
-        /**
-         * When a creature is spawned by a player that is sleeping
-         */
-        BED,
-        /**
          * When a creature is manually spawned
          */
         CUSTOM

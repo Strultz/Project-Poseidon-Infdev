@@ -68,14 +68,7 @@ public class PlayerNBTManager implements PlayerFileData, IDataManager {
     }
 
     public IChunkLoader a(WorldProvider worldprovider) {
-        if (worldprovider instanceof WorldProviderHell) {
-            File file1 = new File(this.b, "DIM-1");
-
-            file1.mkdirs();
-            return new ChunkLoader(file1, true);
-        } else {
-            return new ChunkLoader(this.b, true);
-        }
+    	return new ChunkLoader(this.b, true);
     }
 
     public WorldData c() {

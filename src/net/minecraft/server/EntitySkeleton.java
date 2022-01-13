@@ -89,11 +89,6 @@ public class EntitySkeleton extends EntityMonster {
             loot.add(new org.bukkit.inventory.ItemStack(org.bukkit.Material.ARROW, count));
         }
 
-        count = this.random.nextInt(3);
-        if (count > 0) {
-            loot.add(new org.bukkit.inventory.ItemStack(org.bukkit.Material.BONE, count));
-        }
-
         org.bukkit.World bworld = this.world.getWorld();
         org.bukkit.entity.Entity entity = this.getBukkitEntity();
 

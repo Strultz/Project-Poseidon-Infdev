@@ -10,7 +10,6 @@ import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.vehicle.VehicleBlockCollisionEvent;
-import org.bukkit.event.vehicle.VehicleExitEvent;
 
 import java.util.List;
 import java.util.Random;
@@ -40,8 +39,6 @@ public abstract class Entity {
     public int id;
     public double aH;
     public boolean aI;
-    public Entity passenger;
-    public Entity vehicle;
     public World world;
     public double lastX;
     public double lastY;
@@ -210,10 +207,6 @@ public abstract class Entity {
     }
 
     public void R() {
-        if (this.vehicle != null && this.vehicle.dead) {
-            this.vehicle = null;
-        }
-
         ++this.ticksLived;
         this.bl = this.bm;
         this.lastX = this.locX;
@@ -294,7 +287,6 @@ public abstract class Entity {
 
         if (!this.world.isStatic) {
             this.a(0, this.fireTicks > 0);
-            this.a(2, this.vehicle != null);
         }
 
         this.justCreated = false;
@@ -374,31 +366,6 @@ public abstract class Entity {
             double d6 = d1;
             double d7 = d2;
             AxisAlignedBB axisalignedbb = this.boundingBox.clone();
-            boolean flag = this.onGround && this.isSneaking();
-
-            if (flag) {
-                double d8;
-
-                for (d8 = 0.05D; d0 != 0.0D && this.world.getEntities(this, this.boundingBox.c(d0, -1.0D, 0.0D)).size() == 0; d5 = d0) {
-                    if (d0 < d8 && d0 >= -d8) {
-                        d0 = 0.0D;
-                    } else if (d0 > 0.0D) {
-                        d0 -= d8;
-                    } else {
-                        d0 += d8;
-                    }
-                }
-
-                for (; d2 != 0.0D && this.world.getEntities(this, this.boundingBox.c(0.0D, -1.0D, d2)).size() == 0; d7 = d2) {
-                    if (d2 < d8 && d2 >= -d8) {
-                        d2 = 0.0D;
-                    } else if (d2 > 0.0D) {
-                        d2 -= d8;
-                    } else {
-                        d2 += d8;
-                    }
-                }
-            }
 
             List list = this.world.getEntities(this, this.boundingBox.a(d0, d1, d2));
 
@@ -443,7 +410,7 @@ public abstract class Entity {
             double d10;
             int k;
 
-            if (this.bs > 0.0F && flag1 && (flag || this.br < 0.05F) && (d5 != d0 || d7 != d2)) {
+            if (this.bs > 0.0F && flag1 && this.br < 0.05F && (d5 != d0 || d7 != d2)) {
                 d9 = d0;
                 d10 = d1;
                 double d11 = d2;
@@ -563,24 +530,18 @@ public abstract class Entity {
             }
             // CraftBukkit end
 
-            if (this.n() && !flag && this.vehicle == null) {
+            if (this.n()) {
                 this.bm = (float) ((double) this.bm + (double) MathHelper.a(d9 * d9 + d10 * d10) * 0.6D);
                 l = MathHelper.floor(this.locX);
                 i1 = MathHelper.floor(this.locY - 0.20000000298023224D - (double) this.height);
                 j1 = MathHelper.floor(this.locZ);
                 k = this.world.getTypeId(l, i1, j1);
-                if (this.world.getTypeId(l, i1 - 1, j1) == Block.FENCE.id) {
-                    k = this.world.getTypeId(l, i1 - 1, j1);
-                }
 
                 if (this.bm > (float) this.b && k > 0) {
                     ++this.b;
                     StepSound stepsound = Block.byId[k].stepSound;
 
-                    if (this.world.getTypeId(l, i1 + 1, j1) == Block.SNOW.id) {
-                        stepsound = Block.SNOW.stepSound;
-                        this.world.makeSound(this, stepsound.getName(), stepsound.getVolume1() * 0.15F, stepsound.getVolume2());
-                    } else if (!Block.byId[k].material.isLiquid()) {
+                    if (!Block.byId[k].material.isLiquid()) {
                         this.world.makeSound(this, stepsound.getName(), stepsound.getVolume1() * 0.15F, stepsound.getVolume2());
                     }
 
@@ -676,14 +637,8 @@ public abstract class Entity {
         }
     }
 
-    protected void a(float f) {
-        if (this.passenger != null) {
-            this.passenger.a(f);
-        }
-    }
-
     public boolean ac() {
-        return this.bA || this.world.s(MathHelper.floor(this.locX), MathHelper.floor(this.locY), MathHelper.floor(this.locZ));
+        return this.bA;
     }
 
     public boolean ad() {
@@ -833,30 +788,28 @@ public abstract class Entity {
     public void b(EntityHuman entityhuman) {}
 
     public void collide(Entity entity) {
-        if (entity.passenger != this && entity.vehicle != this) {
-            double d0 = entity.locX - this.locX;
-            double d1 = entity.locZ - this.locZ;
-            double d2 = MathHelper.a(d0, d1);
+    	double d0 = entity.locX - this.locX;
+        double d1 = entity.locZ - this.locZ;
+        double d2 = MathHelper.a(d0, d1);
 
-            if (d2 >= 0.009999999776482582D) {
-                d2 = (double) MathHelper.a(d2);
-                d0 /= d2;
-                d1 /= d2;
-                double d3 = 1.0D / d2;
+        if (d2 >= 0.009999999776482582D) {
+            d2 = (double) MathHelper.a(d2);
+            d0 /= d2;
+            d1 /= d2;
+            double d3 = 1.0D / d2;
 
-                if (d3 > 1.0D) {
-                    d3 = 1.0D;
-                }
-
-                d0 *= d3;
-                d1 *= d3;
-                d0 *= 0.05000000074505806D;
-                d1 *= 0.05000000074505806D;
-                d0 *= (double) (1.0F - this.bu);
-                d1 *= (double) (1.0F - this.bu);
-                this.b(-d0, 0.0D, -d1);
-                entity.b(d0, 0.0D, d1);
+            if (d3 > 1.0D) {
+                d3 = 1.0D;
             }
+
+            d0 *= d3;
+            d1 *= d3;
+            d0 *= 0.05000000074505806D;
+            d1 *= 0.05000000074505806D;
+            d0 *= (double) (1.0F - this.bu);
+            d1 *= (double) (1.0F - this.bu);
+            this.b(-d0, 0.0D, -d1);
+            entity.b(d0, 0.0D, d1);
         }
     }
 
@@ -1092,77 +1045,12 @@ public abstract class Entity {
         return null;
     }
 
-    public void E() {
-        if (this.vehicle.dead) {
-            this.vehicle = null;
-        } else {
-            this.motX = 0.0D;
-            this.motY = 0.0D;
-            this.motZ = 0.0D;
-            this.m_();
-            if (this.vehicle != null) {
-                this.vehicle.f();
-                this.e += (double) (this.vehicle.yaw - this.vehicle.lastYaw);
-
-                for (this.d += (double) (this.vehicle.pitch - this.vehicle.lastPitch); this.e >= 180.0D; this.e -= 360.0D) {
-                    ;
-                }
-
-                while (this.e < -180.0D) {
-                    this.e += 360.0D;
-                }
-
-                while (this.d >= 180.0D) {
-                    this.d -= 360.0D;
-                }
-
-                while (this.d < -180.0D) {
-                    this.d += 360.0D;
-                }
-
-                double d0 = this.e * 0.5D;
-                double d1 = this.d * 0.5D;
-                float f = 10.0F;
-
-                if (d0 > (double) f) {
-                    d0 = (double) f;
-                }
-
-                if (d0 < (double) (-f)) {
-                    d0 = (double) (-f);
-                }
-
-                if (d1 > (double) f) {
-                    d1 = (double) f;
-                }
-
-                if (d1 < (double) (-f)) {
-                    d1 = (double) (-f);
-                }
-
-                this.e -= d0;
-                this.d -= d1;
-                this.yaw = (float) ((double) this.yaw + d0);
-                this.pitch = (float) ((double) this.pitch + d1);
-            }
-        }
-    }
-
-    public void f() {
-        this.passenger.setPosition(this.locX, this.locY + this.m() + this.passenger.I(), this.locZ);
-    }
-
     public double I() {
         return (double) this.height;
     }
 
     public double m() {
         return (double) this.width * 0.75D;
-    }
-
-    public void mount(Entity entity) {
-        // CraftBukkit start
-        this.setPassengerOf(entity);
     }
 
     protected org.bukkit.entity.Entity bukkitEntity;
@@ -1174,68 +1062,12 @@ public abstract class Entity {
         return this.bukkitEntity;
     }
 
-    public void setPassengerOf(Entity entity) {
-        // b(null) doesn't really fly for overloaded methods,
-        // so this method is needed
-
-        // CraftBukkit end
-        this.d = 0.0D;
-        this.e = 0.0D;
-        if (entity == null) {
-            if (this.vehicle != null) {
-                // CraftBukkit start
-                if ((this.getBukkitEntity() instanceof LivingEntity) && (this.vehicle.getBukkitEntity() instanceof Vehicle)) {
-                    VehicleExitEvent event = new VehicleExitEvent((Vehicle) this.vehicle.getBukkitEntity(), (LivingEntity) this.getBukkitEntity());
-                    this.world.getServer().getPluginManager().callEvent(event);
-                }
-                // CraftBukkit end
-
-                this.setPositionRotation(this.vehicle.locX, this.vehicle.boundingBox.b + (double) this.vehicle.width, this.vehicle.locZ, this.yaw, this.pitch);
-                this.vehicle.passenger = null;
-            }
-
-            this.vehicle = null;
-        } else if (this.vehicle == entity) {
-            // CraftBukkit start
-            if ((this.getBukkitEntity() instanceof LivingEntity) && (this.vehicle.getBukkitEntity() instanceof Vehicle)) {
-                VehicleExitEvent event = new VehicleExitEvent((Vehicle) this.vehicle.getBukkitEntity(), (LivingEntity) this.getBukkitEntity());
-                this.world.getServer().getPluginManager().callEvent(event);
-            }
-            // CraftBukkit end
-
-            this.vehicle.passenger = null;
-            this.vehicle = null;
-            this.setPositionRotation(entity.locX, entity.boundingBox.b + (double) entity.width, entity.locZ, this.yaw, this.pitch);
-        } else {
-            if (this.vehicle != null) {
-                this.vehicle.passenger = null;
-            }
-
-            if (entity.passenger != null) {
-                entity.passenger.vehicle = null;
-            }
-
-            this.vehicle = entity;
-            entity.passenger = this;
-        }
-    }
-
     public Vec3D Z() {
         return null;
     }
 
-    public void P() {}
-
     public ItemStack[] getEquipment() {
         return null;
-    }
-
-    public boolean isSneaking() {
-        return this.d(1);
-    }
-
-    public void setSneak(boolean flag) {
-        this.a(1, flag);
     }
 
     protected boolean d(int i) {
@@ -1249,24 +1081,6 @@ public abstract class Entity {
             this.datawatcher.watch(0, Byte.valueOf((byte) (b0 | 1 << i)));
         } else {
             this.datawatcher.watch(0, Byte.valueOf((byte) (b0 & ~(1 << i))));
-        }
-    }
-
-    public void a(EntityWeatherStorm entityweatherstorm) {
-        // CraftBukkit start
-        EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(entityweatherstorm.getBukkitEntity(), this.getBukkitEntity(), EntityDamageEvent.DamageCause.LIGHTNING, 5);
-        Bukkit.getServer().getPluginManager().callEvent(event);
-
-        if (event.isCancelled()) {
-            return;
-        }
-
-        this.burn(event.getDamage());
-        // CraftBukkit end
-
-        ++this.fireTicks;
-        if (this.fireTicks == 0) {
-            this.fireTicks = 300;
         }
     }
 

@@ -164,7 +164,7 @@ public class Pathfinder {
                     int k1 = this.a.getTypeId(l, i1, j1);
 
                     if (k1 > 0) {
-                        if (k1 != Block.IRON_DOOR_BLOCK.id && k1 != Block.WOODEN_DOOR.id) {
+                        if (k1 != Block.WOODEN_DOOR.id) {
                             Material material = Block.byId[k1].material;
 
                             if (material.isSolid()) {

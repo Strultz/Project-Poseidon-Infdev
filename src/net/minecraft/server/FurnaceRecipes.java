@@ -18,11 +18,7 @@ public class FurnaceRecipes {
         this.registerRecipe(Block.DIAMOND_ORE.id, new ItemStack(Item.DIAMOND));
         this.registerRecipe(Block.SAND.id, new ItemStack(Block.GLASS));
         this.registerRecipe(Item.PORK.id, new ItemStack(Item.GRILLED_PORK));
-        this.registerRecipe(Item.RAW_FISH.id, new ItemStack(Item.COOKED_FISH));
         this.registerRecipe(Block.COBBLESTONE.id, new ItemStack(Block.STONE));
-        this.registerRecipe(Item.CLAY_BALL.id, new ItemStack(Item.CLAY_BRICK));
-        this.registerRecipe(Block.CACTUS.id, new ItemStack(Item.INK_SACK, 1, 2));
-        this.registerRecipe(Block.LOG.id, new ItemStack(Item.COAL, 1, 1));
     }
 
     public void registerRecipe(int i, ItemStack itemstack) {

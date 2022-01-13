@@ -1,6 +1,5 @@
 package org.bukkit;
 
-import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.generator.BlockPopulator;
@@ -312,22 +311,6 @@ public interface World {
     public LivingEntity spawnCreature(Location loc, CreatureType type);
 
     /**
-     * Strikes lightning at the given {@link Location}
-     *
-     * @param loc The location to strike lightning
-     * @return
-     */
-    public LightningStrike strikeLightning(Location loc);
-
-    /**
-     * Strikes lightning at the given {@link Location} without doing damage
-     *
-     * @param loc The location to strike lightning
-     * @return
-     */
-    public LightningStrike strikeLightningEffect(Location loc);
-
-    /**
      * Get a list of all entities in this World
      *
      * @return A List of all Entities currently residing in this world
@@ -435,63 +418,6 @@ public interface World {
     public void setFullTime(long time);
 
     /**
-     * Returns whether the world has an ongoing storm.
-     *
-     * @return Whether there is an ongoing storm
-     */
-    public boolean hasStorm();
-
-    /**
-     * Set whether there is a storm. A duration will be set for the new
-     * current conditions.
-     *
-     * @param hasStorm Whether there is rain and snow
-     */
-    public void setStorm(boolean hasStorm);
-
-    /**
-     * Get the remaining time in ticks of the current conditions.
-     *
-     * @return Time in ticks
-     */
-    public int getWeatherDuration();
-
-    /**
-     * Set the remaining time in ticks of the current conditions.
-     *
-     * @param duration Time in ticks
-     */
-    public void setWeatherDuration(int duration);
-
-    /**
-     * Returns whether there is thunder.
-     *
-     * @return Whether there is thunder
-     */
-    public boolean isThundering();
-
-    /**
-     * Set whether it is thundering.
-     *
-     * @param thundering Whether it is thundering
-     */
-    public void setThundering(boolean thundering);
-
-    /**
-     * Get the thundering duration.
-     *
-     * @return Duration in ticks
-     */
-    public int getThunderDuration();
-
-    /**
-     * Set the thundering duration.
-     *
-     * @param duration Duration in ticks
-     */
-    public void setThunderDuration(int duration);
-
-    /**
      * Creates explosion at given coordinates with given power
      *
      * @param x
@@ -534,13 +460,6 @@ public interface World {
      * @return false if explosion was canceled, otherwise true
      */
     public boolean createExplosion(Location loc, float power, boolean setFire);
-
-    /**
-     * Gets the {@link Environment} type of this world
-     *
-     * @return This worlds Environment type
-     */
-    public Environment getEnvironment();
 
     /**
      * Gets the Seed for this world.
@@ -617,7 +536,7 @@ public interface World {
      * @param includeBiome - if true, snapshot includes per-coordinate biome type
      * @param includeBiomeTempRain - if true, snapshot includes per-coordinate raw biome temperature and rainfall
      */
-    public ChunkSnapshot getEmptyChunkSnapshot(int x, int z, boolean includeBiome, boolean includeBiomeTempRain);
+    public ChunkSnapshot getEmptyChunkSnapshot(int x, int z);
 
     /**
      * Sets the spawn flags for this.
@@ -640,42 +559,6 @@ public interface World {
      * @return whether monsters can spawn in this world.
      */
     public boolean getAllowMonsters();
-
-    /**
-     * Gets the biome for the given block coordinates.
-     *
-     * It is safe to run this method when the block does not exist, it will not create the block.
-     *
-     * @param x X coordinate of the block
-     * @param z Z coordinate of the block
-     *
-     * @return Biome of the requested block
-     */
-    public Biome getBiome(int x, int z);
-
-    /**
-     * Gets the temperature for the given block coordinates.
-     *
-     * It is safe to run this method when the block does not exist, it will not create the block.
-     *
-     * @param x X coordinate of the block
-     * @param z Z coordinate of the block
-     *
-     * @return Temperature of the requested block
-     */
-    public double getTemperature(int x, int z);
-
-    /**
-     * Gets the humidity for the given block coordinates.
-     *
-     * It is safe to run this method when the block does not exist, it will not create the block.
-     *
-     * @param x X coordinate of the block
-     * @param z Z coordinate of the block
-     *
-     * @return Humidity of the requested block
-     */
-    public double getHumidity(int x, int z);
 
     /**
      * Gets the maximum height of this world.
@@ -713,48 +596,4 @@ public interface World {
      * @param value true if the world should automatically save, otherwise false
      */
     public void setAutoSave(boolean value);
-
-    /**
-     * Represents various map environment types that a world may be
-     */
-    public enum Environment {
-        /**
-         * Represents the "normal"/"surface world" map
-         */
-        NORMAL(0),
-        /**
-         * Represents a nether based map ("hell")
-         */
-        NETHER(-1),
-        /**
-         * Represents a sky-lands based map ("heaven")
-         */
-        SKYLANDS(1);
-
-        private final int id;
-        private static final Map<Integer, Environment> lookup = new HashMap<Integer, Environment>();
-
-        private Environment(int id) {
-            this.id = id;
-        }
-
-        /**
-         * Gets the dimension ID of this environment
-         *
-         * @return dimension ID
-         */
-        public int getId() {
-            return id;
-        }
-
-        public static Environment getEnvironment(int id) {
-            return lookup.get(id);
-        }
-
-        static {
-            for (Environment env : values()) {
-                lookup.put(env.getId(), env);
-            }
-        }
-    }
 }

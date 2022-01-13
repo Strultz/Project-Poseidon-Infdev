@@ -3,7 +3,6 @@ package org.bukkit.entity;
 import com.projectposeidon.ConnectionType;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
-import org.bukkit.map.MapView;
 
 import java.net.InetSocketAddress;
 import java.util.UUID;
@@ -101,20 +100,6 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
     public boolean performCommand(String command);
 
     /**
-     * Returns if the player is in sneak mode
-     *
-     * @return true if player is in sneak mode
-     */
-    public boolean isSneaking();
-
-    /**
-     * Sets the sneak mode the player
-     *
-     * @param sneak true if player should appear sneaking
-     */
-    public void setSneaking(boolean sneak);
-
-    /**
      * Saves the players current location, health, inventory, motion, and other information into the username.dat file, in the world/player folder
      */
     public void saveData();
@@ -125,45 +110,6 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
      * Note: This will overwrite the players current inventory, health, motion, etc, with the state from the saved dat file.
      */
     public void loadData();
-
-    /**
-     * Sets whether the player is ignored as not sleeping. If everyone is
-     * either sleeping or has this flag set, then time will advance to the
-     * next day. If everyone has this flag set but no one is actually in bed,
-     * then nothing will happen.
-     *
-     * @param isSleeping
-     */
-    public void setSleepingIgnored(boolean isSleeping);
-
-    /**
-     * Returns whether the player is sleeping ignored.
-     *
-     * @return
-     */
-    public boolean isSleepingIgnored();
-
-    /**
-     * Play a note for a player at a location. This requires a note block
-     * at the particular location (as far as the client is concerned). This
-     * will not work without a note block. This will not work with cake.
-     *
-     * @param loc
-     * @param instrument
-     * @param note
-     */
-    public void playNote(Location loc, byte instrument, byte note);
-
-    /**
-     * Play a note for a player at a location. This requires a note block
-     * at the particular location (as far as the client is concerned). This
-     * will not work without a note block. This will not work with cake.
-     *
-     * @param loc
-     * @param instrument
-     * @param note
-     */
-    public void playNote(Location loc, Instrument instrument, Note note);
 
     /**
      * Plays an effect to just this player.
@@ -213,59 +159,12 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
     public void sendBlockChange(Location loc, int material, byte data);
 
     /**
-     * Render a map and send it to the player in its entirety. This may be used
-     * when streaming the map in the normal manner is not desirbale.
-     *
-     * @pram map The map to be sent
-     */
-    public void sendMap(MapView map);
-
-    /**
      * Forces an update of the player's entire inventory.
      *
      * @deprecated This method should not be relied upon as it is a temporary work-around for a larger, more complicated issue.
      */
     @Deprecated
     public void updateInventory();
-
-    /**
-     * Awards this player the given achievement
-     *
-     * @param achievement Achievement to award
-     */
-    public void awardAchievement(Achievement achievement);
-
-    /**
-     * Increments the given statistic for this player
-     *
-     * @param statistic Statistic to increment
-     */
-    public void incrementStatistic(Statistic statistic);
-
-    /**
-     * Increments the given statistic for this player
-     *
-     * @param statistic Statistic to increment
-     * @param amount    Amount to increment this statistic by
-     */
-    public void incrementStatistic(Statistic statistic, int amount);
-
-    /**
-     * Increments the given statistic for this player for the given material
-     *
-     * @param statistic Statistic to increment
-     * @param material  Material to offset the statistic with
-     */
-    public void incrementStatistic(Statistic statistic, Material material);
-
-    /**
-     * Increments the given statistic for this player for the given material
-     *
-     * @param statistic Statistic to increment
-     * @param material  Material to offset the statistic with
-     * @param amount    Amount to increment this statistic by
-     */
-    public void incrementStatistic(Statistic statistic, Material material, int amount);
 
     /**
      * Sets the current time on the player's client. When relative is true the player's time

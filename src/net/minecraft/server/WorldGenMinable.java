@@ -2,60 +2,46 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class WorldGenMinable extends WorldGenerator {
+public final class WorldGenMinable extends WorldGenerator {
+	private int minableBlockId;
+	private int numberOfBlocks;
 
-    private int a;
-    private int b;
+	public WorldGenMinable(int var1, int var2) {
+		this.minableBlockId = var1;
+		this.numberOfBlocks = var2;
+	}
 
-    public WorldGenMinable(int i, int j) {
-        this.a = i;
-        this.b = j;
-    }
+	public final boolean a(World var1, Random var2, int var3, int var4, int var5) {
+		float var6 = var2.nextFloat() * 3.1415927F;
+		double var7 = (double)((float)(var3 + 8) + MathHelper.sin(var6) * (float)this.numberOfBlocks / 8.0F);
+		double var9 = (double)((float)(var3 + 8) - MathHelper.sin(var6) * (float)this.numberOfBlocks / 8.0F);
+		double var11 = (double)((float)(var5 + 8) + MathHelper.cos(var6) * (float)this.numberOfBlocks / 8.0F);
+		double var13 = (double)((float)(var5 + 8) - MathHelper.cos(var6) * (float)this.numberOfBlocks / 8.0F);
+		double var15 = (double)(var4 + var2.nextInt(3) + 2);
+		double var17 = (double)(var4 + var2.nextInt(3) + 2);
 
-    public boolean a(World world, Random random, int i, int j, int k) {
-        float f = random.nextFloat() * 3.1415927F;
-        double d0 = (double) ((float) (i + 8) + MathHelper.sin(f) * (float) this.b / 8.0F);
-        double d1 = (double) ((float) (i + 8) - MathHelper.sin(f) * (float) this.b / 8.0F);
-        double d2 = (double) ((float) (k + 8) + MathHelper.cos(f) * (float) this.b / 8.0F);
-        double d3 = (double) ((float) (k + 8) - MathHelper.cos(f) * (float) this.b / 8.0F);
-        double d4 = (double) (j + random.nextInt(3) + 2);
-        double d5 = (double) (j + random.nextInt(3) + 2);
+		for(var3 = 0; var3 <= this.numberOfBlocks; ++var3) {
+			double var20 = var7 + (var9 - var7) * (double)var3 / (double)this.numberOfBlocks;
+			double var22 = var15 + (var17 - var15) * (double)var3 / (double)this.numberOfBlocks;
+			double var24 = var11 + (var13 - var11) * (double)var3 / (double)this.numberOfBlocks;
+			double var26 = var2.nextDouble() * (double)this.numberOfBlocks / 16.0D;
+			double var28 = (double)(MathHelper.sin((float)var3 * 3.1415927F / (float)this.numberOfBlocks) + 1.0F) * var26 + 1.0D;
+			double var30 = (double)(MathHelper.sin((float)var3 * 3.1415927F / (float)this.numberOfBlocks) + 1.0F) * var26 + 1.0D;
 
-        for (int l = 0; l <= this.b; ++l) {
-            double d6 = d0 + (d1 - d0) * (double) l / (double) this.b;
-            double d7 = d4 + (d5 - d4) * (double) l / (double) this.b;
-            double d8 = d2 + (d3 - d2) * (double) l / (double) this.b;
-            double d9 = random.nextDouble() * (double) this.b / 16.0D;
-            double d10 = (double) (MathHelper.sin((float) l * 3.1415927F / (float) this.b) + 1.0F) * d9 + 1.0D;
-            double d11 = (double) (MathHelper.sin((float) l * 3.1415927F / (float) this.b) + 1.0F) * d9 + 1.0D;
-            int i1 = MathHelper.floor(d6 - d10 / 2.0D);
-            int j1 = MathHelper.floor(d7 - d11 / 2.0D);
-            int k1 = MathHelper.floor(d8 - d10 / 2.0D);
-            int l1 = MathHelper.floor(d6 + d10 / 2.0D);
-            int i2 = MathHelper.floor(d7 + d11 / 2.0D);
-            int j2 = MathHelper.floor(d8 + d10 / 2.0D);
+			for(var4 = (int)(var20 - var28 / 2.0D); var4 <= (int)(var20 + var28 / 2.0D); ++var4) {
+				for(var5 = (int)(var22 - var30 / 2.0D); var5 <= (int)(var22 + var30 / 2.0D); ++var5) {
+					for(int var41 = (int)(var24 - var28 / 2.0D); var41 <= (int)(var24 + var28 / 2.0D); ++var41) {
+						double var35 = ((double)var4 + 0.5D - var20) / (var28 / 2.0D);
+						double var37 = ((double)var5 + 0.5D - var22) / (var30 / 2.0D);
+						double var39 = ((double)var41 + 0.5D - var24) / (var28 / 2.0D);
+						if(var35 * var35 + var37 * var37 + var39 * var39 < 1.0D && var1.getTypeId(var4, var5, var41) == Block.STONE.id) {
+							var1.setRawTypeId(var4, var5, var41, this.minableBlockId);
+						}
+					}
+				}
+			}
+		}
 
-            for (int k2 = i1; k2 <= l1; ++k2) {
-                double d12 = ((double) k2 + 0.5D - d6) / (d10 / 2.0D);
-
-                if (d12 * d12 < 1.0D) {
-                    for (int l2 = j1; l2 <= i2; ++l2) {
-                        double d13 = ((double) l2 + 0.5D - d7) / (d11 / 2.0D);
-
-                        if (d12 * d12 + d13 * d13 < 1.0D) {
-                            for (int i3 = k1; i3 <= j2; ++i3) {
-                                double d14 = ((double) i3 + 0.5D - d8) / (d10 / 2.0D);
-
-                                if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getTypeId(k2, l2, i3) == Block.STONE.id) {
-                                    world.setRawTypeId(k2, l2, i3, this.a);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
+		return true;
+	}
 }
