@@ -61,7 +61,7 @@ public class EntityItem extends Entity {
             this.world.makeSound(this, "random.fizz", 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
         }
 
-        this.g(this.locX, (this.boundingBox.b + this.boundingBox.e) / 2.0D, this.locZ);
+        this.f_();
         this.move(this.motX, this.motY, this.motZ);
         float f = 0.98F;
 
