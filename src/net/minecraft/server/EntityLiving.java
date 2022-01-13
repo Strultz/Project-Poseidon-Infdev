@@ -743,43 +743,24 @@ public abstract class EntityLiving extends Entity {
 
     protected void c_() {
         ++this.ay;
-        EntityHuman entityhuman = this.world.findNearbyPlayer(this, -1.0D);
-
         this.U();
-        this.az = 0.0F;
-        this.aA = 0.0F;
-        float f = 8.0F;
+        if(this.random.nextFloat() < 0.07F) {
+			this.az = (this.random.nextFloat() - 0.5F) * this.aE;
+			this.aA = this.random.nextFloat() * this.aE;
+		}
 
-        if (this.random.nextFloat() < 0.02F) {
-            entityhuman = this.world.findNearbyPlayer(this, (double) f);
-            if (entityhuman != null) {
-                this.b = entityhuman;
-                this.aF = 10 + this.random.nextInt(20);
-            } else {
-                this.aB = (this.random.nextFloat() - 0.5F) * 20.0F;
-            }
-        }
+		this.aC = this.random.nextFloat() < 0.01F;
+		if(this.random.nextFloat() < 0.04F) {
+			this.aB = (this.random.nextFloat() - 0.5F) * 60.0F;
+		}
 
-        if (this.b != null) {
-            this.a(this.b, 10.0F, (float) this.u());
-            if (this.aF-- <= 0 || this.b.dead || this.b.g(this) > (double) (f * f)) {
-                this.b = null;
-            }
-        } else {
-            if (this.random.nextFloat() < 0.05F) {
-                this.aB = (this.random.nextFloat() - 0.5F) * 20.0F;
-            }
-
-            this.yaw += this.aB;
-            this.pitch = this.aD;
-        }
-
-        boolean flag = this.ad();
-        boolean flag1 = this.ae();
-
-        if (flag || flag1) {
-            this.aC = this.random.nextFloat() < 0.8F;
-        }
+		this.yaw += this.aB;
+		this.pitch = 0.0F;
+		boolean var1 = this.ad();
+		boolean var2 = this.ae();
+		if(var1 || var2) {
+			this.aC = this.random.nextFloat() < 0.8F;
+		}
     }
 
     protected int u() {

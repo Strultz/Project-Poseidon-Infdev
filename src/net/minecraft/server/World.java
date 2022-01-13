@@ -1333,7 +1333,7 @@ public class World implements IBlockAccess {
 
             if (vec3d.c() > 0.0D) {
                 vec3d = vec3d.b();
-                double d1 = 0.014D;
+                double d1 = 0.004D;
 
                 entity.motX += vec3d.a * d1;
                 entity.motY += vec3d.b * d1;
