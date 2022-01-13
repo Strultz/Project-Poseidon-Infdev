@@ -68,7 +68,7 @@ public class PlayerNBTManager implements PlayerFileData, IDataManager {
     }
 
     public IChunkLoader a(WorldProvider worldprovider) {
-    	return new ChunkLoader(this.b, true);
+        return new ChunkLoader(this.b, true);
     }
 
     public WorldData c() {

@@ -70,10 +70,10 @@ public class DataWatcher {
     }
     
     public ArrayList getObjects() {
-		ArrayList arraylist = new ArrayList();
+        ArrayList arraylist = new ArrayList();
         arraylist.addAll(b.values());
         return arraylist;
-	}
+    }
 
     public ArrayList b() {
         ArrayList arraylist = null;

@@ -76,64 +76,64 @@ public abstract class BlockFluids extends Block {
     }
 
     private Vec3D c(IBlockAccess var1, int var2, int var3, int var4) {
-    	Vec3D var5 = Vec3D.create(0.0D, 0.0D, 0.0D);
-		int var6 = this.b(var1, var2, var3, var4);
+        Vec3D var5 = Vec3D.create(0.0D, 0.0D, 0.0D);
+        int var6 = this.b(var1, var2, var3, var4);
 
-		for(int var7 = 0; var7 < 4; ++var7) {
-			int var8 = var2;
-			int var9 = var4;
-			if(var7 == 0) {
-				var8 = var2 - 1;
-			}
+        for(int var7 = 0; var7 < 4; ++var7) {
+            int var8 = var2;
+            int var9 = var4;
+            if(var7 == 0) {
+                var8 = var2 - 1;
+            }
 
-			if(var7 == 1) {
-				var9 = var4 - 1;
-			}
+            if(var7 == 1) {
+                var9 = var4 - 1;
+            }
 
-			if(var7 == 2) {
-				++var8;
-			}
+            if(var7 == 2) {
+                ++var8;
+            }
 
-			if(var7 == 3) {
-				++var9;
-			}
+            if(var7 == 3) {
+                ++var9;
+            }
 
-			int var10;
-			if((var10 = this.b(var1, var8, var3, var9)) < 0) {
-				if((var10 = this.b(var1, var8, var3 - 1, var9)) >= 0) {
-					var10 -= var6 - 8;
-					var5 = var5.add((double)((var8 - var2) * var10), (double)(var10 * 0), (double)((var9 - var4) * var10));
-				}
-			} else if(var10 >= 0) {
-				var10 -= var6;
-				var5 = var5.add((double)((var8 - var2) * var10), (double)(var10 * 0), (double)((var9 - var4) * var10));
-			}
-		}
+            int var10;
+            if((var10 = this.b(var1, var8, var3, var9)) < 0) {
+                if((var10 = this.b(var1, var8, var3 - 1, var9)) >= 0) {
+                    var10 -= var6 - 8;
+                    var5 = var5.add((double)((var8 - var2) * var10), (double)(var10 * 0), (double)((var9 - var4) * var10));
+                }
+            } else if(var10 >= 0) {
+                var10 -= var6;
+                var5 = var5.add((double)((var8 - var2) * var10), (double)(var10 * 0), (double)((var9 - var4) * var10));
+            }
+        }
 
-		if(var1.getData(var2, var3, var4) >= 8) {
-			boolean var11 = false;
-			if(this.b(var1, var2, var3, var4 - 1, 2)) {
-				var11 = true;
-			}
+        if(var1.getData(var2, var3, var4) >= 8) {
+            boolean var11 = false;
+            if(this.b(var1, var2, var3, var4 - 1, 2)) {
+                var11 = true;
+            }
 
-			if(var11 || this.b(var1, var2, var3, var4 + 1, 3)) {
-				var11 = true;
-			}
+            if(var11 || this.b(var1, var2, var3, var4 + 1, 3)) {
+                var11 = true;
+            }
 
-			if(var11 || this.b(var1, var2 - 1, var3, var4, 4)) {
-				var11 = true;
-			}
+            if(var11 || this.b(var1, var2 - 1, var3, var4, 4)) {
+                var11 = true;
+            }
 
-			if(var11 || this.b(var1, var2 + 1, var3, var4, 5)) {
-				var11 = true;
-			}
+            if(var11 || this.b(var1, var2 + 1, var3, var4, 5)) {
+                var11 = true;
+            }
 
-			if(var11) {
-				var5 = var5.b().add(0.0D, -6.0D, 0.0D);
-			}
-		}
+            if(var11) {
+                var5 = var5.b().add(0.0D, -6.0D, 0.0D);
+            }
+        }
 
-		return var5.b();
+        return var5.b();
     }
 
     public void a(World world, int i, int j, int k, Entity entity, Vec3D vec3d) {

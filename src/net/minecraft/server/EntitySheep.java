@@ -18,7 +18,7 @@ public class EntitySheep extends EntityAnimal {
     }
 
     public boolean damageEntity(Entity entity, int id) {
-    	if (!this.world.isStatic && !this.isSheared()) {
+        if (!this.world.isStatic && !this.isSheared()) {
             this.setSheared(true);
             int i = 1 + this.random.nextInt(3);
 

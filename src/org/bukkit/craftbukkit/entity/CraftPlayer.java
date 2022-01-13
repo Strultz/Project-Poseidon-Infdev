@@ -71,7 +71,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     public double getEyeHeight() {
-    	return 1.62D;
+        return 1.62D;
     }
 
     public void setHandle(final EntityPlayer entity) {

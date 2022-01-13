@@ -33,7 +33,7 @@ public class Sign extends MaterialData implements Attachable {
      * @return BlockFace attached to
      */
     public BlockFace getAttachedFace() {
-    	return BlockFace.DOWN;
+        return BlockFace.DOWN;
     }
 
     /**

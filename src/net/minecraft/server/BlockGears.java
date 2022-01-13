@@ -3,16 +3,16 @@ package net.minecraft.server;
 import java.util.Random;
 
 public class BlockGears extends Block {
-	protected BlockGears() {
+    protected BlockGears() {
         super(55, 62, Material.ORIENTABLE);
         this.a(true);
     }
-	
+    
     public AxisAlignedBB e(World world, final int n, final int n2, final int n3) {
         return null;
     }
     
-	public boolean a() {
+    public boolean a() {
         return false;
     }
 

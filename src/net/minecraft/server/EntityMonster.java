@@ -41,7 +41,7 @@ public class EntityMonster extends EntityCreature implements IMonster {
 
     public boolean damageEntity(Entity entity, int i) {
         if (super.damageEntity(entity, i)) {
-        	if (entity != this) {
+            if (entity != this) {
                 // CraftBukkit start
                 org.bukkit.entity.Entity bukkitTarget = entity == null ? null : entity.getBukkitEntity();
 

@@ -10,7 +10,7 @@ import java.util.HashSet;
 public class Step extends MaterialData {
     private static HashSet<Material> stepTypes = new HashSet<Material>();
     static {
-    	stepTypes.add(Material.STONE);
+        stepTypes.add(Material.STONE);
     }
 
     public Step() {
@@ -42,7 +42,7 @@ public class Step extends MaterialData {
      * @return Material of this step
      */
     public Material getMaterial() {
-    	return Material.STONE;
+        return Material.STONE;
     }
 
     /**
@@ -51,7 +51,7 @@ public class Step extends MaterialData {
      * @param material New material of this step
      */
     public void setMaterial(Material material) {
-    	setData((byte) 0x0);
+        setData((byte) 0x0);
     }
 
     @Override

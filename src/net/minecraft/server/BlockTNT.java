@@ -25,7 +25,7 @@ public class BlockTNT extends Block {
 
     public void postBreak(World world, int i, int j, int k, int l) {
         if (!world.isStatic) {
-        	EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F));
+            EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F));
 
             world.addEntity(entitytntprimed);
             world.makeSound(entitytntprimed, "random.fuse", 1.0F, 1.0F);

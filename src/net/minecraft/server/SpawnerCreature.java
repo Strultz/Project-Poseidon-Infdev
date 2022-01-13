@@ -10,8 +10,8 @@ import java.util.Set;
 // CraftBukkit
 
 public final class SpawnerCreature {
-	private static final Class[] animals = { EntityPig.class, EntitySheep.class };
-	private static final Class[] monsters = { EntityZombie.class, EntitySkeleton.class, EntitySpider.class, EntityCreeper.class };
+    private static final Class[] animals = { EntityPig.class, EntitySheep.class };
+    private static final Class[] monsters = { EntityZombie.class, EntitySkeleton.class, EntitySpider.class, EntityCreeper.class };
     private static Set b = new HashSet();
     
     public SpawnerCreature() {}
@@ -65,8 +65,8 @@ public final class SpawnerCreature {
                             int k1 = 0;
 
                             Class[] entitieslist = enumcreaturetype == EnumCreatureType.MONSTER ? SpawnerCreature.monsters : SpawnerCreature.animals;
-							int pick = world.random.nextInt(entitieslist.length);
-							Class entityClass = entitieslist[pick];
+                            int pick = world.random.nextInt(entitieslist.length);
+                            Class entityClass = entitieslist[pick];
 
                             ChunkPosition chunkposition = a(world, chunkcoordintpair.x * 16, chunkcoordintpair.z * 16);
                             int i2 = chunkposition.x;

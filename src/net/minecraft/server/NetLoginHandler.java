@@ -95,7 +95,7 @@ public class NetLoginHandler extends NetHandler {
             }
         } else {
             //Project Poseidon - Start (Release2Beta)
-        	connectionType = ConnectionType.NORMAL;
+            connectionType = ConnectionType.NORMAL;
             rawConnectionType = 0;
             //TODO: We need to find a better and cleaner way to support these different Beta proxies, Maybe a handler class???
             if (connectionType.equals(ConnectionType.RELEASE2BETA_OFFLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.RELEASE2BETA_ONLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.BUNGEECORD_OFFLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.BUNGEECORD_ONLINE_MODE_IP_FORWARDING)) {

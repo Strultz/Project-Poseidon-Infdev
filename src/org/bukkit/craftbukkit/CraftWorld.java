@@ -547,7 +547,7 @@ public class CraftWorld implements World {
         if (FallingSand.class.isAssignableFrom(clazz)) {
             entity = new EntityFallingSand(world, x, y, z, 0);
         } else if (Minecart.class.isAssignableFrom(clazz)) {
-        	entity = new EntityMinecart(world, x, y, z);
+            entity = new EntityMinecart(world, x, y, z);
         } else if (Arrow.class.isAssignableFrom(clazz)) {
             entity = new EntityArrow(world);
             entity.setPositionRotation(x, y, z, 0, 0);

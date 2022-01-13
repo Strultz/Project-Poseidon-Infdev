@@ -34,18 +34,18 @@ public abstract class WorldProvider {
     }
 
     public float a(long worldTime, float var1) {
-		int var2;
-		if((var1 = ((float)(var2 = (int)(worldTime % 24000L)) + var1) / 24000.0F - 0.25F) < 0.0F) {
-			++var1;
-		}
+        int var2;
+        if((var1 = ((float)(var2 = (int)(worldTime % 24000L)) + var1) / 24000.0F - 0.25F) < 0.0F) {
+            ++var1;
+        }
 
-		if(var1 > 1.0F) {
-			--var1;
-		}
+        if(var1 > 1.0F) {
+            --var1;
+        }
 
-		float var3 = var1;
-		var1 = 1.0F - (float)((Math.cos((double)var1 * 3.141592653589793D) + 1.0D) / 2.0D);
-		return var3 + (var1 - var3) / 3.0F;
+        float var3 = var1;
+        var1 = 1.0F - (float)((Math.cos((double)var1 * 3.141592653589793D) + 1.0D) / 2.0D);
+        return var3 + (var1 - var3) / 3.0F;
     }
 
     public boolean d() {

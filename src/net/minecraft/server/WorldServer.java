@@ -28,7 +28,7 @@ public class WorldServer extends World implements BlockChangeDelegate {
         this.manager = new PlayerManager(minecraftserver, this.dimension, minecraftserver.propertyManager.getInt("view-distance", 10));
     }
 
-	public final int dimension;
+    public final int dimension;
     public EntityTracker tracker;
     public PlayerManager manager;
     // CraftBukkit end
@@ -40,7 +40,7 @@ public class WorldServer extends World implements BlockChangeDelegate {
         }
         // CraftBukkit end */
 
-    	super.entityJoinedWorld(entity, flag);
+        super.entityJoinedWorld(entity, flag);
     }
 
     public void vehicleEnteredWorld(Entity entity, boolean flag) {

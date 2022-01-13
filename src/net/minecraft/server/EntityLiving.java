@@ -745,22 +745,22 @@ public abstract class EntityLiving extends Entity {
         ++this.ay;
         this.U();
         if(this.random.nextFloat() < 0.07F) {
-			this.az = (this.random.nextFloat() - 0.5F) * this.aE;
-			this.aA = this.random.nextFloat() * this.aE;
-		}
+            this.az = (this.random.nextFloat() - 0.5F) * this.aE;
+            this.aA = this.random.nextFloat() * this.aE;
+        }
 
-		this.aC = this.random.nextFloat() < 0.01F;
-		if(this.random.nextFloat() < 0.04F) {
-			this.aB = (this.random.nextFloat() - 0.5F) * 60.0F;
-		}
+        this.aC = this.random.nextFloat() < 0.01F;
+        if(this.random.nextFloat() < 0.04F) {
+            this.aB = (this.random.nextFloat() - 0.5F) * 60.0F;
+        }
 
-		this.yaw += this.aB;
-		this.pitch = 0.0F;
-		boolean var1 = this.ad();
-		boolean var2 = this.ae();
-		if(var1 || var2) {
-			this.aC = this.random.nextFloat() < 0.8F;
-		}
+        this.yaw += this.aB;
+        this.pitch = 0.0F;
+        boolean var1 = this.ad();
+        boolean var2 = this.ae();
+        if(var1 || var2) {
+            this.aC = this.random.nextFloat() < 0.8F;
+        }
     }
 
     protected int u() {

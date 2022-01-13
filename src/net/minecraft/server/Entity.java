@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public abstract class Entity {
 
-	// Poseidon start - Backport of 0070-Use-a-Shared-Random-for-Entities.patch from PaperSpigot
+    // Poseidon start - Backport of 0070-Use-a-Shared-Random-for-Entities.patch from PaperSpigot
     public static Random SHARED_RANDOM = new Random() {
         private boolean locked = false;
         @Override
@@ -34,7 +34,7 @@ public abstract class Entity {
         }
     };
     // Poseidon end
-	
+    
     private static int entityCount = 0;
     public int id;
     public double aH;
@@ -282,9 +282,9 @@ public abstract class Entity {
         }
 
         if (this.locY < -2.0D) {
-        	this.motX *= 0.85D;
-			this.motY *= 0.85D;
-			this.motZ *= 0.85D;
+            this.motX *= 0.85D;
+            this.motY *= 0.85D;
+            this.motZ *= 0.85D;
             this.Y();
         }
 
@@ -791,7 +791,7 @@ public abstract class Entity {
     public void b(EntityHuman entityhuman) {}
 
     public void collide(Entity entity) {
-    	double d0 = entity.locX - this.locX;
+        double d0 = entity.locX - this.locX;
         double d1 = entity.locZ - this.locZ;
         double d2 = MathHelper.a(d0, d1);
 
@@ -1024,10 +1024,10 @@ public abstract class Entity {
     }
 
     public boolean K() {
-    	int var1 = MathHelper.floor(this.locX);
-		int var2 = MathHelper.floor(this.locY + (double)this.t());
-		int var3 = MathHelper.floor(this.locZ);
-		return this.world.p(var1, var2, var3);
+        int var1 = MathHelper.floor(this.locX);
+        int var2 = MathHelper.floor(this.locY + (double)this.t());
+        int var3 = MathHelper.floor(this.locZ);
+        return this.world.p(var1, var2, var3);
     }
 
     public boolean a(EntityHuman entityhuman) {

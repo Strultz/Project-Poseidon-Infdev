@@ -56,7 +56,7 @@ public class EntityMinecart extends Entity implements IInventory {
     }
 
     protected void b() {
-    	this.datawatcher.a(16, (byte) 0);
+        this.datawatcher.a(16, (byte) 0);
     }
 
     public AxisAlignedBB a_(Entity entity) {
@@ -577,7 +577,7 @@ public class EntityMinecart extends Entity implements IInventory {
     }
 
     protected void b(NBTTagCompound nbttagcompound) {
-    	NBTTagList nbttaglist = new NBTTagList();
+        NBTTagList nbttaglist = new NBTTagList();
 
         for (int i = 0; i < this.items.length; ++i) {
             if (this.items[i] != null) {
@@ -593,7 +593,7 @@ public class EntityMinecart extends Entity implements IInventory {
     }
 
     protected void a(NBTTagCompound nbttagcompound) {
-    	NBTTagList nbttaglist = nbttagcompound.l("Items");
+        NBTTagList nbttaglist = nbttagcompound.l("Items");
 
         this.items = new ItemStack[this.getSize()];
 
@@ -611,7 +611,7 @@ public class EntityMinecart extends Entity implements IInventory {
 
     public void collide(Entity entity) {
         if (!this.world.isStatic) {
-        	// CraftBukkit start
+            // CraftBukkit start
             Vehicle vehicle = (Vehicle) this.getBukkitEntity();
             org.bukkit.entity.Entity hitEntity = (entity == null) ? null : entity.getBukkitEntity();
 
@@ -720,13 +720,13 @@ public class EntityMinecart extends Entity implements IInventory {
     }
 
     public void update() {
-    	if (!this.world.isStatic) {
-    		datawatcher.watch(16, (byte)getDirtHeightRaw());
-    	}
+        if (!this.world.isStatic) {
+            datawatcher.watch(16, (byte)getDirtHeightRaw());
+        }
     }
 
     public boolean a(EntityHuman entityhuman) {
-    	if (!this.world.isStatic) {
+        if (!this.world.isStatic) {
             entityhuman.a((IInventory) this);
         }
 

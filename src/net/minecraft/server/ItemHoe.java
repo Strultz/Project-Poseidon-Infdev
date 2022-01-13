@@ -41,14 +41,14 @@ public class ItemHoe extends Item {
                 // CraftBukkit end
                 
                 if(world.random.nextInt(8) == 0 && i1 == Block.GRASS.id) {
-					for(int fart9 = 0; fart9 <= 0; ++fart9) {
-						float var11 = world.random.nextFloat() * 0.7F + 0.15F;
-						float var14 = world.random.nextFloat() * 0.7F + 0.15F;
-						EntityItem var12;
-						(var12 = new EntityItem(world, (double)((float)i + var11), (double)((float)j + 1.2F), (double)((float)k + var14), new ItemStack(Item.SEEDS))).pickupDelay = 10;
-						world.addEntity(var12);
-					}
-				}
+                    for(int fart9 = 0; fart9 <= 0; ++fart9) {
+                        float var11 = world.random.nextFloat() * 0.7F + 0.15F;
+                        float var14 = world.random.nextFloat() * 0.7F + 0.15F;
+                        EntityItem var12;
+                        (var12 = new EntityItem(world, (double)((float)i + var11), (double)((float)j + 1.2F), (double)((float)k + var14), new ItemStack(Item.SEEDS))).pickupDelay = 10;
+                        world.addEntity(var12);
+                    }
+                }
 
                 itemstack.damage(1, entityhuman);
                 return true;

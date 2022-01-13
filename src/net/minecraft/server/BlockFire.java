@@ -29,7 +29,7 @@ public class BlockFire extends Block {
         this.a(Block.TNT.id, 15, 100);
         
         for (int i = 0; i < 16; i++) {
-        	this.a(Block.RED_WOOL.id + i, 30, 60);
+            this.a(Block.RED_WOOL.id + i, 30, 60);
         }
     }
 
@@ -219,7 +219,7 @@ public class BlockFire extends Block {
     }
 
     public void c(World world, int i, int j, int k) {
-    	if (!world.p(i, j - 1, k) && !this.g(world, i, j, k)) {
+        if (!world.p(i, j - 1, k) && !this.g(world, i, j, k)) {
             world.setTypeId(i, j, k, 0);
         } else {
             world.c(i, j, k, this.id, this.c());

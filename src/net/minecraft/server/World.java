@@ -898,27 +898,27 @@ public class World implements IBlockAccess {
     }
 
     public List getEntities(AxisAlignedBB var1) {
-    	ArrayList var2 = new ArrayList();
-		int var3 = MathHelper.floor(var1.a);
-		int var4 = MathHelper.floor(var1.b + 1.0D);
-		int var5 = MathHelper.floor(var1.c);
-		int var6 = MathHelper.floor(var1.d + 1.0D);
-		int var7 = MathHelper.floor(var1.e);
-		int var8 = MathHelper.floor(var1.f + 1.0D);
+        ArrayList var2 = new ArrayList();
+        int var3 = MathHelper.floor(var1.a);
+        int var4 = MathHelper.floor(var1.b + 1.0D);
+        int var5 = MathHelper.floor(var1.c);
+        int var6 = MathHelper.floor(var1.d + 1.0D);
+        int var7 = MathHelper.floor(var1.e);
+        int var8 = MathHelper.floor(var1.f + 1.0D);
 
-		for(; var3 < var4; ++var3) {
-			for(int var9 = var5 - 1; var9 < var6; ++var9) {
-				for(int var10 = var7; var10 < var8; ++var10) {
-					Block var11;
-					AxisAlignedBB var12;
-					if((var11 = Block.byId[this.getTypeId(var3, var9, var10)]) != null && (var12 = var11.e(this, var3, var9, var10)) != null && var1.a(var12)) {
-						var2.add(var12);
-					}
-				}
-			}
-		}
+        for(; var3 < var4; ++var3) {
+            for(int var9 = var5 - 1; var9 < var6; ++var9) {
+                for(int var10 = var7; var10 < var8; ++var10) {
+                    Block var11;
+                    AxisAlignedBB var12;
+                    if((var11 = Block.byId[this.getTypeId(var3, var9, var10)]) != null && (var12 = var11.e(this, var3, var9, var10)) != null && var1.a(var12)) {
+                        var2.add(var12);
+                    }
+                }
+            }
+        }
 
-		return var2;
+        return var2;
     }
 
     public int a(float f) {
@@ -1132,7 +1132,7 @@ public class World implements IBlockAccess {
             entity.lastYaw = entity.yaw;
             entity.lastPitch = entity.pitch;
             if (flag && entity.bG) {
-            	entity.m_();
+                entity.m_();
             }
 
             if (Double.isNaN(entity.locX) || Double.isInfinite(entity.locX)) {

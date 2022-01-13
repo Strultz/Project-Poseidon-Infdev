@@ -16,21 +16,21 @@ public class BlockLeaves extends BlockLeavesBase {
     }
 
     public void a(World var1, int var2, int var3, int var4, Random var5) {
-    	if(!var1.isStatic) {
-			if(!var1.getMaterial(var2, var3 - 1, var4).isSolid()) {
-				for(int var8 = var2 - 3; var8 <= var2 + 3; ++var8) {
-					for(int var6 = var3 - 1; var6 <= var3; ++var6) {
-						for(int var7 = var4 - 3; var7 <= var4 + 3; ++var7) {
-							if(var1.getTypeId(var8, var6, var7) == Block.LOG.id) {
-								return;
-							}
-						}
-					}
-				}
-	
-				this.g(var1, var2, var3, var4);
-			}
-		}
+        if(!var1.isStatic) {
+            if(!var1.getMaterial(var2, var3 - 1, var4).isSolid()) {
+                for(int var8 = var2 - 3; var8 <= var2 + 3; ++var8) {
+                    for(int var6 = var3 - 1; var6 <= var3; ++var6) {
+                        for(int var7 = var4 - 3; var7 <= var4 + 3; ++var7) {
+                            if(var1.getTypeId(var8, var6, var7) == Block.LOG.id) {
+                                return;
+                            }
+                        }
+                    }
+                }
+    
+                this.g(var1, var2, var3, var4);
+            }
+        }
     }
 
     private void g(World world, int i, int j, int k) {
