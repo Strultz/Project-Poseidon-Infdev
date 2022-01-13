@@ -423,9 +423,7 @@ public class Block {
     }
 
     public boolean canPlace(World world, int i, int j, int k) {
-        int l = world.getTypeId(i, j, k);
-
-        return l == 0 || byId[l].material.isReplacable();
+        return true;
     }
 
     public boolean interact(World world, int i, int j, int k, EntityHuman entityhuman) {
@@ -492,10 +490,6 @@ public class Block {
     protected Block n() {
         this.br = false;
         return this;
-    }
-
-    public int e() {
-        return this.material.j();
     }
 
     static {

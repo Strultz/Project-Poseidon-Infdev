@@ -68,6 +68,12 @@ public class DataWatcher {
 
         dataoutputstream.writeByte(127);
     }
+    
+    public ArrayList getObjects() {
+		ArrayList arraylist = new ArrayList();
+        arraylist.addAll(b.values());
+        return arraylist;
+	}
 
     public ArrayList b() {
         ArrayList arraylist = null;

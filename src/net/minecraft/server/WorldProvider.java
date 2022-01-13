@@ -33,23 +33,19 @@ public abstract class WorldProvider {
         return k == Block.SAND.id;
     }
 
-    public float a(long i, float f) {
-        int j = (int) (i % 24000L);
-        float f1 = ((float) j + f) / 24000.0F - 0.25F;
+    public float a(long worldTime, float var1) {
+		int var2;
+		if((var1 = ((float)(var2 = (int)(worldTime % 24000L)) + var1) / 24000.0F - 0.25F) < 0.0F) {
+			++var1;
+		}
 
-        if (f1 < 0.0F) {
-            ++f1;
-        }
+		if(var1 > 1.0F) {
+			--var1;
+		}
 
-        if (f1 > 1.0F) {
-            --f1;
-        }
-
-        float f2 = f1;
-
-        f1 = 1.0F - (float) ((Math.cos((double) f1 * 3.141592653589793D) + 1.0D) / 2.0D);
-        f1 = f2 + (f1 - f2) / 3.0F;
-        return f1;
+		float var3 = var1;
+		var1 = 1.0F - (float)((Math.cos((double)var1 * 3.141592653589793D) + 1.0D) / 2.0D);
+		return var3 + (var1 - var3) / 3.0F;
     }
 
     public boolean d() {

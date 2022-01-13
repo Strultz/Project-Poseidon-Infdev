@@ -73,7 +73,7 @@ public final class SpawnerCreature {
                             int j2 = chunkposition.y;
                             int k2 = chunkposition.z;
 
-                            if (!world.e(i2, j2, k2) && world.getMaterial(i2, j2, k2) == Material.AIR) {
+                            if (!world.p(i2, j2, k2) && world.getMaterial(i2, j2, k2) == Material.AIR) {
                                 int l2 = 0;
 
                                 for (int i3 = 0; i3 < 3; ++i3) {
@@ -133,6 +133,6 @@ public final class SpawnerCreature {
     }
 
     private static boolean a(EnumCreatureType enumcreaturetype, World world, int i, int j, int k) {
-        return world.e(i, j - 1, k) && !world.e(i, j, k) && !world.getMaterial(i, j, k).isLiquid() && !world.e(i, j + 1, k);
+        return world.p(i, j - 1, k) && !world.p(i, j, k) && !world.getMaterial(i, j, k).isLiquid() && !world.p(i, j + 1, k);
     }
 }

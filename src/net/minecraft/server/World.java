@@ -1519,12 +1519,6 @@ public class World implements IBlockAccess {
         return block == null ? false : block.a();
     }
 
-    public boolean e(int i, int j, int k) {
-        Block block = Block.byId[this.getTypeId(i, j, k)];
-
-        return block == null ? false : block.material.h() && block.b();
-    }
-
     public boolean doLighting() {
         if (this.M >= 50) {
             return false;

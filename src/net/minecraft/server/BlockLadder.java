@@ -40,25 +40,25 @@ public class BlockLadder extends Block {
     }
 
     public boolean canPlace(World world, int i, int j, int k) {
-        return world.e(i - 1, j, k) ? true : (world.e(i + 1, j, k) ? true : (world.e(i, j, k - 1) ? true : world.e(i, j, k + 1)));
+        return world.p(i - 1, j, k) ? true : (world.p(i + 1, j, k) ? true : (world.p(i, j, k - 1) ? true : world.p(i, j, k + 1)));
     }
 
     public void postPlace(World world, int i, int j, int k, int l) {
         int i1 = world.getData(i, j, k);
 
-        if ((i1 == 0 || l == 2) && world.e(i, j, k + 1)) {
+        if ((i1 == 0 || l == 2) && world.p(i, j, k + 1)) {
             i1 = 2;
         }
 
-        if ((i1 == 0 || l == 3) && world.e(i, j, k - 1)) {
+        if ((i1 == 0 || l == 3) && world.p(i, j, k - 1)) {
             i1 = 3;
         }
 
-        if ((i1 == 0 || l == 4) && world.e(i + 1, j, k)) {
+        if ((i1 == 0 || l == 4) && world.p(i + 1, j, k)) {
             i1 = 4;
         }
 
-        if ((i1 == 0 || l == 5) && world.e(i - 1, j, k)) {
+        if ((i1 == 0 || l == 5) && world.p(i - 1, j, k)) {
             i1 = 5;
         }
 
@@ -69,19 +69,19 @@ public class BlockLadder extends Block {
         int i1 = world.getData(i, j, k);
         boolean flag = false;
 
-        if (i1 == 2 && world.e(i, j, k + 1)) {
+        if (i1 == 2 && world.p(i, j, k + 1)) {
             flag = true;
         }
 
-        if (i1 == 3 && world.e(i, j, k - 1)) {
+        if (i1 == 3 && world.p(i, j, k - 1)) {
             flag = true;
         }
 
-        if (i1 == 4 && world.e(i + 1, j, k)) {
+        if (i1 == 4 && world.p(i + 1, j, k)) {
             flag = true;
         }
 
-        if (i1 == 5 && world.e(i - 1, j, k)) {
+        if (i1 == 5 && world.p(i - 1, j, k)) {
             flag = true;
         }
 

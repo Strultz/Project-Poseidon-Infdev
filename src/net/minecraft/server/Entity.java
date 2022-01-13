@@ -1029,7 +1029,7 @@ public abstract class Entity {
             int k = MathHelper.floor(this.locY + (double) this.t() + (double) f1);
             int l = MathHelper.floor(this.locZ + (double) f2);
 
-            if (this.world.e(j, k, l)) {
+            if (this.world.p(j, k, l)) {
                 return true;
             }
         }
@@ -1094,13 +1094,13 @@ public abstract class Entity {
         double d4 = d1 - (double) j;
         double d5 = d2 - (double) k;
 
-        if (this.world.e(i, j, k)) {
-            boolean flag = !this.world.e(i - 1, j, k);
-            boolean flag1 = !this.world.e(i + 1, j, k);
-            boolean flag2 = !this.world.e(i, j - 1, k);
-            boolean flag3 = !this.world.e(i, j + 1, k);
-            boolean flag4 = !this.world.e(i, j, k - 1);
-            boolean flag5 = !this.world.e(i, j, k + 1);
+        if (this.world.p(i, j, k)) {
+            boolean flag = !this.world.p(i - 1, j, k);
+            boolean flag1 = !this.world.p(i + 1, j, k);
+            boolean flag2 = !this.world.p(i, j - 1, k);
+            boolean flag3 = !this.world.p(i, j + 1, k);
+            boolean flag4 = !this.world.p(i, j, k - 1);
+            boolean flag5 = !this.world.p(i, j, k + 1);
             byte b0 = -1;
             double d6 = 9999.0D;
 

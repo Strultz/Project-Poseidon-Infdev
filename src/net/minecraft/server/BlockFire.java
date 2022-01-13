@@ -71,7 +71,7 @@ public class BlockFire extends Block {
 
             world.c(i, j, k, this.id, this.c());
             if (!this.g(world, i, j, k)) {
-                if (!world.e(i, j - 1, k) || l > 3) {
+                if (!world.p(i, j - 1, k) || l > 3) {
                     world.setTypeId(i, j, k, 0);
                 }
             } else if (!this.b(world, i, j - 1, k) && l == 15 && random.nextInt(4) == 0) {
@@ -209,17 +209,17 @@ public class BlockFire extends Block {
     }
 
     public boolean canPlace(World world, int i, int j, int k) {
-        return world.e(i, j - 1, k) || this.g(world, i, j, k);
+        return world.p(i, j - 1, k) || this.g(world, i, j, k);
     }
 
     public void doPhysics(World world, int i, int j, int k, int l) {
-        if (!world.e(i, j - 1, k) && !this.g(world, i, j, k)) {
+        if (!world.p(i, j - 1, k) && !this.g(world, i, j, k)) {
             world.setTypeId(i, j, k, 0);
         }
     }
 
     public void c(World world, int i, int j, int k) {
-    	if (!world.e(i, j - 1, k) && !this.g(world, i, j, k)) {
+    	if (!world.p(i, j - 1, k) && !this.g(world, i, j, k)) {
             world.setTypeId(i, j, k, 0);
         } else {
             world.c(i, j, k, this.id, this.c());

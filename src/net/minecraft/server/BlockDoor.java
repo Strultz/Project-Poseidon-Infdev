@@ -144,7 +144,7 @@ public class BlockDoor extends Block {
                 flag = true;
             }
 
-            if (!world.e(i, j - 1, k)) {
+            if (!world.p(i, j - 1, k)) {
                 world.setTypeId(i, j, k, 0);
                 flag = true;
                 if (world.getTypeId(i, j + 1, k) == this.id) {
@@ -174,7 +174,7 @@ public class BlockDoor extends Block {
     }
 
     public boolean canPlace(World world, int i, int j, int k) {
-        return j >= 127 ? false : world.e(i, j - 1, k) && super.canPlace(world, i, j, k) && super.canPlace(world, i, j + 1, k);
+        return j >= 127 ? false : world.p(i, j - 1, k) && super.canPlace(world, i, j, k) && super.canPlace(world, i, j + 1, k);
     }
 
     public static boolean e(int i) {

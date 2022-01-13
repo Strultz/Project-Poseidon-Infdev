@@ -16,16 +16,13 @@ public class EntityMinecart extends Entity implements IInventory {
     public int b;
     public int c;
     private boolean i;
-    public int e;
-    public double f;
-    public double g;
-    private static final int[][][] matrix = new int[][][] { { { 0, 0, -1}, { 0, 0, 1}}, { { -1, 0, 0}, { 1, 0, 0}}, { { -1, -1, 0}, { 1, 0, 0}}, { { -1, 0, 0}, { 1, -1, 0}}, { { 0, 0, -1}, { 0, -1, 1}}, { { 0, -1, -1}, { 0, 0, 1}}, { { 0, 0, 1}, { 1, 0, 0}}, { { 0, 0, 1}, { -1, 0, 0}}, { { 0, 0, -1}, { -1, 0, 0}}, { { 0, 0, -1}, { 1, 0, 0}}};
     private int k;
     private double l;
     private double m;
     private double n;
     private double o;
     private double p;
+    private static final int[][][] matrix = new int[][][] { { { 0, 0, -1}, { 0, 0, 1}}, { { -1, 0, 0}, { 1, 0, 0}}, { { -1, -1, 0}, { 1, 0, 0}}, { { -1, 0, 0}, { 1, -1, 0}}, { { 0, 0, -1}, { 0, -1, 1}}, { { 0, -1, -1}, { 0, 0, 1}}, { { 0, 0, 1}, { 1, 0, 0}}, { { 0, 0, 1}, { -1, 0, 0}}, { { 0, 0, -1}, { -1, 0, 0}}, { { 0, 0, -1}, { 1, 0, 0}}};
 
     // CraftBukkit start
     public boolean slowWhenEmpty = true;
@@ -58,7 +55,9 @@ public class EntityMinecart extends Entity implements IInventory {
         return false;
     }
 
-    protected void b() {}
+    protected void b() {
+    	this.datawatcher.a(16, (byte) 0);
+    }
 
     public AxisAlignedBB a_(Entity entity) {
         return entity.boundingBox;
@@ -411,15 +410,15 @@ public class EntityMinecart extends Entity implements IInventory {
                         this.motX += this.motX / d20 * d21;
                         this.motZ += this.motZ / d20 * d21;
                     } else if (i1 == 1) {
-                        if (this.world.e(i - 1, j, k)) {
+                        if (this.world.p(i - 1, j, k)) {
                             this.motX = 0.02D;
-                        } else if (this.world.e(i + 1, j, k)) {
+                        } else if (this.world.p(i + 1, j, k)) {
                             this.motX = -0.02D;
                         }
                     } else if (i1 == 0) {
-                        if (this.world.e(i, j, k - 1)) {
+                        if (this.world.p(i, j, k - 1)) {
                             this.motZ = 0.02D;
-                        } else if (this.world.e(i, j, k + 1)) {
+                        } else if (this.world.p(i, j, k + 1)) {
                             this.motZ = -0.02D;
                         }
                     }
@@ -510,15 +509,6 @@ public class EntityMinecart extends Entity implements IInventory {
                         entity.collide(this);
                     }
                 }
-            }
-
-            if (flag && this.random.nextInt(4) == 0) {
-                --this.e;
-                if (this.e < 0) {
-                    this.f = this.g = 0.0D;
-                }
-
-                this.world.a("largesmoke", this.locX, this.locY + 0.8D, this.locZ, 0.0D, 0.0D, 0.0D);
             }
         }
     }
@@ -615,6 +605,8 @@ public class EntityMinecart extends Entity implements IInventory {
                 this.items[j] = new ItemStack(nbttagcompound1);
             }
         }
+        
+        datawatcher.watch(16, (byte)getDirtHeightRaw());
     }
 
     public void collide(Entity entity) {
@@ -727,7 +719,11 @@ public class EntityMinecart extends Entity implements IInventory {
         return 64;
     }
 
-    public void update() {}
+    public void update() {
+    	if (!this.world.isStatic) {
+    		datawatcher.watch(16, (byte)getDirtHeightRaw());
+    	}
+    }
 
     public boolean a(EntityHuman entityhuman) {
     	if (!this.world.isStatic) {
@@ -735,6 +731,20 @@ public class EntityMinecart extends Entity implements IInventory {
         }
 
         return true;
+    }
+    
+    public final float getDirtHeight() {
+        return (float)datawatcher.a(16) / (float)this.items.length;
+    }
+
+    public final int getDirtHeightRaw() {
+        int n = 0;
+        for (int i = 0; i < this.items.length; ++i) {
+            if (this.items[i] != null) {
+                ++n;
+            }
+        }
+        return n;
     }
 
     public boolean a_(EntityHuman entityhuman) {

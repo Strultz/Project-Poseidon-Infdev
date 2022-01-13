@@ -124,7 +124,7 @@ public class EntityTrackerEntry {
             DataWatcher datawatcher = this.tracker.aa();
 
             if (datawatcher.a()) {
-                this.b((Packet) (new Packet40EntityMetadata(this.tracker.id, datawatcher)));
+                this.b((Packet) (new Packet40EntityMetadata(this.tracker.id, datawatcher, false)));
             }
 
             if (needsPositionUpdate) {
@@ -213,7 +213,8 @@ public class EntityTrackerEntry {
                     if (this.isMoving) {
                         entityplayer.netServerHandler.sendPacket(new Packet28EntityVelocity(this.tracker.id, this.tracker.motX, this.tracker.motY, this.tracker.motZ));
                     }
-
+                    DataWatcher datawatcher = tracker.aa();
+                    entityplayer.netServerHandler.sendPacket(new Packet40EntityMetadata(tracker.id, datawatcher, true));
                     ItemStack[] aitemstack = this.tracker.getEquipment();
 
                     if (aitemstack != null) {

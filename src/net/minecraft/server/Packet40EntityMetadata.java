@@ -12,9 +12,9 @@ public class Packet40EntityMetadata extends Packet {
 
     public Packet40EntityMetadata() {}
 
-    public Packet40EntityMetadata(int i, DataWatcher datawatcher) {
+    public Packet40EntityMetadata(int i, DataWatcher datawatcher, boolean flag) {
         this.a = i;
-        this.b = datawatcher.b();
+        this.b = flag ? datawatcher.getObjects() : datawatcher.b();
     }
 
     public void a(DataInputStream datainputstream) throws IOException {
