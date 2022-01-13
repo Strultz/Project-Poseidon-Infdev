@@ -87,8 +87,8 @@ public class NetLoginHandler extends NetHandler {
         }
         receivedLoginPacket = true;
         this.g = packet1login.name;
-        if (packet1login.a != 14) {
-            if (packet1login.a > 14) {
+        if (packet1login.a != 61801) {
+            if (packet1login.a > 61801) {
                 this.disconnect("Outdated server!");
             } else {
                 this.disconnect("Outdated client!");
