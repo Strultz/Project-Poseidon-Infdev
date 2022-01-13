@@ -64,7 +64,6 @@ public class MinecraftServer implements Runnable, ICommandListener {
 
     //Poseidon Start
     private WatchDogThread watchDogThread;
-    private boolean modLoaderSupport = false;
     //Poseidon End
 
     public MinecraftServer(OptionSet options) { // CraftBukkit - adds argument OptionSet
@@ -94,18 +93,7 @@ public class MinecraftServer implements Runnable, ICommandListener {
         System.setErr(new PrintStream(new LoggerOutputStream(log, Level.SEVERE), true));
         // CraftBukkit end
 
-        modLoaderSupport = PoseidonConfig.getInstance().getBoolean("settings.support.modloader.enable", false);
-
-        if (modLoaderSupport) {
-            log.info("EXPERIMENTAL MODLOADERMP SUPPORT ENABLED.");
-            if (!isModloaderPresent()) {
-                log.severe("ModLoaderMP support is enabled, however, it isn't present. Please install it before enabling this setting");
-                return false;
-            }
-            net.minecraft.server.ModLoader.Init(this);
-        }
-
-        log.info("Starting minecraft server version Beta 1.7.3");
+        log.info("Starting minecraft server version Infdev 20100618");
         if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L) {
             log.warning("**** NOT ENOUGH RAM!");
             log.warning("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
@@ -394,10 +382,6 @@ public class MinecraftServer implements Runnable, ICommandListener {
                 long i = System.currentTimeMillis();
 
                 for (long j = 0L; this.isRunning; Thread.sleep(1L)) {
-                    if (modLoaderSupport) {
-                        net.minecraft.server.ModLoader.OnTick(this);
-                    }
-
                     long k = System.currentTimeMillis();
                     long l = k - i;
 
