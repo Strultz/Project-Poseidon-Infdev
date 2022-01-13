@@ -102,13 +102,6 @@ public class PlayerListener implements Listener {
     public void onPlayerPreLogin(PlayerPreLoginEvent event) {}
 
     /**
-     * Called when a player throws an egg and it might hatch
-     *
-     * @param event Relevant event details
-     */
-    public void onPlayerEggThrow(PlayerEggThrowEvent event) {}
-
-    /**
      * Called when a player plays an animation, such as an arm swing
      *
      * @param event Relevant event details
@@ -163,32 +156,4 @@ public class PlayerListener implements Listener {
      * @param event Relevant event details
      */
     public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {}
-
-    /**
-     * Called when a player enters a bed
-     *
-     * @param event Relevant event details
-     */
-    public void onPlayerBedEnter(PlayerBedEnterEvent event) {}
-
-    /**
-     * Called when a player leaves a bed
-     *
-     * @param event Relevant event details
-     */
-    public void onPlayerBedLeave(PlayerBedLeaveEvent event) {}
-
-    /**
-     * Called when a player is teleporting in a portal (after the animation)
-     *
-     * @param event Relevant event details
-     */
-    public void onPlayerPortal(PlayerPortalEvent event) {}
-
-    /**
-     * Called when a player is fishing
-     *
-     * @param event Relevant event details
-     */
-    public void onPlayerFish(PlayerFishEvent event) {}
 }

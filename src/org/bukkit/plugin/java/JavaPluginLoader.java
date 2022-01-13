@@ -459,15 +459,6 @@ public class JavaPluginLoader implements PluginLoader
                     }
                 };
 
-            case PLAYER_PORTAL:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((PlayerListener) listener).onPlayerPortal((PlayerPortalEvent) event);
-                    }
-                };
-
             case PLAYER_INTERACT:
                 return new EventExecutor()
                 {
@@ -501,15 +492,6 @@ public class JavaPluginLoader implements PluginLoader
                     public void execute(Listener listener, Event event)
                     {
                         ((PlayerListener) listener).onPlayerPreLogin((PlayerPreLoginEvent) event);
-                    }
-                };
-
-            case PLAYER_EGG_THROW:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((PlayerListener) listener).onPlayerEggThrow((PlayerEggThrowEvent) event);
                     }
                 };
 
@@ -582,33 +564,6 @@ public class JavaPluginLoader implements PluginLoader
                     public void execute(Listener listener, Event event)
                     {
                         ((PlayerListener) listener).onPlayerBucketFill((PlayerBucketFillEvent) event);
-                    }
-                };
-
-            case PLAYER_BED_ENTER:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((PlayerListener) listener).onPlayerBedEnter((PlayerBedEnterEvent) event);
-                    }
-                };
-
-            case PLAYER_BED_LEAVE:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((PlayerListener) listener).onPlayerBedLeave((PlayerBedLeaveEvent) event);
-                    }
-                };
-
-            case PLAYER_FISH:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((PlayerListener) listener).onPlayerFish((PlayerFishEvent) event);
                     }
                 };
 

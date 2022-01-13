@@ -253,23 +253,11 @@ public abstract class Event implements Serializable {
          */
         PLAYER_INTERACT_ENTITY(Category.PLAYER),
         /**
-         * Called when a player throws an egg
-         *
-         * @see org.bukkit.event.player.PlayerEggThrowEvent
-         */
-        PLAYER_EGG_THROW(Category.PLAYER),
-        /**
          * Called when a player teleports from one position to another
          *
          * @see org.bukkit.event.player.PlayerTeleportEvent
          */
         PLAYER_TELEPORT(Category.PLAYER),
-        /**
-         * Called when a player completes the portaling process by standing in a portal
-         *
-         * @see org.bukkit.event.player.PlayerPortalEvent
-         */
-        PLAYER_PORTAL(Category.PLAYER),
         /**
          * Called when a player changes their held item
          *
@@ -306,24 +294,6 @@ public abstract class Event implements Serializable {
          * @see org.bukkit.event.player.PlayerInventoryEvent
          */
         PLAYER_INVENTORY(Category.PLAYER),
-        /**
-         * Called when a player enter a bed
-         *
-         * @see org.bukkit.event.player.PlayerBedEnterEvent
-         */
-        PLAYER_BED_ENTER(Category.PLAYER),
-        /**
-         * Called when a player leaves a bed
-         *
-         * @see org.bukkit.event.player.PlayerBedLeaveEvent
-         */
-        PLAYER_BED_LEAVE(Category.PLAYER),
-        /**
-         * Called when a player is fishing
-         *
-         * @see org.bukkit.event.player.PlayerFishEvent
-         */
-        PLAYER_FISH(Category.PLAYER),
 
         /**
          * BLOCK EVENTS
