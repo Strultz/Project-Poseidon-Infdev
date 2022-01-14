@@ -66,12 +66,6 @@ public class EntityDamageEvent extends EntityEvent implements Cancellable {
     public enum DamageCause {
 
         /**
-         * Damage caused when an entity contacts a block such as a Cactus.
-         *
-         * Damage: 1 (Cactus)
-         */
-        CONTACT,
-        /**
          * Damage caused when an entity attacks another entity.
          *
          * Damage: variable
@@ -137,12 +131,6 @@ public class EntityDamageEvent extends EntityEvent implements Cancellable {
          * Damage: 4 for players
          */
         VOID,
-        /**
-         * Damage caused by being struck by lightning
-         *
-         * Damage: 5
-         */
-        LIGHTNING,
         /**
          * Damage caused by committing suicide using the command "/kill"
          *
