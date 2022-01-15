@@ -617,6 +617,8 @@ public abstract class Entity {
             this.fallDistance = (float) ((double) this.fallDistance - d0);
         }
     }
+    
+    protected void a(float f) {}
 
     public AxisAlignedBB e_() {
         return null;
