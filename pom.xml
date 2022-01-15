@@ -17,8 +17,8 @@
     </scm>
     <repositories>
         <repository>
-            <id>bukkit-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots</url>
+            <id>bukkit-reso</id>
+            <url>file://${project.basedir}/local</url>
         </repository>
         <repository>
             <id>chew-jenkins</id>
@@ -33,7 +33,7 @@
     <dependencies>
         <dependency>
             <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
+            <artifactId>bukkit-resources</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
