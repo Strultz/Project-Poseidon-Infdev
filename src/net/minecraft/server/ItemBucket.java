@@ -19,6 +19,9 @@ public class ItemBucket extends Item {
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
+        if (world.isStatic) {
+            return itemstack;
+        }
         float f = 1.0F;
         float f1 = entityhuman.lastPitch + (entityhuman.pitch - entityhuman.lastPitch) * f;
         float f2 = entityhuman.lastYaw + (entityhuman.yaw - entityhuman.lastYaw) * f;
