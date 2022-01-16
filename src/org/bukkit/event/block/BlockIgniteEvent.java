@@ -65,9 +65,5 @@ public class BlockIgniteEvent extends BlockEvent implements Cancellable {
          * Block ignition caused by dynamic spreading of fire.
          */
         SPREAD,
-        /**
-         * Block ignition caused by lightning.
-         */
-        LIGHTNING,
     }
 }
