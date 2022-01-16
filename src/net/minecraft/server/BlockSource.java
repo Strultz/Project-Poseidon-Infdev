@@ -6,7 +6,7 @@ public final class BlockSource extends Block {
     private int liquidInt;
     
     protected BlockSource(final int n, final int liquidInt) {
-        super(n, Block.byId[liquidInt].textureId, Material.WATER);
+        super(n, Block.byId[liquidInt].textureId, Block.byId[liquidInt].material);
         this.liquidInt = liquidInt;
         this.a(true);
     }
