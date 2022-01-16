@@ -87,13 +87,14 @@ public class NetLoginHandler extends NetHandler {
         }
         receivedLoginPacket = true;
         this.g = packet1login.name;
-        if (packet1login.a != 61801) {
-            if (packet1login.a > 61801) {
+        if (packet1login.a != 61802) {
+            if (packet1login.a > 61802) {
                 this.disconnect("Outdated server!");
             } else {
                 this.disconnect("Outdated client!");
             }
         } else {
+            //might add login byte back for this sort of thing
             //Project Poseidon - Start (Release2Beta)
             connectionType = ConnectionType.NORMAL;
             rawConnectionType = 0;
