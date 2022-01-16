@@ -235,12 +235,6 @@ public abstract class Event implements Serializable {
          */
         PLAYER_ANIMATION(Category.PLAYER),
         /**
-         * Called when a player toggles sneak mode
-         *
-         * @see org.bukkit.event.player.PlayerToggleSneakEvent
-         */
-        PLAYER_TOGGLE_SNEAK(Category.PLAYER),
-        /**
          * Called when a player interacts with an object or air
          *
          * @see org.bukkit.event.player.PlayerInteractEvent

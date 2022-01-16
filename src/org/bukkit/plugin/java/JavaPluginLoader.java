@@ -536,15 +536,6 @@ public class JavaPluginLoader implements PluginLoader
                     }
                 };
 
-            case PLAYER_TOGGLE_SNEAK:
-                return new EventExecutor()
-                {
-                    public void execute(Listener listener, Event event)
-                    {
-                        ((PlayerListener) listener).onPlayerToggleSneak((PlayerToggleSneakEvent) event);
-                    }
-                };
-
             case PLAYER_BUCKET_EMPTY:
                 return new EventExecutor()
                 {
