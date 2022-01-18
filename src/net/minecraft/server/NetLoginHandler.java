@@ -99,7 +99,7 @@ public class NetLoginHandler extends NetHandler {
             connectionType = ConnectionType.NORMAL;
             rawConnectionType = 0;
             //TODO: We need to find a better and cleaner way to support these different Beta proxies, Maybe a handler class???
-            if (connectionType.equals(ConnectionType.RELEASE2BETA_OFFLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.RELEASE2BETA_ONLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.BUNGEECORD_OFFLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.BUNGEECORD_ONLINE_MODE_IP_FORWARDING)) {
+            /*if (connectionType.equals(ConnectionType.RELEASE2BETA_OFFLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.RELEASE2BETA_ONLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.BUNGEECORD_OFFLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.BUNGEECORD_ONLINE_MODE_IP_FORWARDING)) {
                 //Proxy has IP Forwarding enabled
                 if ((Boolean) PoseidonConfig.getInstance().getConfigOption("settings.release2beta.enable-ip-pass-through")) {
                     //IP Forwarding is enabled server side
@@ -121,7 +121,7 @@ public class NetLoginHandler extends NetHandler {
                     this.disconnect(ChatColor.RED + "IP Forwarding is disabled in Poseidon. Please disable in Release2Beta.");
                     return;
                 }
-            }
+            }*/
             //Project Poseidon - End (Release2Beta
 
             if (((CraftServer) Bukkit.getServer()).isShuttingdown()) {
