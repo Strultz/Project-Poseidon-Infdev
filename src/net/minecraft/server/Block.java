@@ -88,7 +88,7 @@ public class Block {
     public static final Block SOIL = (new BlockSoil(60)).c(0.6F).a(f).a("farmland");
     public static final Block FURNACE = (new BlockFurnace(61, false)).c(3.5F).a(h).a("furnace").g();
     public static final Block BURNING_FURNACE = (new BlockFurnace(62, true)).c(3.5F).a(h).a(0.875F).a("furnace").g();
-    public static final Block SIGN_POST = (new BlockSign(63, TileEntitySign.class, true)).c(1.0F).a(e).a("sign").n().g();
+    public static final Block SIGN_POST = (new BlockSign(63, TileEntitySign.class)).c(1.0F).a(e).a("sign").n().g();
     public static final Block WOODEN_DOOR = (new BlockDoor(64, Material.WOOD)).c(3.0F).a(e).a("doorWood").n().g();
     public static final Block LADDER = (new BlockLadder(65, 83)).c(0.4F).a(e).a("ladder").g();
     public static final Block RAILS = (new BlockMinecartTrack(66, 128)).c(0.7F).a(i).a("rail").g();
