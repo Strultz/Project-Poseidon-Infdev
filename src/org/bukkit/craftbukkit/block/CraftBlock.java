@@ -195,6 +195,7 @@ public class CraftBlock implements Block {
         switch (material) {
             case SIGN:
             case SIGN_POST:
+                return new CraftSign(this);
             case CHEST:
                 return new CraftChest(this);
             case BURNING_FURNACE:
