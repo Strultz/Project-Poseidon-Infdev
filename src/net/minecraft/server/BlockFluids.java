@@ -190,7 +190,7 @@ public abstract class BlockFluids extends Block {
 
                     if (l == 0) {
                         world.setTypeId(i, j, k, Block.OBSIDIAN.id);
-                    } else if (l <= 4) {
+                    } else {
                         world.setTypeId(i, j, k, Block.COBBLESTONE.id);
                     }
 
