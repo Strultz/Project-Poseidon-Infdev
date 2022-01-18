@@ -4,12 +4,9 @@ import java.util.Random;
 
 public class BlockDoor extends Block {
 
-    protected BlockDoor(int i, Material material) {
-        super(i, material);
+    protected BlockDoor(int i) {
+        super(i, Material.WOOD);
         this.textureId = 97;
-        if (material == Material.ORE) {
-            ++this.textureId;
-        }
 
         float f = 0.5F;
         float f1 = 1.0F;
@@ -83,27 +80,23 @@ public class BlockDoor extends Block {
     }
 
     public boolean interact(World world, int i, int j, int k, EntityHuman entityhuman) {
-        if (this.material == Material.ORE) {
+        int l = world.getData(i, j, k);
+
+        if ((l & 8) != 0) {
+            if (world.getTypeId(i, j - 1, k) == this.id) {
+                this.interact(world, i, j - 1, k, entityhuman);
+            }
+
             return true;
         } else {
-            int l = world.getData(i, j, k);
-
-            if ((l & 8) != 0) {
-                if (world.getTypeId(i, j - 1, k) == this.id) {
-                    this.interact(world, i, j - 1, k, entityhuman);
-                }
-
-                return true;
-            } else {
-                if (world.getTypeId(i, j + 1, k) == this.id) {
-                    world.setData(i, j + 1, k, (l ^ 4) + 8);
-                }
-
-                world.setData(i, j, k, l ^ 4);
-                world.b(i, j - 1, k, i, j, k);
-                world.a(entityhuman, 1003, i, j, k, 0);
-                return true;
+            if (world.getTypeId(i, j + 1, k) == this.id) {
+                world.setData(i, j + 1, k, (l ^ 4) + 8);
             }
+
+            world.setData(i, j, k, l ^ 4);
+            world.b(i, j - 1, k, i, j, k);
+            world.a(entityhuman, 1003, i, j, k, 0);
+            return true;
         }
     }
 
