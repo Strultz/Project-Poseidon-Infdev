@@ -175,7 +175,7 @@ public class NetworkManager {
                 this.m.add(packet);
                 flag = true;
             } else {
-                this.a("disconnect.endOfStream", new Object[0]);
+                this.a("End of stream", new Object[0]);
             }
 
             return flag;
@@ -190,7 +190,7 @@ public class NetworkManager {
 
     private void a(Exception exception) {
         exception.printStackTrace();
-        this.a("disconnect.genericReason", new Object[]{"Internal exception: " + exception.toString()});
+        this.a("{}", new Object[]{"Internal exception: " + exception.toString()});
     }
 
     public void a(String s, Object... aobject) {
@@ -226,12 +226,12 @@ public class NetworkManager {
 
     public void b() {
         if (this.x > 1048576) {
-            this.a("disconnect.overflow", new Object[0]);
+            this.a("Buffer overflow", new Object[0]);
         }
 
         if (this.m.isEmpty()) {
             if (this.w++ == 1200) {
-                this.a("disconnect.timeout", new Object[0]);
+                this.a("Timed out", new Object[0]);
             }
         } else {
             this.w = 0;

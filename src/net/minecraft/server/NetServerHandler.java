@@ -635,7 +635,7 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
         if (this.disconnected) return; // CraftBukkit - rarely it would send a disconnect line twice
 
 
-        if (!(boolean) PoseidonConfig.getInstance().getConfigOption("settings.remove-join-leave-debug", true) || !s.equals("disconnect.quitting")) {
+        if (!(boolean) PoseidonConfig.getInstance().getConfigOption("settings.remove-join-leave-debug", true) || !s.equals("Quitting")) {
             a.info(this.player.name + " lost connection: " + s);
         }
 
@@ -881,7 +881,7 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
         if (event.isCancelled())
             return;
 
-        this.networkManager.a("disconnect.quitting", new Object[0]);
+        this.networkManager.a("Quitting", new Object[0]);
     }
 
     public int b() {
