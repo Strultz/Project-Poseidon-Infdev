@@ -102,7 +102,7 @@ public class MinecraftServer implements Runnable, ICommandListener {
         this.propertyManager = new PropertyManager(this.options); // CraftBukkit - CLI argument support
         String s = this.propertyManager.getString("server-ip", "");
 
-        this.onlineMode = this.propertyManager.getBoolean("online-mode", false); //Project Poseidon - False by default
+        this.onlineMode = this.propertyManager.getBoolean("online-mode", true);
         this.spawnAnimals = this.propertyManager.getBoolean("spawn-animals", true);
         this.pvpMode = this.propertyManager.getBoolean("pvp", true);
         this.allowFlight = this.propertyManager.getBoolean("allow-flight", false);
