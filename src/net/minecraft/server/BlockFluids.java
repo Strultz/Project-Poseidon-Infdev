@@ -185,7 +185,7 @@ public abstract class BlockFluids extends Block {
                     flag = true;
                 }
 
-                if (flag) {
+                if (flag && !world.isStatic) {
                     int l = world.getData(i, j, k);
 
                     if (l == 0) {
