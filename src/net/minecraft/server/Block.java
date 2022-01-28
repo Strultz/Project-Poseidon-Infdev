@@ -108,7 +108,6 @@ public class Block {
     public StepSound stepSound;
     public float bz;
     public final Material material;
-    public float frictionFactor;
     private String name;
 
     protected Block(int i, Material material) {
@@ -116,7 +115,6 @@ public class Block {
         this.br = true;
         this.stepSound = d;
         this.bz = 1.0F;
-        this.frictionFactor = 0.6F;
         if (byId[i] != null) {
             throw new IllegalArgumentException("Slot " + i + " is already occupied by " + byId[i] + " when adding " + this);
         } else {

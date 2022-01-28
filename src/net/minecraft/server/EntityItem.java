@@ -63,24 +63,15 @@ public class EntityItem extends Entity {
 
         this.f_();
         this.move(this.motX, this.motY, this.motZ);
-        float f = 0.98F;
-
-        if (this.onGround) {
-            f = 0.58800006F;
-            int i = this.world.getTypeId(MathHelper.floor(this.locX), MathHelper.floor(this.boundingBox.b) - 1, MathHelper.floor(this.locZ));
-
-            if (i > 0) {
-                f = Block.byId[i].frictionFactor * 0.98F;
-            }
-        }
-
-        this.motX *= (double) f;
+        this.motX *= 0.9800000190734863D;
         this.motY *= 0.9800000190734863D;
-        this.motZ *= (double) f;
-        if (this.onGround) {
+        this.motZ *= 0.9800000190734863D;
+        if(this.onGround) {
+            this.motX *= 0.699999988079071D;
+            this.motZ *= 0.699999988079071D;
             this.motY *= -0.5D;
         }
-
+        
         ++this.e;
         ++this.b;
         if (this.b >= 6000) {

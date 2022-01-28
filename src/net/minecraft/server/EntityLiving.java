@@ -521,49 +521,9 @@ public abstract class EntityLiving extends Entity {
                 this.motY = 0.30000001192092896D;
             }
         } else {
-            float f2 = 0.91F;
-
-            if (this.onGround) {
-                f2 = 0.54600006F;
-                int i = this.world.getTypeId(MathHelper.floor(this.locX), MathHelper.floor(this.boundingBox.b) - 1, MathHelper.floor(this.locZ));
-
-                if (i > 0) {
-                    f2 = Block.byId[i].frictionFactor * 0.91F;
-                }
-            }
-
-            float f3 = 0.16277136F / (f2 * f2 * f2);
-
-            this.a(f, f1, this.onGround ? 0.1F * f3 : 0.02F);
-            f2 = 0.91F;
-            if (this.onGround) {
-                f2 = 0.54600006F;
-                int j = this.world.getTypeId(MathHelper.floor(this.locX), MathHelper.floor(this.boundingBox.b) - 1, MathHelper.floor(this.locZ));
-
-                if (j > 0) {
-                    f2 = Block.byId[j].frictionFactor * 0.91F;
-                }
-            }
+            this.a(f, f1, this.onGround ? 0.1F : 0.02F);
 
             if (this.p()) {
-                float f4 = 0.15F;
-
-                if (this.motX < (double) (-f4)) {
-                    this.motX = (double) (-f4);
-                }
-
-                if (this.motX > (double) f4) {
-                    this.motX = (double) f4;
-                }
-
-                if (this.motZ < (double) (-f4)) {
-                    this.motZ = (double) (-f4);
-                }
-
-                if (this.motZ > (double) f4) {
-                    this.motZ = (double) f4;
-                }
-
                 this.fallDistance = 0.0F;
                 if (this.motY < -0.15D) {
                     this.motY = -0.15D;
@@ -575,10 +535,14 @@ public abstract class EntityLiving extends Entity {
                 this.motY = 0.2D;
             }
 
-            this.motY -= 0.08D;
+            this.motX *= 0.9100000262260437D;
             this.motY *= 0.9800000190734863D;
-            this.motX *= (double) f2;
-            this.motZ *= (double) f2;
+            this.motZ *= 0.9100000262260437D;
+            this.motY -= 0.08D;
+            if(this.onGround) {
+                this.motX *= 0.6000000238418579D;
+                this.motZ *= 0.6000000238418579D;
+            }
         }
 
         this.an = this.ao;
