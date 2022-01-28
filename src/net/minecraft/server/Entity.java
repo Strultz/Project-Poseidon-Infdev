@@ -573,7 +573,7 @@ public abstract class Entity {
                 }
             }
 
-            boolean flag2 = this.ac();
+            boolean flag2 = this.ad();
 
             if (this.world.d(this.boundingBox.shrink(0.0010D, 0.0010D, 0.0010D))) {
                 this.burn(1);
@@ -640,10 +640,6 @@ public abstract class Entity {
             // CraftBukkit end
             this.damageEntity((Entity) null, i);
         }
-    }
-
-    public boolean ac() {
-        return this.bA;
     }
 
     public boolean ad() {

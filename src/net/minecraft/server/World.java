@@ -1285,48 +1285,39 @@ public class World implements IBlockAccess {
         return false;
     }
 
-    public boolean a(AxisAlignedBB axisalignedbb, Material material, Entity entity) {
-        int i = MathHelper.floor(axisalignedbb.a);
-        int j = MathHelper.floor(axisalignedbb.d + 1.0D);
-        int k = MathHelper.floor(axisalignedbb.b);
-        int l = MathHelper.floor(axisalignedbb.e + 1.0D);
-        int i1 = MathHelper.floor(axisalignedbb.c);
-        int j1 = MathHelper.floor(axisalignedbb.f + 1.0D);
+    public boolean a(AxisAlignedBB var1, Material var2, Entity var3) {
+        int var4 = MathHelper.floor(var1.a);
+        int var5 = MathHelper.floor(var1.d + 1.0D);
+        int var6 = MathHelper.floor(var1.b);
+        int var7 = MathHelper.floor(var1.e + 1.0D);
+        int var8 = MathHelper.floor(var1.c);
+        int var18 = MathHelper.floor(var1.f + 1.0D);
+        boolean var9 = false;
+        Vec3D var10 = Vec3D.create(0.0D, 0.0D, 0.0D);
 
-        if (!this.a(i, k, i1, j, l, j1)) {
-            return false;
-        } else {
-            boolean flag = false;
-            Vec3D vec3d = Vec3D.create(0.0D, 0.0D, 0.0D);
-
-            for (int k1 = i; k1 < j; ++k1) {
-                for (int l1 = k; l1 < l; ++l1) {
-                    for (int i2 = i1; i2 < j1; ++i2) {
-                        Block block = Block.byId[this.getTypeId(k1, l1, i2)];
-
-                        if (block != null && block.material == material) {
-                            double d0 = (double) ((float) (l1 + 1) - BlockFluids.c(this.getData(k1, l1, i2)));
-
-                            if ((double) l >= d0) {
-                                flag = true;
-                                block.a(this, k1, l1, i2, entity, vec3d);
-                            }
+        for(; var4 < var5; ++var4) {
+            for(int var11 = var6; var11 < var7; ++var11) {
+                for(int var12 = var8; var12 < var18; ++var12) {
+                    Block var13;
+                    if((var13 = Block.byId[this.getTypeId(var4, var11, var12)]) != null && var13.material == var2) {
+                        double var16 = (double)((float)(var11 + 1) - BlockFluids.c(this.getData(var4, var11, var12)));
+                        if((double)var7 >= var16) {
+                            var9 = true;
+                            var13.a(this, var4, var11, var12, var3, var10);
                         }
                     }
                 }
             }
-
-            if (vec3d.c() > 0.0D) {
-                vec3d = vec3d.b();
-                double d1 = 0.004D;
-
-                entity.motX += vec3d.a * d1;
-                entity.motY += vec3d.b * d1;
-                entity.motZ += vec3d.c * d1;
-            }
-
-            return flag;
         }
+
+        if(var10.c() > 0.0D) {
+            var10 = var10.b();
+            var3.motX += var10.a * 0.014D;
+            var3.motY += var10.b * 0.014D;
+            var3.motZ += var10.c * 0.014D;
+        }
+
+        return var9;
     }
 
     public boolean a(AxisAlignedBB axisalignedbb, Material material) {

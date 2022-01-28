@@ -60,8 +60,80 @@ public class EntityItem extends Entity {
             this.motZ = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
             this.world.makeSound(this, "random.fizz", 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
         }
+        
+        double var6 = this.locZ;
+        double var4 = this.locY;
+        double var2 = this.locX;
+        int var8 = MathHelper.floor(var2);
+        int var9 = MathHelper.floor(var4);
+        int var10 = MathHelper.floor(var6);
+        double var11 = var2 - (double)var8;
+        double var13 = var4 - (double)var9;
+        double var15 = var6 - (double)var10;
+        if(Block.o[this.world.getTypeId(var8, var9, var10)]) {
+            boolean var26 = !Block.o[this.world.getTypeId(var8 - 1, var9, var10)];
+            boolean var3 = !Block.o[this.world.getTypeId(var8 + 1, var9, var10)];
+            boolean var28 = !Block.o[this.world.getTypeId(var8, var9 - 1, var10)];
+            boolean var5 = !Block.o[this.world.getTypeId(var8, var9 + 1, var10)];
+            boolean var29 = !Block.o[this.world.getTypeId(var8, var9, var10 - 1)];
+            boolean var7 = !Block.o[this.world.getTypeId(var8, var9, var10 + 1)];
+            byte var30 = -1;
+            double var24 = 9999.0D;
+            if(var26 && var11 < 9999.0D) {
+                var24 = var11;
+                var30 = 0;
+            }
 
-        this.f_();
+            if(var3 && 1.0D - var11 < var24) {
+                var24 = 1.0D - var11;
+                var30 = 1;
+            }
+
+            if(var28 && var13 < var24) {
+                var24 = var13;
+                var30 = 2;
+            }
+
+            if(var5 && 1.0D - var13 < var24) {
+                var24 = 1.0D - var13;
+                var30 = 3;
+            }
+
+            if(var29 && var15 < var24) {
+                var24 = var15;
+                var30 = 4;
+            }
+
+            if(var7 && 1.0D - var15 < var24) {
+                var30 = 5;
+            }
+
+            float var27 = this.random.nextFloat() * 0.2F + 0.1F;
+            if(var30 == 0) {
+                this.motX = (double)(-var27);
+            }
+
+            if(var30 == 1) {
+                this.motX = (double)var27;
+            }
+
+            if(var30 == 2) {
+                this.motY = (double)(-var27);
+            }
+
+            if(var30 == 3) {
+                this.motY = (double)var27;
+            }
+
+            if(var30 == 4) {
+                this.motZ = (double)(-var27);
+            }
+
+            if(var30 == 5) {
+                this.motZ = (double)var27;
+            }
+        }
+
         this.move(this.motX, this.motY, this.motZ);
         this.motX *= 0.9800000190734863D;
         this.motY *= 0.9800000190734863D;
