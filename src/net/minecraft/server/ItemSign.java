@@ -43,6 +43,8 @@ public class ItemSign extends Item {
 
             if (!Block.SIGN_POST.canPlace(world, i, j, k)) {
                 return false;
+            } else if (!world.isEmpty(i, j, k)) {
+                return false;
             } else {
                 CraftBlockState blockState = CraftBlockState.getBlockState(world, i, j, k); // CraftBukkit
 
