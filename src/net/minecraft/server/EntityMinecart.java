@@ -12,9 +12,6 @@ import java.util.List;
 public class EntityMinecart extends Entity implements IInventory {
 
     private ItemStack[] items;
-    public int damage;
-    public int b;
-    public int c;
     private boolean i;
     private int k;
     private double l;
@@ -42,9 +39,6 @@ public class EntityMinecart extends Entity implements IInventory {
     public EntityMinecart(World world) {
         super(world);
         this.items = new ItemStack[27]; // CraftBukkit
-        this.damage = 0;
-        this.b = 0;
-        this.c = 1;
         this.i = false;
         this.aI = true;
         this.b(0.98F, 0.98F);
@@ -57,6 +51,9 @@ public class EntityMinecart extends Entity implements IInventory {
 
     protected void b() {
         this.datawatcher.a(16, (byte) 0);
+        this.datawatcher.a(17, 0);
+        this.datawatcher.a(18, 1);
+        this.datawatcher.a(19, 0);
     }
 
     public boolean d_() {
@@ -91,17 +88,17 @@ public class EntityMinecart extends Entity implements IInventory {
             i = event.getDamage();
             // CraftBukkit end
 
-            this.c = -this.c;
-            this.b = 10;
+            this.func_70494_i(-this.func_70493_k());
+            this.func_70497_h(10);
             this.af();
-            this.damage += i * 10;
-            if (this.damage > 40) {
+            this.setDamage(this.getDamage() + i * 10);
+            if (this.getDamage() > 40) {
                 // CraftBukkit start
                 VehicleDestroyEvent destroyEvent = new VehicleDestroyEvent(vehicle, passenger);
                 this.world.getServer().getPluginManager().callEvent(destroyEvent);
 
                 if (destroyEvent.isCancelled()) {
-                    this.damage = 40; // Maximize damage so this doesn't get triggered again right away
+                    this.setDamage(40); // Maximize damage so this doesn't get triggered again right away
                     return true;
                 }
                 // CraftBukkit end
@@ -188,13 +185,22 @@ public class EntityMinecart extends Entity implements IInventory {
         float prevYaw = this.yaw;
         float prevPitch = this.pitch;
         // CraftBukkit end
-
-        if (this.b > 0) {
-            --this.b;
+        
+        if (this.func_70496_j() > 0)
+        {
+            this.func_70497_h(this.func_70496_j() - 1);
         }
 
-        if (this.damage > 0) {
-            --this.damage;
+        if (this.getDamage() > 0)
+        {
+            this.setDamage(this.getDamage() - 1);
+        }
+
+        if(this.locY < -2.0D) {
+            this.motX *= 0.85D;
+            this.motY *= 0.85D;
+            this.motZ *= 0.85D;
+            this.Y();
         }
 
         double d0;
@@ -682,6 +688,36 @@ public class EntityMinecart extends Entity implements IInventory {
             }
         }
         return n;
+    }
+    
+    public void setDamage(int par1)
+    {
+        this.datawatcher.watch(19, Integer.valueOf(par1));
+    }
+    
+    public int getDamage()
+    {
+        return this.datawatcher.b(19);
+    }
+
+    public void func_70497_h(int par1)
+    {
+        this.datawatcher.watch(17, Integer.valueOf(par1));
+    }
+
+    public int func_70496_j()
+    {
+        return this.datawatcher.b(17);
+    }
+
+    public void func_70494_i(int par1)
+    {
+        this.datawatcher.watch(18, Integer.valueOf(par1));
+    }
+
+    public int func_70493_k()
+    {
+        return this.datawatcher.b(18);
     }
 
     public boolean a_(EntityHuman entityhuman) {
