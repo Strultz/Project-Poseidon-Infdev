@@ -620,10 +620,6 @@ public abstract class Entity {
     
     protected void a(float f) {}
 
-    public AxisAlignedBB e_() {
-        return null;
-    }
-
     protected void burn(int i) {
         if (!this.fireProof) {
             // CraftBukkit start
@@ -1032,16 +1028,8 @@ public abstract class Entity {
         return false;
     }
 
-    public AxisAlignedBB a_(Entity entity) {
-        return null;
-    }
-
     public double I() {
         return (double) this.height;
-    }
-
-    public double m() {
-        return (double) this.width * 0.75D;
     }
 
     protected org.bukkit.entity.Entity bukkitEntity;
