@@ -24,6 +24,8 @@ public class ItemDoor extends Item {
 
             if (!block.canPlace(world, i, j, k)) {
                 return false;
+            } else if (!world.isEmpty(i, j, k)) {
+                return false;
             } else {
                 int i1 = MathHelper.floor((double) ((entityhuman.yaw + 180.0F) * 4.0F / 360.0F) - 0.5D) & 3;
                 byte b0 = 0;
