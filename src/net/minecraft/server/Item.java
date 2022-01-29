@@ -81,7 +81,7 @@ public class Item {
     public static Item MINECART = (new ItemMinecart(72)).a(7, 8).a("minecart");
     public final int id;
     protected int maxStackSize = 64;
-    private int durability = 0;
+    private int durability = 32;
     protected int textureId;
     protected boolean bi = false;
     protected boolean bj = false;

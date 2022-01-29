@@ -14,32 +14,14 @@ public class ItemSign extends Item {
     }
 
     public boolean a(ItemStack itemstack, EntityHuman entityhuman, World world, int i, int j, int k, int l) {
-        if (l == 0) {
+        if (l != 1) {
             return false;
         } else if (!world.getMaterial(i, j, k).isBuildable()) {
             return false;
         } else {
             int clickedX = i, clickedY = j, clickedZ = k; // CraftBukkit
 
-            if (l == 1) {
-                ++j;
-            }
-
-            if (l == 2) {
-                --k;
-            }
-
-            if (l == 3) {
-                ++k;
-            }
-
-            if (l == 4) {
-                --i;
-            }
-
-            if (l == 5) {
-                ++i;
-            }
+            ++j;
 
             if (!Block.SIGN_POST.canPlace(world, i, j, k)) {
                 return false;
