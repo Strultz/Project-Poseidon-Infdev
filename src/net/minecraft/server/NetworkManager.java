@@ -237,7 +237,7 @@ public class NetworkManager {
             this.w = 0;
         }
 
-        int i = 100;
+        int i = 1000;
 
         while (!this.m.isEmpty() && i-- >= 0) {
             Packet packet = (Packet) this.m.remove(0);

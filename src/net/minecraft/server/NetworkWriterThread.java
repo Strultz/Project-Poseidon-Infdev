@@ -33,12 +33,6 @@ class NetworkWriterThread extends Thread {
                 }
 
                 try {
-                    sleep(100L);
-                } catch (InterruptedException interruptedexception) {
-                    ;
-                }
-
-                try {
                     if (NetworkManager.e(this.a) != null) {
                         NetworkManager.e(this.a).flush();
                     }
@@ -48,6 +42,12 @@ class NetworkWriterThread extends Thread {
                     }
 
                     //ioexception.printStackTrace(); //Project Poseidon Remove - Credit to Notcz in Modification Station
+                }
+                
+                try {
+                    sleep(2L);
+                } catch (InterruptedException interruptedexception) {
+                    ;
                 }
             } finally {
                 if (flag) {
