@@ -365,6 +365,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     // CraftBukkit start
     public long timeOffset = 0;
     public boolean relativeTime = true;
+    public int ping;
 
     public long getPlayerTime() {
         if (this.relativeTime) {

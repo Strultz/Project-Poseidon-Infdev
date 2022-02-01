@@ -23,6 +23,7 @@ import org.bukkit.event.player.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.logging.Logger;
 
 // CraftBukkit start
@@ -36,7 +37,7 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
     private MinecraftServer minecraftServer;
     public EntityPlayer player; // CraftBukkit - private -> public
     private int f;
-    private int g;
+    private long g;
     private int h;
     private boolean i;
     private double x;
@@ -49,6 +50,9 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
     private int rawConnectionType = 0; //Project Poseidon - Create Variable
     private boolean receivedKeepAlive = false;
     private boolean firePacketEvents;
+    private int l;
+    private long j;
+    private static Random k = new Random();
 
     public boolean isReceivedKeepAlive() {
         return receivedKeepAlive;
@@ -124,9 +128,13 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
 
     public void a() {
         this.i = false;
+        ++this.f;
         this.networkManager.b();
-        if (this.f - this.g > 20) {
-            this.sendPacket(new Packet0KeepAlive());
+        if ((long)this.f - this.g > 20) {
+            this.g = (long)this.f;
+            this.j = System.nanoTime() / 1000000L;
+            this.l = k.nextInt();
+            this.sendPacket(new Packet0KeepAlive(this.l));
         }
     }
 
@@ -684,8 +692,6 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
         }
         if (packet != null) this.networkManager.queue(packet);
         // CraftBukkit end
-
-        this.g = this.f;
     }
 
     public void a(Packet16BlockItemSwitch packet16blockitemswitch) {
@@ -872,6 +878,11 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
 
     public void a(Packet0KeepAlive packet0KeepAlive) {
         this.receivedKeepAlive = true;
+        if(packet0KeepAlive.randomId == this.l)
+        {
+            int i = (int)(System.nanoTime() / 0xf4240L - this.j);
+            this.player.ping = (this.player.ping * 3 + i) / 4;
+        }
     }
 
     public void a(Packet255KickDisconnect packet255kickdisconnect) {

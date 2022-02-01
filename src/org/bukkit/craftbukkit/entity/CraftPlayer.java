@@ -330,4 +330,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         return !hiddenPlayers.contains(player.getUniqueId());
     }
 
+    public int getPing() {
+        return getHandle().ping;
+    }
+
 }

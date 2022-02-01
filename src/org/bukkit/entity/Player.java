@@ -245,5 +245,12 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
      * @return True if the provided player is not being hidden from this player
      */
     public boolean canSee(Player player);
+    
+    /**
+     * Returns the current ping of the player
+     * 
+     * @return Player's ping
+     */
+    public int getPing();
 
 }
