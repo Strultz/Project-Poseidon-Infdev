@@ -13,7 +13,7 @@ import java.util.List;
 // CraftBukkit start
 // CraftBukkit end
 
-public abstract class EntityLiving extends Entity {
+public class EntityLiving extends Entity {
 
     public int maxNoDamageTicks = 20;
     public float I;
