@@ -406,9 +406,6 @@ public abstract class EntityHuman extends EntityLiving {
         int i = this.inventory.a(entity);
 
         if (i > 0) {
-            if (this.motY < 0.0D) {
-                ++i;
-            }
 
             // CraftBukkit start - Don't call the event when the entity is human since it will be called with damageEntity
             if (entity instanceof EntityLiving && !(entity instanceof EntityHuman)) {
