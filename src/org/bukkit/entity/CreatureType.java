@@ -7,6 +7,7 @@ import java.util.Map;
 public enum CreatureType {
     CREEPER("Creeper"),
     GIANT("Giant"),
+    MOB("Mob"),
     MONSTER("Monster"),
     PIG("Pig"),
     SHEEP("Sheep"),
