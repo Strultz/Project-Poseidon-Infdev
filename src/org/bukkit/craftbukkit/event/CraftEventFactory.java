@@ -191,6 +191,8 @@ public class CraftEventFactory {
         // Supertype of many, last!
         } else if (entityliving instanceof EntityMonster) {
             type = CreatureType.MONSTER;
+        } else if (entityliving instanceof EntityLiving) {
+            type = CreatureType.MOB;
         }
 
         CreatureSpawnEvent event = new CreatureSpawnEvent(entity, type, entity.getLocation(), spawnReason);
