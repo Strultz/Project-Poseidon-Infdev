@@ -216,4 +216,9 @@ public interface Inventory {
      * Clear out the whole index
      */
     public void clear();
+    
+    /**
+     * Update the inventory
+     */
+    public void update();
 }

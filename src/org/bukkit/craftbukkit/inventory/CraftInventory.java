@@ -362,4 +362,8 @@ public class CraftInventory implements org.bukkit.inventory.Inventory {
             clear(i);
         }
     }
+    
+    public void update() {
+        getInventory().update();
+    }
 }
