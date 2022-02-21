@@ -14,10 +14,6 @@ public class BlockFurnace extends BlockContainer {
         this.textureId = 45;
     }
 
-    public int a(int i, Random random) {
-        return Block.FURNACE.id;
-    }
-
     public void c(World world, int i, int j, int k) {
         super.c(world, i, j, k);
         this.g(world, i, j, k);
