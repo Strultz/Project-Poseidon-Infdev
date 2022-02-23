@@ -32,7 +32,6 @@ public class World implements IBlockAccess {
     public List c = new ArrayList();
     private List G = new ArrayList();
     public List players = new ArrayList();
-
     private long H = 16777215L;
     public int f = 0;
     protected int g = (new Random()).nextInt();
