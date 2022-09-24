@@ -1,3 +1,6 @@
+# Important Notice
+Mod "Infdev Enhanced" is no longer supported, which means this branch will no longer be updated.
+
 # Project-Poseidon-Infdev
 ## What is Project-Poseidon-Infdev
 This is a fork of Project-Poseidon that supports my Infdev 20100420 mod "Infdev Enhanced".
