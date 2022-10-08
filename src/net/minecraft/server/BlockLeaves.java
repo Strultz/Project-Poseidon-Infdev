@@ -5,12 +5,10 @@ import org.bukkit.event.block.LeavesDecayEvent;
 import java.util.Random;
 
 public class BlockLeaves extends BlockLeavesBase {
-
     private int c;
-    int[] a;
 
     protected BlockLeaves(int i, int j) {
-        super(i, j, Material.LEAVES, false);
+        super(i, j, Material.LEAVES, true);
         this.c = j;
         this.a(true);
     }

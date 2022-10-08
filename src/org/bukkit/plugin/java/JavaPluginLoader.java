@@ -553,7 +553,15 @@ public class JavaPluginLoader implements PluginLoader
                         ((PlayerListener) listener).onPlayerBucketFill((PlayerBucketFillEvent) event);
                     }
                 };
-
+            case PLAYER_ITEM_DAMAGE:
+                return new EventExecutor()
+                {
+                    public void execute(Listener listener, Event event)
+                    {
+                        ((PlayerListener) listener).onPlayerItemDamage((PlayerItemDamageEvent) event);
+                    }
+                };
+                
             // Block Events
             case BLOCK_PHYSICS:
                 return new EventExecutor()

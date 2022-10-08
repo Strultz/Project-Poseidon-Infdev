@@ -16,11 +16,11 @@ public class BlockSapling extends BlockFlower {
     public void a(World world, int i, int j, int k, Random random) {
         if (!world.isStatic) {
             super.a(world, i, j, k, random);
-            if (world.getLightLevel(i, j + 1, k) >= 9 && random.nextInt(30) == 0) {
+            if (world.getLightLevel(i, j + 1, k) >= 9 && random.nextInt(5) == 0) {
                 int l = world.getData(i, j, k);
 
-                if ((l & 8) == 0) {
-                    world.setData(i, j, k, l | 8);
+                if (l < 15) {
+                    world.setData(i, j, k, l + 1);
                 } else {
                     this.b(world, i, j, k, random);
                 }
@@ -28,27 +28,16 @@ public class BlockSapling extends BlockFlower {
         }
     }
 
-    public int a(int i, int j) {
-        j &= 3;
-        return j == 1 ? 63 : (j == 2 ? 79 : super.a(i, j));
-    }
-
     public void b(World world, int i, int j, int k, Random random) {
-        int l = world.getData(i, j, k) & 3;
-
         world.setRawTypeId(i, j, k, 0);
 
         // CraftBukkit start - fixes client updates on recently grown trees
         BlockChangeWithNotify delegate = new BlockChangeWithNotify(world);
 
         if (!new WorldGenTree().generate(delegate, random, i, j, k)) {
-            world.setRawTypeIdAndData(i, j, k, this.id, l);
+            world.setRawTypeId(i, j, k, this.id);
         }
         // CraftBukkit end
-    }
-
-    protected int a_(int i) {
-        return i & 3;
     }
 
     // CraftBukkit start
