@@ -227,6 +227,7 @@ public class ServerConfigurationManager {
         
         // CraftBukkit start
         EntityPlayer entityplayer1 = entityplayer;
+        org.bukkit.World fromWorld = entityplayer1.getBukkitEntity().getWorld();
 
         if (location == null) {
             CraftWorld cworld = (CraftWorld) this.server.server.getWorlds().get(0);
@@ -268,6 +269,12 @@ public class ServerConfigurationManager {
         //PlayerTracker.getInstance().addPlayer(entityplayer1.name); //Project POSEIDON
         this.updateClient(entityplayer1); // CraftBukkit
         entityplayer1.x();
+        // CraftBukkit start - don't fire on respawn
+        if (fromWorld != location.getWorld()) {
+            org.bukkit.event.player.PlayerChangedWorldEvent event = new org.bukkit.event.player.PlayerChangedWorldEvent((Player) entityplayer1.getBukkitEntity(), fromWorld);
+            Bukkit.getServer().getPluginManager().callEvent(event);
+        }
+        // CraftBukkit end
         return entityplayer1;
     }
 
