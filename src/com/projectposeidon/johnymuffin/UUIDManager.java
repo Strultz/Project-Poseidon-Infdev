@@ -21,7 +21,7 @@ public class UUIDManager {
         //Check if uuidcache.json exists
         if (!configFile.exists()) {
             try (FileWriter file = new FileWriter("uuidcache.json")) {
-                System.out.println("Generating uuidcache.json for Project Poseidon");
+                System.out.println("[Poseidon] Generating uuidcache.json for Project Poseidon");
                 UUIDJsonArray = new JSONArray();
                 file.write(UUIDJsonArray.toJSONString());
                 file.flush();
@@ -31,19 +31,19 @@ public class UUIDManager {
             }
         }
         try {
-            System.out.println("Reading uuidcache.json for Project Poseidon");
+            System.out.println("[Poseidon] Reading uuidcache.json for Project Poseidon");
             JSONParser parser = new JSONParser();
             UUIDJsonArray = (JSONArray) parser.parse(new FileReader("uuidcache.json"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
-            System.out.println("The UUIDCache is corrupt or unreadable, resetting");
+            System.out.println("[Poseidon] The UUIDCache is corrupt or unreadable, resetting");
             UUIDJsonArray = new JSONArray();
             saveJsonArray();
 
             //e.printStackTrace();
         } catch (Exception e) {
-            System.out.println("Error reading uuidcache.json, changing to memory only cache: " + e + ": " + e.getMessage());
+            System.out.println("[Poseidon] Error reading uuidcache.json, changing to memory only cache: " + e + ": " + e.getMessage());
             UUIDJsonArray = new JSONArray();
         }
 
@@ -67,7 +67,7 @@ public class UUIDManager {
 
     public void saveJsonArray() {
         try (FileWriter file = new FileWriter("uuidcache.json")) {
-            System.out.println("Saving uuidcache.json for Project Poseidon");
+            System.out.println("[Poseidon] Saving UUID Cache");
             file.write(UUIDJsonArray.toJSONString());
             file.flush();
         } catch (IOException e) {
@@ -135,13 +135,19 @@ public class UUIDManager {
     }
 
     public String getUsernameFromUUID(UUID uuid) {
+        // Get most recent username from UUID
+        String username = null;
+        long expiry = -1;
         for (int i = 0; i < UUIDJsonArray.size(); i++) {
-            JSONObject tmp = (JSONObject) UUIDJsonArray.get(i);
-            if (UUID.fromString((String) tmp.get("uuid")).equals(uuid)) {
-                return (String) tmp.get("name");
+            JSONObject playerEntry = (JSONObject) UUIDJsonArray.get(i);
+            UUID entryUUID = UUID.fromString(String.valueOf(playerEntry.get("uuid")));
+            long expiresOn = Long.valueOf(String.valueOf(playerEntry.get("expiresOn")));
+            if (entryUUID.equals(uuid) && expiresOn >= expiry) {
+                expiry = expiresOn;
+                username = String.valueOf(playerEntry.get("name"));
             }
         }
-        return null;
+        return username;
     }
 
     private void removeInstancesOfUsername(String username) {
@@ -158,7 +164,10 @@ public class UUIDManager {
             JSONObject tmp = (JSONObject) UUIDJsonArray.get(i);
             if (UUID.fromString((String) tmp.get("uuid")).equals(uuid)) {
                 if ((boolean) PoseidonConfig.getInstance().getConfigOption("settings.delete-duplicate-uuids")) {
+                    //Remove the duplicate UUID
                     UUIDJsonArray.remove(i);
+                    //Decrement i to account for the removed element
+                    i--;
                 } else {
                     //This allows for plugins to use a old username and find UUID.
                     tmp.replace("expiresOn", 1);

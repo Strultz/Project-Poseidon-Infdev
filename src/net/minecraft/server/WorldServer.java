@@ -127,4 +127,9 @@ public class WorldServer extends World implements BlockChangeDelegate {
     public void saveLevel() {
         this.w.e();
     }
+    
+    // Poseidon
+    public PlayerManager getPlayerManager() {
+        return this.manager;
+    }
 }

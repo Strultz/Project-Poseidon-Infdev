@@ -95,6 +95,7 @@ public abstract class Entity {
     public int bI;
     public int bJ;
     public boolean bK;
+    public boolean airBorne;
     public UUID uniqueId = UUID.randomUUID(); // CraftBukkit
 
     public Entity(World world) {
@@ -814,6 +815,7 @@ public abstract class Entity {
         this.motX += d0;
         this.motY += d1;
         this.motZ += d2;
+        this.airBorne = true;
     }
 
     protected void af() {

@@ -92,7 +92,13 @@ public class MinecraftServer implements Runnable, ICommandListener {
         System.setErr(new PrintStream(new LoggerOutputStream(log, Level.SEVERE), true));
         // CraftBukkit end
 
-        log.info("Starting minecraft server version Infdev Improved v7 (20100618)");
+        //If Poseidon Config DEBUG is enabled, enable debug mode
+        if(options.has("debug-config")) {
+            log.info("[Poseidon] Configuration debug mode has been enabled. This will cause the poseidon.yml to be reloaded every time the server starts.");
+            PoseidonConfig.getInstance().resetConfig();
+        } 
+
+        log.info("Starting minecraft server version Infdev Improved v8 (20100618)");
         if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L) {
             log.warning("**** NOT ENOUGH RAM!");
             log.warning("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
@@ -151,7 +157,7 @@ public class MinecraftServer implements Runnable, ICommandListener {
         this.a(new WorldLoaderServer(new File(".")), s1, k);
 
         //Project Poseidon Start
-        log.info("Starting Project Poseidon Modules!");
+        log.info("[Poseidon] Starting Project Poseidon Modules!");
 
         PoseidonConfig.getInstance();
         UUIDManager.getInstance();
@@ -159,7 +165,7 @@ public class MinecraftServer implements Runnable, ICommandListener {
         //Start Watchdog
         watchDogThread = new WatchDogThread(Thread.currentThread());
         if (PoseidonConfig.getInstance().getBoolean("settings.enable-watchdog", true)) {
-            log.info("Starting Watchdog to detect any server hangs!");
+            log.info("[Poseidon] Starting Watchdog to detect any server hangs!");
             watchDogThread.start();
             watchDogThread.tickUpdate();
         }
@@ -167,10 +173,10 @@ public class MinecraftServer implements Runnable, ICommandListener {
         if (PoseidonConfig.getInstance().getBoolean("settings.settings.statistics.enabled", true)) {
 //            new PoseidonStatisticsAgent(this, this.server);
         } else {
-            log.info("Please consider enabling statistics in Poseidon.yml. It helps us see how many servers are running Poseidon, and what versions.");
+            log.info("[Poseidon] Please consider enabling statistics in Poseidon.yml. It helps us see how many servers are running Poseidon, and what versions.");
         }
 
-        log.info("Finished loading Project Poseidon Modules!");
+        log.info("[Poseidon] Finished loading Project Poseidon Modules!");
         //Project Poseidon End
 
         // CraftBukkit start

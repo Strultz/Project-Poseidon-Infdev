@@ -17,7 +17,7 @@ public class WatchDogThread extends Thread {
     private boolean printedDebug;
 
     public WatchDogThread(Thread thread) {
-    	this.serverThread = thread;
+        this.serverThread = thread;
         this.killTimeout = PoseidonConfig.getInstance().getConfigInteger("settings.watchdog.timeout.value");
 
         this.debugTimeoutEnabled = PoseidonConfig.getInstance().getConfigBoolean("settings.watchdog.debug-timeout.enabled");

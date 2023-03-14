@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.legacyminecraft.poseidon.PoseidonConfig;
 import org.bukkit.craftbukkit.TrigMath;
 import org.bukkit.craftbukkit.entity.CraftItem;
 import org.bukkit.entity.Player;
@@ -424,9 +425,37 @@ public abstract class EntityHuman extends EntityLiving {
             // CraftBukkit end
 
             // CraftBukkit start - Return when the damage fails so that the item will not lose durability
+            double d0 = entity.motX;
+            double d1 = entity.motY;
+            double d2 = entity.motZ;
+            
             if (!entity.damageEntity(this, i)) {
                 return;
             }
+            
+            if (entity instanceof EntityPlayer && entity.velocityChanged && PoseidonConfig.getInstance().getBoolean("settings.player-knockback-fix.enabled", true)) {
+                boolean cancelled = false;
+                org.bukkit.entity.Player player = (org.bukkit.entity.Player) entity.getBukkitEntity();
+                org.bukkit.util.Vector velocity = new org.bukkit.util.Vector(d0, d1, d2);
+
+                org.bukkit.event.player.PlayerVelocityEvent event = new org.bukkit.event.player.PlayerVelocityEvent(player, velocity.clone());
+                this.world.getServer().getPluginManager().callEvent(event);
+
+                if(event.isCancelled()) {
+                    cancelled = true;
+                } else if(!velocity.equals(event.getVelocity())) {
+                    player.setVelocity(velocity);
+                }
+                
+                if (!cancelled) {
+                    ((EntityPlayer)entity).netServerHandler.sendPacket(new Packet28EntityVelocity(entity));
+                    entity.velocityChanged = false;
+                    entity.motX = d0;
+                    entity.motY = d1;
+                    entity.motZ = d2;
+                }
+            }
+            
             // CraftBukkit end
 
             ItemStack itemstack = this.G();

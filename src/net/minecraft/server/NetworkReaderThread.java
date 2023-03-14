@@ -1,12 +1,15 @@
 package net.minecraft.server;
 
-class NetworkReaderThread extends Thread {
+import com.legacyminecraft.poseidon.PoseidonConfig;
 
+class NetworkReaderThread extends Thread {
+    private boolean fast; // Poseidon
     final NetworkManager a;
 
     NetworkReaderThread(NetworkManager networkmanager, String s) {
         super(s);
         this.a = networkmanager;
+        this.fast = PoseidonConfig.getInstance().getBoolean("settings.faster-packets.enabled", true); // Poseidon
     }
 
     public void run() {
