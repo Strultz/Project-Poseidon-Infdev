@@ -9,6 +9,7 @@ public class Packet1Login extends Packet {
     public int a;
     public String name;
     public long c;
+	public byte loginFlag; // originally dimension but there are no dimensions in Infdev
 
     public Packet1Login() {}
 
@@ -22,12 +23,14 @@ public class Packet1Login extends Packet {
         this.a = datainputstream.readInt();
         this.name = a(datainputstream, 16);
         this.c = datainputstream.readLong();
+		this.loginFlag = datainputstream.readByte();
     }
 
     public void a(DataOutputStream dataoutputstream) throws IOException {
         dataoutputstream.writeInt(this.a);
         a(this.name, dataoutputstream);
         dataoutputstream.writeLong(this.c);
+		dataoutputstream.writeByte(this.loginFlag);
     }
 
     public void a(NetHandler nethandler) {
@@ -35,6 +38,6 @@ public class Packet1Login extends Packet {
     }
 
     public int a() {
-        return 4 + this.name.length() + 4 + 4;
+        return 4 + this.name.length() + 4 + 5;
     }
 }
