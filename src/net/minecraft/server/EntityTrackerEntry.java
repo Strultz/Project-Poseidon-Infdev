@@ -63,7 +63,7 @@ public class EntityTrackerEntry {
 
         if (++this.l % this.c == 0 || this.tracker.airBorne || this.tracker.aa().a()) {
             ++this.t; // Poseidon - moved below
-			
+            
             // encoded means multiplied by 32
             // this is required to send it to the client, as the relative position is sent as the float multiplied by 32
             int newEncodedPosX = MathHelper.floor(this.tracker.locX * 32.0D);
