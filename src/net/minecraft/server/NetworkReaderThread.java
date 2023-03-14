@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.legacyminecraft.poseidon.PoseidonConfig;
-
 class NetworkReaderThread extends Thread {
     final NetworkManager a;
 
