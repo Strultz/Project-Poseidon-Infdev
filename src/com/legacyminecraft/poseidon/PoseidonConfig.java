@@ -27,6 +27,15 @@ public class PoseidonConfig extends Configuration {
         this.save();
     }
 
+    public void resetConfig() {
+        // Delete all the config options
+        for(String key : this.getKeys()) {
+            this.removeProperty(key);
+        }
+        // Reload the config
+        this.write();
+    }
+
     private void write() {
         if (this.getString("config-version") == null || Integer.valueOf(this.getString("config-version")) < configVersion) {
             System.out.println("Converting to Config Version: " + configVersion);
@@ -45,13 +54,21 @@ public class PoseidonConfig extends Configuration {
         generateConfigOption("settings.use-get-for-uuids.enabled", false);
         generateConfigOption("settings.use-get-for-uuids.info", "This setting causes the server to use the GET method for Username to UUID conversion. This is useful incase the POST method goes offline.");
 
+        generateConfigOption("settings.faster-chunk-packets.enabled", true);
+        generateConfigOption("settings.faster-chunk-packets.info", "This setting increases the speed of packets, a fix from newer Minecraft versions.");
+
+        generateConfigOption("settings.fix-drowning-push-down.enabled", true);
+        generateConfigOption("settings.fix-drowning-push-down.info", "This setting fixes taking drowning damage pushing you down.");
+        
+        generateConfigOption("settings.player-knockback-fix.enabled", true);
+        generateConfigOption("settings.player-knockback-fix.info", "This setting fixes reduced knockback for certain players on the server.");
+
         //Watchdog
         //generateConfigOption("settings.enable-watchdog", true);
         generateConfigOption("settings.watchdog.info", "Watchdog is a automatic hang detection system which can print stacktraces and kill the server automatically after a predefined interval.");
         generateConfigOption("settings.watchdog.enable", true);
         generateConfigOption("settings.watchdog.timeout.value", 120);
         generateConfigOption("settings.watchdog.timeout.info", "The number of seconds to kill the server process after no ticks occurring.");
-
         generateConfigOption("settings.watchdog.debug-timeout.enabled", false);
         generateConfigOption("settings.watchdog.debug-timeout.value", 30);
         generateConfigOption("settings.watchdog.debug-timeout.info", "debug-timeout can be used to print a stack trace at a lower interval then the main timeout allowing admins to locate blocking tasks that cause hangs over a certain duration. Only enable this if you have experienced temporary hangs/server freezes.");
@@ -59,11 +76,19 @@ public class PoseidonConfig extends Configuration {
         //Packet Events
         generateConfigOption("settings.packet-events.enabled", false);
         generateConfigOption("settings.packet-events.info", "This setting causes the server to fire a Bukkit event for each packet received and sent to a player once they have finished the initial login process. This only needs to be enabled if you have a plugin that uses this specific feature.");
+//        generateConfigOption("settings.bukkit-event.disabled-plugin-unregister.value", true);
+//        generateConfigOption("settings.bukkit-event.disabled-plugin-unregister.info", "This setting will automatically unregister listeners from disabled plugins. This is useful if you have a plugin that can get disabled at runtime and you want to prevent errors to the disabled plugin.");
+        generateConfigOption("settings.packet-spam-detection.enabled", true);
+        generateConfigOption("settings.packet-spam-detection.info", "This setting causes the server to detect and kick malicious players who send too many packets in a short period of time. This is useful to prevent players from sending too many packets to the server to cause lag.");
+        generateConfigOption("settings.packet-spam-detection.threshold", 10000);
+
         //Statistics
         generateConfigOption("settings.statistics.key", UUID.randomUUID().toString());
         generateConfigOption("settings.statistics.enabled", true);
-        //Word Settings
+
+        //World Settings
         generateConfigOption("world-settings.optimized-explosions", false);
+        generateConfigOption("world-settings.send-explosion-velocity", true);
         generateConfigOption("world-settings.randomize-spawn", true);
         generateConfigOption("world-settings.teleport-to-highest-safe-block", true);
         generateConfigOption("world-settings.use-modern-fence-bounding-boxes", false);
@@ -76,22 +101,38 @@ public class PoseidonConfig extends Configuration {
         generateConfigOption("world.settings.speed-hack-check.distance", 100.0D);
         generateConfigOption("world.settings.speed-hack-check.info", "This setting allows you to configure the automatic speedhack detection.");
 
-
         //generateConfigOption("world-settings.eject-from-vehicle-on-teleport.enabled", true);
         //generateConfigOption("world-settings.eject-from-vehicle-on-teleport.info", "Eject the player from a boat or minecart before teleporting them preventing cross world coordinate exploits.");
+
         //Release2Beta Settings
         generateConfigOption("settings.release2beta.enable-ip-pass-through", false);
         generateConfigOption("settings.release2beta.proxy-ip", "127.0.0.1");
+
+        //BungeeCord
+        generateConfigOption("settings.bungeecord.bungee-mode.enable", false);
+        generateConfigOption("settings.bungeecord.bungee-mode.kick-message", "You must connect through BungeeCord to join this server!");
+        generateConfigOption("settings.bungeecord.bungee-mode.info", "Only allows connections via BungeeCord to join. Includes optional custom kick message for players not using BungeeCord.");
+
         //Offline Username Check
         generateConfigOption("settings.check-username-validity.enabled", true);
         generateConfigOption("settings.check-username-validity.info", "If enabled, verifies the validity of a usernames of cracked players.");
         generateConfigOption("settings.check-username-validity.regex", "[a-zA-Z0-9_?]*");
         generateConfigOption("settings.check-username-validity.max-length", 16);
         generateConfigOption("settings.check-username-validity.min-length", 3);
+        generateConfigOption("emergency.debug.regenerate-corrupt-chunks.enable", false);
+        generateConfigOption("emergency.debug.regenerate-corrupt-chunks.info", "This setting allows you to automatically regenerate corrupt chunks. This is useful after a ungraceful shutdown while a file is being written to or out of memory exception.");
 
+        //Messages
+        generateConfigOption("message.kick.banned", "You are banned from this server!");
+        generateConfigOption("message.kick.ip-banned", "Your IP address is banned from this server!");
+        generateConfigOption("message.kick.not-whitelisted", "You are not white-listed on this server!");
+        generateConfigOption("message.kick.full", "The server is full!");
+        generateConfigOption("message.kick.shutdown", "\u00A7cServer is shutting down, please rejoin later.");
+        generateConfigOption("message.kick.already-online", "\u00A7cA player with your username or uuid is already online, try reconnecting in a minute.");
+        generateConfigOption("message.player.join", "\u00A7e%player% joined the game.");
+        generateConfigOption("message.player.leave", "\u00A7e%player% left the game.");
 
         //Tree Leave Destroy Blacklist
-
         if (Boolean.valueOf(String.valueOf(getConfigOption("world.settings.block-tree-growth.enabled", true)))) {
             if (String.valueOf(this.getConfigOption("world.settings.block-tree-growth.list", "")).trim().isEmpty()) {
                 //Empty Blacklist
@@ -119,7 +160,6 @@ public class PoseidonConfig extends Configuration {
         } else {
             treeBlacklistIDs = new Integer[0];
         }
-
     }
 
 
@@ -145,7 +185,7 @@ public class PoseidonConfig extends Configuration {
         return value;
 
     }
-    
+
     public String getConfigString(String key) {
         return String.valueOf(getConfigOption(key));
     }
@@ -173,7 +213,6 @@ public class PoseidonConfig extends Configuration {
         convertToNewAddress("settings.statistics.enabled", "settings.enable-statistics");
         convertToNewAddress("settings.allow-graceful-uuids", "allowGracefulUUID");
         convertToNewAddress("settings.save-playerdata-by-uuid", "savePlayerdataByUUID");
-        
         convertToNewAddress("settings.enable-watchdog", "settings.watchdog.enable");
     }
 

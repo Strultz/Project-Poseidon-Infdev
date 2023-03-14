@@ -1,9 +1,9 @@
 package net.minecraft.server;
 
+import com.legacyminecraft.poseidon.PoseidonConfig;
 import java.io.IOException;
 
 class NetworkWriterThread extends Thread {
-
     final NetworkManager a;
 
     NetworkWriterThread(NetworkManager networkmanager, String s) {

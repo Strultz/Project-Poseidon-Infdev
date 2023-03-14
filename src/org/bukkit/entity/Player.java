@@ -1,6 +1,7 @@
 package org.bukkit.entity;
 
 import com.projectposeidon.ConnectionType;
+import net.minecraft.server.Packet;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 
@@ -252,5 +253,7 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
      * @return Player's ping
      */
     public int getPing();
+
+    public void sendPacket(final Player player, final Packet packet);
 
 }

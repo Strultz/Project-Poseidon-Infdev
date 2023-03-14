@@ -31,6 +31,9 @@ public class LoginProcessHandler {
     private ArrayList<Plugin> pluginPauses = new ArrayList<Plugin>();
     private ArrayList<ConnectionPause> pluginPauseObjects = new ArrayList<ConnectionPause>();
     private ArrayList<String> pluginPauseNames = new ArrayList<String>();
+    private ArrayList<String> allPluginPauseNames = new ArrayList<String>();
+    
+    private final String msgKickAlreadyOnline;
 
     public LoginProcessHandler(NetLoginHandler netloginhandler, Packet1Login packet1login, CraftServer server, boolean onlineMode) {
         this.loginProcessHandler = this;
@@ -38,7 +41,12 @@ public class LoginProcessHandler {
         this.packet1Login = packet1login;
         this.server = server;
         this.onlineMode = onlineMode;
+        
+        this.msgKickAlreadyOnline = PoseidonConfig.getInstance().getConfigString("message.kick.already-online");
+        
         processAuthentication();
+
+        long connectionStartTime = System.currentTimeMillis()/1000L;
 
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(new PoseidonPlugin(), () -> {
             if (!loginSuccessful && !loginCancelled) {
@@ -49,6 +57,21 @@ public class LoginProcessHandler {
             }
         }, 400);
 
+        runLoginTimer(connectionStartTime);
+
+    }
+
+    private void runLoginTimer(long connectionStartTime) {
+        int playerConnectionDebug = Bukkit.getScheduler().scheduleAsyncDelayedTask(new PoseidonPlugin(), () -> {
+            int currentRunningTime = (int) (System.currentTimeMillis()/1000L - connectionStartTime);
+            if (!loginSuccessful && !loginCancelled) {
+                System.out.println("[Poseidon] The login process for " + packet1Login.name + " is still running. It has been running for " + currentRunningTime + " seconds. The following plugins are still currently pausing the login process: " + pluginPauseNames.toString());
+                //This if statement shouldn't be needed, but this is here just in case a players login fails but the appropriate variables aren't changed
+                if (currentRunningTime < 60) {
+                    runLoginTimer(connectionStartTime);
+                }
+            }
+        }, 20*3);
     }
 
     private void processAuthentication() {
@@ -141,7 +164,7 @@ public class LoginProcessHandler {
         //Check if a player with the same UUID or Username is already online which is mainly an issue in Offline Mode servers.
         for (Player p : server.getOnlinePlayers()) {
             if (p.getName().equalsIgnoreCase(username) || p.getUniqueId().equals(uuid)) {
-                cancelLoginProcess(ChatColor.RED + "A player with your username or uuid is already online, try reconnecting in a minute.");
+                cancelLoginProcess(this.msgKickAlreadyOnline);
                 System.out.println("[Poseidon] User " + username + " has been blocked from connecting as they share a username or UUID with a user who is already online called " + p.getName() +
                         "\nMost likely the user has changed their UUID or the server is running in offline mode and someone has attempted to connect with their name");
             }
@@ -198,7 +221,8 @@ public class LoginProcessHandler {
         }
         //Add plugin pause names and pauses for respective plugins
         final ConnectionPause connectionPause = new ConnectionPause(plugin.getDescription().getName(), connectionPauseName, loginProcessHandler);
-        pluginPauseNames.add(plugin.getDescription().getName() + ":" + connectionPauseName);
+        pluginPauseNames.add(plugin.getDescription().getName() + ":" + connectionPause.getConnectionPauseName());
+        allPluginPauseNames.add(plugin.getDescription().getName() + ":" + connectionPause.getConnectionPauseName());
         pluginPauseObjects.add(connectionPause);
         return connectionPause;
     }
@@ -209,19 +233,22 @@ public class LoginProcessHandler {
     public synchronized void removeConnectionPause(ConnectionPause connectionPause) {
         if (pluginPauseObjects.contains(connectionPause)) {
             pluginPauseObjects.remove(connectionPause);
+            pluginPauseNames.remove(connectionPause.getPluginName() + ":" + connectionPause.getConnectionPauseName());
             connectionPause.setActive(false);
             if (!loginProcessHandler.isPlayerConnectionPaused()) {
                 long endTime = System.currentTimeMillis() / 1000L;
                 int difference = (int) (endTime - startTime);
-                System.out.println("[Poseidon] Player " + loginProcessHandler.packet1Login.name + " was allowed to join after being on hold for " + difference + " seconds by the following plugins: " + pluginPauseNames.toString());
-                loginProcessHandler.setLoginSuccessful(true);
                 if (!loginCancelled) {
+                    System.out.println("[Poseidon] Player " + loginProcessHandler.packet1Login.name + " was allowed to join after being on hold for " + difference + " seconds by the following plugins: " + allPluginPauseNames.toString());
+                    loginProcessHandler.setLoginSuccessful(true);
                     NetLoginHandler.a(netLoginHandler, packet1Login);
+                } else {
+                    System.out.println("[Poseidon] Player " + loginProcessHandler.packet1Login.name + " was not allowed to join after being on hold for " + difference + " seconds by the following plugins: " + allPluginPauseNames.toString());
                 }
             }
         } else {
-//          System.out.println("[Poseidon] A plugin has tried to remove a connection pause from the player " + packet1Login.name + " called " + connectionPause.getConnectionPauseName() +
-//                  " from the plugin " + connectionPause.getPluginName() + ". Please contact the plugin author and get them to check their logic as this is a duplicate remove, or a pause for another player.");
+//            System.out.println("[Poseidon] A plugin has tried to remove a connection pause from the player " + packet1Login.name + " called " + connectionPause.getConnectionPauseName() +
+//                    " from the plugin " + connectionPause.getPluginName() + ". Please contact the plugin author and get them to check their logic as this is a duplicate remove, or a pause for another player.");
         }
     }
 
@@ -252,6 +279,7 @@ public class LoginProcessHandler {
     public void removeConnectionPause(Plugin plugin) {
         if (pluginPauses.contains(plugin)) {
             pluginPauses.remove(plugin);
+            pluginPauseNames.remove(plugin.getDescription().getName());
             //Check if all pauses are removed
             if (!loginProcessHandler.isPlayerConnectionPaused()) {
                 long endTime = System.currentTimeMillis() / 1000L;

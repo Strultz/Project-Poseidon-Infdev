@@ -117,6 +117,7 @@ public final class ItemStack {
         return Item.byId[this.id].e();
     }
 
+    @SuppressWarnings("deprecation")
     public void damage(int i, Entity entity) {
         if (this.d()) {
             if (entity instanceof EntityPlayer) {
