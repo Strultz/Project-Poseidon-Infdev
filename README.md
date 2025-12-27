@@ -3,7 +3,7 @@
 ## What's Project Poseidon?
 **A CraftBukkit CB1060 fork for Beta 1.7.3 fixing bugs and adding basic features.<br>**
 
-If your looking for Project Poseidon support on pre-1.7.3 versions, please check out [Project Poseidon Uberbukkit](https://github.com/Moresteck/Project-Poseidon-Uberbukkit) developed by Moresteck which supports earlier versions.<br>
+If you're looking for Project Poseidon support on pre-1.7.3 versions, please check out [Project Poseidon Uberbukkit](https://github.com/Moresteck/Project-Poseidon-Uberbukkit) developed by Moresteck which supports earlier versions.<br>
 
 Discord: https://discord.gg/FwKg676
 
@@ -43,7 +43,7 @@ You can download the latest builds at the [GitHub Releases](https://github.com/r
 
 Historical builds can be found on the [Glass Launcher Jenkins](https://jenkins.glass-launcher.net/job/Project-Poseidon/).
 
-Please note, download the artifact (JAR) without original in the name, eg. `project-poseidon-1.1.8.jar`.
+Please note, download the artifact (JAR) without original in the name, eg. `poseidon-craftbukkit-1.1.11.jar`.
 
 ## Maven Repository & Plugin Development
 
@@ -91,13 +91,13 @@ mvn clean package
 You should now have a runnable JAR inside the /target folder!
 
 ## Regarding the DMCA of CraftBukkit in 2014
-The contributor Wolverness who first contributed on CraftBukkit in February 2012 issued a DMCA against CraftBukkit and other major forks of CraftBukkit.
+The contributor Wolvereness who first contributed on CraftBukkit in February 2012 issued a DMCA against CraftBukkit and other major forks of CraftBukkit.
 This project is based on the following commits:
 
 * CraftBukkit: [54bcd1c1f36691a714234e5ca2f30a20b3ad2816](https://hub.spigotmc.org/stash/projects/SPIGOT/repos/craftbukkit/commits/54bcd1c1f36691a714234e5ca2f30a20b3ad2816) (SpigotMC)
 * Bukkit: [3524fde5ffc387ef9e39f6ee7dae83ff4dbf8229](https://github.com/Bukkit/Bukkit/commit/3524fde5ffc387ef9e39f6ee7dae83ff4dbf8229) (GitHub)
 
-The Bukkit and CraftBukkit commits that Project Poseidon is based on are before Wolverness started contributing.
+The Bukkit and CraftBukkit commits that Project Poseidon is based on are before Wolvereness started contributing.
 
 If you were a contributor before these commits please feel free to contact me or open an issue asking for this repository to be taken down.
 
