@@ -208,21 +208,12 @@ public class EntityTrackerEntry {
     }
 
     public void a() {
-        // Poseidon start
-        //this.a((Packet) (new Packet29DestroyEntity(this.tracker.id)));
-        Iterator iterator = this.trackedPlayers.iterator();
-
-        while (iterator.hasNext()) {
-            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
-
-            entityplayer.removeQueue.add(Integer.valueOf(this.tracker.id));
-        }
-        // Poseidon end
+        this.a((Packet) (new Packet29DestroyEntity(this.tracker.id)));
     }
 
     public void a(EntityPlayer entityplayer) {
         if (this.trackedPlayers.contains(entityplayer)) {
-            entityplayer.removeQueue.add(Integer.valueOf(this.tracker.id)); // Poseidon
+            entityplayer.netServerHandler.sendPacket(new Packet29DestroyEntity(this.tracker.id));
             this.trackedPlayers.remove(entityplayer);
         }
     }
@@ -241,8 +232,6 @@ public class EntityTrackerEntry {
                             return;
                         }
                     }
-                    
-                    entityplayer.removeQueue.remove(Integer.valueOf(this.tracker.id));
                     // CraftBukkit end
                     
                     this.trackedPlayers.add(entityplayer);
@@ -289,8 +278,7 @@ public class EntityTrackerEntry {
                 }
             } else if (this.trackedPlayers.contains(entityplayer)) {
                 this.trackedPlayers.remove(entityplayer);
-                entityplayer.removeQueue.add(Integer.valueOf(this.tracker.id)); // Poseidon
-                //entityplayer.netServerHandler.sendPacket(new Packet29DestroyEntity(this.tracker.id));
+                entityplayer.netServerHandler.sendPacket(new Packet29DestroyEntity(this.tracker.id));
             }
         }
     }
@@ -398,8 +386,7 @@ public class EntityTrackerEntry {
     public void c(EntityPlayer entityplayer) {
         if (this.trackedPlayers.contains(entityplayer)) {
             this.trackedPlayers.remove(entityplayer);
-            entityplayer.removeQueue.add(Integer.valueOf(this.tracker.id)); // Poseidon
-            //entityplayer.netServerHandler.sendPacket(new Packet29DestroyEntity(this.tracker.id));
+            entityplayer.netServerHandler.sendPacket(new Packet29DestroyEntity(this.tracker.id));
         }
     }
 }

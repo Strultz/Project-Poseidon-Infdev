@@ -23,7 +23,6 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public double e;
     public List chunkCoordIntPairQueue = new LinkedList();
     public Set playerChunkCoordIntPairs = new HashSet();
-    public final List removeQueue = new LinkedList(); // poseidon
     private int bL = -99999999;
     private int bM = 60;
     private ItemStack[] bN = new ItemStack[]{null, null, null, null, null};
@@ -210,24 +209,6 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     
     public void a(boolean flag) {
         super.m_();
-        
-        // Poseidon start
-        while (!this.removeQueue.isEmpty()) {
-            int i = Math.min(this.removeQueue.size(), 127);
-            int[] aint = new int[i];
-            Iterator iterator = this.removeQueue.iterator();
-            int j = 0;
-
-            while (iterator.hasNext() && j < i) {
-                aint[j++] = ((Integer) iterator.next()).intValue();
-                iterator.remove();
-            }
-
-            for (int k = 0; k < aint.length; k++) { // cant use array since not supported in b1.7.3
-                this.netServerHandler.sendPacket(new Packet29DestroyEntity(aint[k]));
-            }
-        }
-        // poseidon end
 
         for (int i = 0; i < this.inventory.getSize(); ++i) {
             ItemStack itemstack = this.inventory.getItem(i);
