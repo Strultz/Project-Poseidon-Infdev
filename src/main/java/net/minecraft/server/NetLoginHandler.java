@@ -120,50 +120,40 @@ public class NetLoginHandler extends NetHandler {
     }
 
     private boolean proxyHandler(Packet1Login packet1login) {
-        //Project Poseidon - Start (Release2Beta)
-        if (packet1login.d == (byte) -999 || packet1login.d == (byte) 25) {
-            connectionType = ConnectionType.RELEASE2BETA_OFFLINE_MODE_IP_FORWARDING;
-        } else if (packet1login.d == (byte) 26) {
-            connectionType = ConnectionType.RELEASE2BETA_ONLINE_MODE_IP_FORWARDING;
-        } else if (packet1login.d == (byte) 1) {
-            connectionType = ConnectionType.RELEASE2BETA;
-        } else if (packet1login.d == (byte) 2) {
-            connectionType = ConnectionType.BUNGEECORD_OFFLINE_MODE_IP_FORWARDING;
-        } else {
-            connectionType = ConnectionType.NORMAL;
-        }
+        // Poseidon start - proxies
+        connectionType = ConnectionType.getConnectionType(packet1login.d);
         rawConnectionType = packet1login.d;
-        //TODO: We need to find a better and cleaner way to support these different Beta proxies, Maybe a handler class???
-        if ((Boolean) PoseidonConfig.getInstance().getConfigOption("settings.bungeecord.bungee-mode.enable") && !connectionType.equals(ConnectionType.BUNGEECORD_OFFLINE_MODE_IP_FORWARDING) && !connectionType.equals(ConnectionType.BUNGEECORD_ONLINE_MODE_IP_FORWARDING)) {
+
+        if (PoseidonConfig.getInstance().getBoolean("settings.bungeecord.bungee-mode.enable", false) && connectionType != ConnectionType.BUNGEECORD_OFFLINE_MODE_IP_FORWARDING) {
             a.info(packet1login.name + " is not using BungeeCord, kicking the player.");
-            this.disconnect((String) PoseidonConfig.getInstance().getConfigOption("settings.bungeecord.bungee-mode.kick-message"));
+            this.disconnect(PoseidonConfig.getInstance().getString("settings.bungeecord.bungee-mode.kick-message"));
             return false;
         }
 
-        if (connectionType.equals(ConnectionType.RELEASE2BETA_OFFLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.RELEASE2BETA_ONLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.BUNGEECORD_OFFLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.BUNGEECORD_ONLINE_MODE_IP_FORWARDING)) {
-            //Proxy has IP Forwarding enabled
-            if ((Boolean) PoseidonConfig.getInstance().getConfigOption("settings.release2beta.enable-ip-pass-through")) {
-                //IP Forwarding is enabled server side
-                if (this.getSocket().getInetAddress().getHostAddress().equalsIgnoreCase(String.valueOf(PoseidonConfig.getInstance().getConfigOption("settings.release2beta.proxy-ip", "127.0.0.1")))) {
-                    //Release2Beta server is authorized - Override IP address
-                    InetSocketAddress address = deserializeAddress(packet1login.c);
-                    a.info(packet1login.name + " has been detected using Release2Beta, using the IP passed through: " + address.getAddress().getHostAddress());
-                    this.networkManager.setSocketAddress(address);
-                    this.usingReleaseToBeta = true;
-                } else {
-                    //Release2Beta server isn't authorized
-                    a.info(packet1login.name + " is attempting to use a unauthorized Release2Beta server, kicking the player.");
-                    this.disconnect(ChatColor.RED + "The Release2Beta server you are connecting through is unauthorized.");
-                    return false;
-                }
-            } else {
-                //Poseidon doesn't support IP Forwarding
-                a.info(packet1login.name + " is trying to connect through R2B with IP Forwarding enabled, however, it is disabled in Poseidon. Kicking player!");
-                this.disconnect(ChatColor.RED + "IP Forwarding is disabled in Poseidon. Please disable in Release2Beta.");
+        if (this.connectionType.usesIpForwarding()) {
+            // Proxy has IP Forwarding enabled
+            if (!PoseidonConfig.getInstance().getBoolean("settings.release2beta.enable-ip-pass-through", false)) {
+                // Poseidon doesn't support IP Forwarding
+                a.info(packet1login.name + " is trying to connect through a proxy with IP Forwarding enabled, however, it is disabled in Poseidon. Kicking player!");
+                this.disconnect(ChatColor.RED + "IP Forwarding is disabled on this server.");
                 return false;
             }
+
+            // IP Forwarding is enabled server side
+            if (!this.getSocket().getInetAddress().getHostAddress().equalsIgnoreCase(PoseidonConfig.getInstance().getString("settings.release2beta.proxy-ip", "127.0.0.1"))) {
+                // Proxy server isn't authorized
+                a.info(packet1login.name + " is attempting to use a unauthorized proxy server, kicking the player.");
+                this.disconnect(ChatColor.RED + "The proxy server you are connecting through is unauthorized.");
+                return false;
+            }
+
+            // Proxy server is authorized, override IP address
+            InetSocketAddress address = deserializeAddress(packet1login.c);
+            a.info(packet1login.name + " has been detected using a proxy, using the IP passed through: " + address.getAddress().getHostAddress());
+            this.networkManager.setSocketAddress(address);
+            this.usingReleaseToBeta = true;
         }
-        //Project Poseidon - End (Release2Beta
+        // Poseidon end
 
         return true;
     }
@@ -207,11 +197,11 @@ public class NetLoginHandler extends NetHandler {
             this.server.networkListenThread.a(netserverhandler);
             netserverhandler.sendPacket(new Packet4UpdateTime(entityplayer.getPlayerTime())); // CraftBukkit - add support for player specific time
             entityplayer.syncInventory();
-            // poseidon start
+            // Poseidon start
             if (PoseidonConfig.getInstance().getBoolean("settings.support.modloader.enable", false)) {
                 net.minecraft.server.ModLoaderMp.HandleAllLogins(entityplayer);
             }
-            // poseidon end
+            // Poseidon end
         }
 
         this.c = true;
