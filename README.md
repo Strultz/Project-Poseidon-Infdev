@@ -43,7 +43,7 @@ You can download the latest builds at the [GitHub Releases](https://github.com/r
 
 Historical builds can be found on the [Glass Launcher Jenkins](https://jenkins.glass-launcher.net/job/Project-Poseidon/).
 
-Please note, download the artifact (JAR) without original in the name, eg. `poseidon-craftbukkit-1.1.11.jar`.
+Please note, download the artifact (JAR) without original in the name, eg. `project-poseidon-1.1.8.jar`.
 
 ## Maven Repository & Plugin Development
 
